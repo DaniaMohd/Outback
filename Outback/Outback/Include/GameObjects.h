@@ -23,7 +23,8 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_HERO,			//2
 	TYPE_OBJECT_ENEMY1,			//3
 	TYPE_OBJECT_COIN,			//4
-	TYPE_OBJECT_PARTICLES		//5
+	TYPE_OBJECT_PARTICLES,		//5
+	TYPE_OBJECT_BULLET			//6
 };
 
 enum class STATE
@@ -93,6 +94,8 @@ public:
 	void			EnemyStateMachine();		//State machine functions
 	void			boomerangCreate(Character character);
 	void			boomerangReturn(Character character);
+	void			ProjectileCreate(Character character, Character enemy);
+	void			ProjectileUpdate();
 };
 
 extern GameObj*				sGameObjList;

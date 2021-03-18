@@ -113,6 +113,7 @@ void Character::characterCreate(unsigned int type, float scale1, AEVec2* pPos, A
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
 }
 
+
 /******************************************************************************/
 /*!
 	Enemy state behaviour
@@ -199,9 +200,30 @@ void Character::EnemyStateMachine()
 	}
 }
 
+
+
+void Character::ProjectileCreate(Character player, Character enemy)
+{
+	float x = (player.posCurr.x - enemy.posCurr.x) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
+	float y = (player.posCurr.y - enemy.posCurr.y) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
+
+	AEVec2 vel = { x*10,y*10 };
+	gameObjInstCreate(TYPE_OBJECT_BULLET, 1.0f, &enemy.posCurr, &vel, 0);
+	counter = 0;
+}
+
+void Character::ProjectileUpdate()
+{
+	counter += g_dt;
+	if (counter > 2)
+	{
+		flag = 0;
+	}
+}
+
 /******************************************************************************/
 /*!
-	Creates projectile baised on who shot it
+	Creates projectile based on who shot it
 */
 /******************************************************************************/
 void Character::boomerangCreate(Character character)

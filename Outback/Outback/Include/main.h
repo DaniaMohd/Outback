@@ -26,7 +26,7 @@ extern double	g_appTime;
 // includes
 
 #include "AEEngine.h"
-#include "Math.h"
+#include "math.h"
 
 #include "GameStateMgr.h"
 #include "GameState_Platform.h"
@@ -35,6 +35,7 @@ extern double	g_appTime;
 #include "MainMenu.h"
 #include "Win.h"
 #include "GameObjects.h"
+
 
 #endif // CS1130_MAIN_H_
 

@@ -1,12 +1,16 @@
-﻿  Collision.cpp
+﻿  Bullet.cpp
+  Collision.cpp
   GameObjects.cpp
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback (1)\Outback\Source\GameObjects.cpp(90,10): warning C4101: 'cellTranslation': unreferenced local variable
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(90,10): warning C4101: 'cellTranslation': unreferenced local variable
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(207,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(208,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   GameStateMgr.cpp
   GameState_Platform.cpp
-  main.cpp
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(462,3): warning C4456: declaration of 'i' hides previous local declaration
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(382,6): message : see declaration of 'i'
   MainMenu.cpp
   Map.cpp
   Win.cpp
+  main.cpp
   Generating Code...
-  LINK : C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback (1)\\Bin\OutbackD.exe not found or not built by the last incremental link; performing full link
-  Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback (1)\\Bin\OutbackD.exe
+  Outback.vcxproj -> C:\Users\zzz\Documents\GitHub\Outback\Outback\Bin\OutbackD.exe

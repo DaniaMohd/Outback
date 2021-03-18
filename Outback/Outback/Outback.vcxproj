@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\GameObjects.cpp" />
     <ClCompile Include="Source\GameStateMgr.cpp" />
@@ -21,6 +22,7 @@
     <ClCompile Include="Source\Win.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Include\Collision.h" />
     <ClInclude Include="Include\GameObjects.h" />
     <ClInclude Include="Include\GameStateList.h" />

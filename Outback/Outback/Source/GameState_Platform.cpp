@@ -33,6 +33,10 @@ unsigned long			sGameObjNum;
 static Character*		sEnemies;
 static unsigned int		sEnemyNum;
 
+//Bullet
+static GameObjInst*		sBullet;
+unsigned int			sBulletNum;
+
 // list of coins
 static GameObjInst*		sCoins;
 static unsigned int		sCoinNum;
@@ -183,7 +187,6 @@ void GameStatePlatformLoad(void)
 	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create Coin Texture!");
 
-
 	//Creating the Particle object
 	pObj = sGameObjList + sGameObjNum++;
 	pObj->type = TYPE_OBJECT_PARTICLES;
@@ -203,6 +206,26 @@ void GameStatePlatformLoad(void)
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
 	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
+
+
+	//Creating the Bullets
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_BULLET;
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 
 	// Loading the levels
 	if (gGameStateCurr == GS_LEVEL1)
@@ -434,6 +457,24 @@ void GameStatePlatformUpdate(void)
 		pHero.gridCollisionFlag = 0;
 	}
 
+	if (AEInputCheckTriggered(AEVK_K))
+	{
+		for (int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			// skip non-active object
+			if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
+				continue;
+			for (int j = 0; j < GAME_OBJ_NUM_MAX; j++)
+			{
+				if (sBoomerang[j].flag == 0)
+				{
+					sBoomerang[j].ProjectileCreate(pHero, sEnemies[i]);
+					break;
+				}
+			}
+		}
+	}
+
 	// Main Menu
 	if (AEInputCheckTriggered(AEVK_BACK))
 	{
@@ -539,6 +580,17 @@ void GameStatePlatformUpdate(void)
 
 		sBoomerang[i].gameObjInstUpdatePos();
 		sBoomerang[i].gameObjInstBoundingBox();
+		if (sBoomerang[i].pObject->type == TYPE_OBJECT_BULLET)
+		{
+			sBoomerang[i].ProjectileUpdate();
+
+			//counter set to 1 because the veloci
+			//if (sBoomerang[i].counter > 1)
+			//{
+			//	sBoomerang[i].gameObjInstDestroy();
+			//}
+		}
+		else
 		sBoomerang[i].boomerangReturn(pHero);
 	}
 
