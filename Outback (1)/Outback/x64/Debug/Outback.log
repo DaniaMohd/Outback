@@ -1,0 +1,11 @@
+﻿  Collision.cpp
+  GameObjects.cpp
+C:\Users\gorec\Google Drive\SIT\GAM\GAM150\Outback\Outback\Source\GameObjects.cpp(90,10): warning C4101: 'cellTranslation': unreferenced local variable
+  GameStateMgr.cpp
+  GameState_Platform.cpp
+  main.cpp
+  MainMenu.cpp
+  Map.cpp
+  Win.cpp
+  Generating Code...
+  Outback.vcxproj -> C:\Users\gorec\Google Drive\SIT\GAM\GAM150\Outback\\Bin\OutbackD.exe
