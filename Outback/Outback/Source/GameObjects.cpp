@@ -67,10 +67,21 @@ void GameObjInst::gameObjInstUpdatePos()
 void GameObjInst::gameObjInstTransformMatrix()
 {
 	AEMtx33 scale1, rot, trans, result;
-	if(dirFaceR)
+	if (pObject->type == TYPE_OBJECT_BULLET)
+	{
 		AEMtx33Scale(&scale1, scale, scale);
+	}
 	else
-		AEMtx33Scale(&scale1, -scale, scale);
+	{
+		if (dirFaceR)
+		{
+			AEMtx33Scale(&scale1, scale, scale);
+		}
+		else
+		{
+			AEMtx33Scale(&scale1, -scale, scale);
+		}
+	}
 	// Compute the rotation matrix 
 	AEMtx33Rot(&rot, dirCurr);
 	// Compute the translation matrix
@@ -207,9 +218,15 @@ void Character::ProjectileCreate(Character player, Character enemy)
 	float x = (player.posCurr.x - enemy.posCurr.x) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
 	float y = (player.posCurr.y - enemy.posCurr.y) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
 
+	float angle = acos(x);
 	AEVec2 vel = { x*10,y*10 };
-	gameObjInstCreate(TYPE_OBJECT_BULLET, 1.0f, &enemy.posCurr, &vel, 0);
+	if (enemy.posCurr.y > player.posCurr.y)
+	{
+		angle *= -1;
+	}
+	gameObjInstCreate(TYPE_OBJECT_BULLET, 1.0f, &enemy.posCurr, &vel, angle);
 	counter = 0;
+
 }
 
 void Character::ProjectileUpdate()

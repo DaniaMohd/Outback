@@ -224,7 +224,7 @@ void GameStatePlatformLoad(void)
 
 	pObj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
-	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\arrow.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 
 	// Loading the levels
@@ -510,6 +510,19 @@ void GameStatePlatformUpdate(void)
 		****************/
 		sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
 		sEnemies[i].EnemyStateMachine();
+
+		//testing the auto fire for enemies
+		if (sEnemies[i].innerState == INNER_STATE::INNER_STATE_ON_ENTER)
+		{
+			for (int j = 0; j < GAME_OBJ_NUM_MAX; j++)
+			{
+				if (sBoomerang[j].flag == 0)
+				{
+					sBoomerang[j].ProjectileCreate(pHero, sEnemies[i]);
+					break;
+				}
+			}
+		}
 	}
 	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
 
@@ -748,6 +761,10 @@ void GameStatePlatformUpdate(void)
 		if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
 			continue;
 
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].pObject->type == TYPE_OBJECT_BULLET)
+		{
+			printf("DIE\n");
+		}
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].projectileReturning == true)
 		{
 			printf("returned\n");
