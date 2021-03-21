@@ -1,4 +1,4 @@
 ﻿  GameState_Platform.cpp
-C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(462,3): warning C4456: declaration of 'i' hides previous local declaration
-C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(382,6): message : see declaration of 'i'
-  Outback.vcxproj -> C:\Users\zzz\Documents\GitHub\Outback\Outback\Bin\OutbackD.exe
+C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(466,3): warning C4456: declaration of 'i' hides previous local declaration
+C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(386,6): message : see declaration of 'i'
+  Outback.vcxproj -> C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe

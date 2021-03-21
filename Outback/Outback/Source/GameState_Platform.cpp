@@ -46,6 +46,7 @@ static GameObjInst*		sParticles;
 
 // list of enemies
 static Character*		sBoomerang;
+static unsigned int		sBoomNum;
 
 // Binary map data
 static GameObjInst		pBlackInstance;
@@ -347,6 +348,9 @@ void GameStatePlatformInit(void)
 				Hero_Initial_Y = y;
 
 				pHero.gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, &Pos, nullptr, 0.0f);
+				//YuXi
+				pHero.projectileMax = 1;
+				pHero.powerRange = 0;
 
 				SnapToCell(&pHero.posCurr.x);
 				SnapToCell(&pHero.posCurr.y);
@@ -481,17 +485,43 @@ void GameStatePlatformUpdate(void)
 		gGameStateNext = GS_MAINMENU;
 	}
 
-	if (AEInputCheckTriggered(AEVK_J))
+	//YuXi
+	if (pHero.counter > 0)
 	{
+		pHero.counter -= 0.01f;
+	}
+	else
+	{
+		pHero.counter = 0;
+	}
+	//printf("CD: %f", pHero.counter);
+
+	//if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
+	if (AEInputCheckTriggered(AEVK_J) && pHero.counter == 0)
+	{
+		//Yuxi
+		pHero.counter = 1;
 		for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
 		{
 			if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
 			{
 				sBoomerang[i].boomerangCreate(pHero);
+				//YuXi
+				//++sBoomNum;
 				printf("FIRE!!!");
 				break;
 			}
 		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		pHero.powerRange += 1;
+	}
+
+	if (AEInputCheckTriggered(AEVK_M))
+	{
+		pHero.projectileMax += 1;
 	}
 	
 	//Update object instances physics and behavior
@@ -763,11 +793,13 @@ void GameStatePlatformUpdate(void)
 
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
-			printf("DIE\n");
+			//printf("DIE\n");
 		}
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].projectileReturning == true)
 		{
 			printf("returned\n");
+			//YuXi
+			//--sBoomNum;
 			sBoomerang[i].gameObjInstDestroy();
 		}
 	}

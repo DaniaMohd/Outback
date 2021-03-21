@@ -71,6 +71,9 @@ public:
 	void			gameObjInstUpdatePos();
 	void			gameObjInstTransformMatrix();
 	void			gameObjInstDrawObject(AEMtx33* map);
+
+	int				projectileMax;
+	int				powerRange;
 };
 
 class Character : public GameObjInst

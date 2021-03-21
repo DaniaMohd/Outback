@@ -250,7 +250,7 @@ void Character::boomerangCreate(Character character)
 	AEVec2 vel;
 	AEVec2Zero(&vel);
 
-	projectileRange = 10;
+	projectileRange = 10 + 5 * character.powerRange;
 	projectileTime = zero;
 	initialPos = character.posCurr;
 	projectileReturning = false;
