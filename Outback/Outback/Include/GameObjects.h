@@ -16,6 +16,11 @@ const unsigned int	FLAG_ACTIVE = 0x00000001;
 const unsigned int	FLAG_VISIBLE = 0x00000002;
 const unsigned int	FLAG_NON_COLLIDABLE = 0x00000004;
 
+class GameObjInst;
+class Enemy;
+class Player;
+class Projectile;
+
 enum TYPE_OBJECT
 {
 	TYPE_OBJECT_EMPTY,			//0
@@ -24,7 +29,8 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_ENEMY1,			//3
 	TYPE_OBJECT_COIN,			//4
 	TYPE_OBJECT_PARTICLES,		//5
-	TYPE_OBJECT_BULLET			//6
+	TYPE_OBJECT_BULLET,			//6
+	TYPE_OBJECT_BOOMERANG		//7
 };
 
 enum class STATE
@@ -72,11 +78,11 @@ public:
 	void			gameObjInstTransformMatrix();
 	void			gameObjInstDrawObject(AEMtx33* map);
 
-	int				projectileMax;
-	int				powerRange;
+	//int				projectileMax;
+	//int				powerRange;
 };
 
-class Character : public GameObjInst
+class Enemy : public GameObjInst
 {
 public:
 	//Used to hold the current 
@@ -86,20 +92,58 @@ public:
 	enum			STATE state;
 	enum			INNER_STATE innerState;
 
-	int				range;
-	float			projectileRange;
-	bool			projectileReturning;
-	//int				initialDir;
-	AEVec2			initialPos;
-	AEVec2			projectileTime;
+	int				detectionRange;
+	int				firingRange;
 
-	void			characterCreate(unsigned int type, float scale1, AEVec2* pPos, AEVec2* pVel, float dir, enum STATE startState);
+	//int			healthPoints;
+	//int			damage;
+
+	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
 	void			EnemyStateMachine();		//State machine functions
-	void			boomerangCreate(Character character);
-	void			boomerangReturn(Character character);
-	void			ProjectileCreate(Character character, Character enemy);
+
+	//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
+	void			enemyFire(Player character, Projectile *bullet);
+
+	//enemy charging function, input player
+};
+
+class Player : public GameObjInst
+{
+public:
+	//Used to hold the current 
+	int				gridCollisionFlag;
+
+	float			boomerangRange;
+
+	//int			healthPoints;
+	//int			damage;
+
+	void			playerCreate(AEVec2* pPos);
+	void			playerFire(Projectile *boomerang);
+	
+	//probably additional functions to aid in upgrade pickups
+};
+
+class Projectile : public GameObjInst
+{
+public:
+	//int				range;
+	float			projectileRange;
+	bool			boomerangReturning;
+
+	AEVec2			initialPos;
+	AEVec2			boomerangTime;
+
+	void			boomerangCreate(AEVec2* startPosition, AEVec2* vel, float range);
+	void			boomerangUpdate(Player character);
+
+	void			ProjectileCreate(AEVec2* startPosition, AEVec2* vel, float angle);
 	void			ProjectileUpdate();
 };
 
+//function of input type player and enemy pointer to spawn enemies arounf the player???
+
 extern GameObj*				sGameObjList;
 extern unsigned long		sGameObjNum;
+
+//extern to carry over player data, probs

@@ -1,9 +1,9 @@
 /******************************************************************************/
 /*!
 \file		GameState_Platform.cpp
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
+\author 	
+\par    	email:
+\date   	??/??/2021
 \brief      This file contains the definition for the Game State Platform function.
 
 Copyright (C) 2021 DigiPen Institute of Technology.
@@ -30,12 +30,12 @@ GameObj*				sGameObjList;
 unsigned long			sGameObjNum;
 
 // list of enemies
-static Character*		sEnemies;
+static Enemy*			sEnemies;
 static unsigned int		sEnemyNum;
 
-//Bullet
-static GameObjInst*		sBullet;
-unsigned int			sBulletNum;
+////Bullet
+//static GameObjInst*		sBullet;
+//unsigned int			sBulletNum;
 
 // list of coins
 static GameObjInst*		sCoins;
@@ -45,8 +45,8 @@ static unsigned int		sCoinNum;
 static GameObjInst*		sParticles;
 
 // list of enemies
-static Character*		sBoomerang;
-static unsigned int		sBoomNum;
+static Projectile*		sProjectiles;
+static unsigned int		sProjectileNum;
 
 // Binary map data
 static GameObjInst		pBlackInstance;
@@ -54,7 +54,7 @@ static GameObjInst		pWhiteInstance;
 static AEMtx33			MapTransform;
 
 // Hero instance
-static Character		pHero;
+static Player			pHero;
 
 const int				PIXEL = 20;
 
@@ -73,14 +73,14 @@ void GameStatePlatformLoad(void)
 	sGameObjList = (GameObj *)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObj));
 	sGameObjNum = 0;
 
-	sEnemies = (Character*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Character));
+	sEnemies = (Enemy *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Enemy));
 	sEnemyNum = 0;
 
-	sCoins = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
+	sCoins = (GameObjInst *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
-	sParticles = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
+	sParticles = (GameObjInst *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
-	sBoomerang = (Character*)calloc(GAME_OBJ_NUM_MAX, sizeof(Character));
+	sProjectiles = (Projectile *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Projectile));
 
 
 	GameObj* pObj;
@@ -228,6 +228,25 @@ void GameStatePlatformLoad(void)
 	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\arrow.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 
+	//Creating the Bullets
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_BOOMERANG;
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
+
 	// Loading the levels
 	if (gGameStateCurr == GS_LEVEL1)
 	{
@@ -347,10 +366,11 @@ void GameStatePlatformInit(void)
 				Hero_Initial_X = x;
 				Hero_Initial_Y = y;
 
-				pHero.gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, &Pos, nullptr, 0.0f);
-				//YuXi
-				pHero.projectileMax = 1;
-				pHero.powerRange = 0;
+				pHero.playerCreate(&Pos);
+				//pHero.gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, &Pos, nullptr, 0.0f);
+				////YuXi
+				//pHero.projectileMax = 1;
+				//pHero.powerRange = 0;
 
 				SnapToCell(&pHero.posCurr.x);
 				SnapToCell(&pHero.posCurr.y);
@@ -358,7 +378,8 @@ void GameStatePlatformInit(void)
 
 			else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
 			{
-				sEnemies[sEnemyNum].characterCreate(TYPE_OBJECT_ENEMY1, 1.0f, &Pos, nullptr, 0.0f, STATE::STATE_GOING_LEFT);
+				sEnemies[sEnemyNum].enemyCreate(TYPE_OBJECT_ENEMY1, &Pos);
+				//sEnemies[sEnemyNum].characterCreate(TYPE_OBJECT_ENEMY1, 1.0f, &Pos, nullptr, 0.0f, STATE::STATE_GOING_LEFT);
 
 				SnapToCell(&sEnemies[sEnemyNum].posCurr.x);
 				SnapToCell(&sEnemies[sEnemyNum].posCurr.y);
@@ -404,9 +425,9 @@ void GameStatePlatformUpdate(void)
 	if (AEInputCheckCurr(AEVK_A) || AEInputCheckCurr(AEVK_LEFT))
 	{
 		pHero.velCurr.x = -MOVE_VELOCITY_HERO;
-		//pHero.dirCurr = PI;
 		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
 		{
+			//should probs make this into a function
 			for (unsigned int k = 0; k < GAME_OBJ_INST_NUM_MAX; k++)
 			{
 				if (sParticles[k].flag == 0)
@@ -424,9 +445,9 @@ void GameStatePlatformUpdate(void)
 	else if (AEInputCheckCurr(AEVK_D) || AEInputCheckCurr(AEVK_RIGHT))
 	{
 		pHero.velCurr.x = MOVE_VELOCITY_HERO;
-		//pHero.dirCurr = 0;
 		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
 		{
+			//should probs make this into a function
 			for (unsigned int k = 0; k < GAME_OBJ_INST_NUM_MAX; k++)
 			{
 				if (sParticles[k].flag == 0)
@@ -461,21 +482,24 @@ void GameStatePlatformUpdate(void)
 		pHero.gridCollisionFlag = 0;
 	}
 
+	//enemy firing
 	if (AEInputCheckTriggered(AEVK_K))
 	{
-		for (int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			// skip non-active object
 			if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
 				continue;
-			for (int j = 0; j < GAME_OBJ_NUM_MAX; j++)
-			{
-				if (sBoomerang[j].flag == 0)
-				{
-					sBoomerang[j].ProjectileCreate(pHero, sEnemies[i]);
-					break;
-				}
-			}
+
+			sEnemies[i].enemyFire(pHero, sProjectiles);
+			//for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			//{
+			//	if (sProjectiles[j].flag == 0)
+			//	{
+			//		sEnemies[i].enemyFire(pHero, sProjectiles[j]);
+			//		break;
+			//	}
+			//}
 		}
 	}
 
@@ -501,28 +525,30 @@ void GameStatePlatformUpdate(void)
 	{
 		//Yuxi
 		pHero.counter = 1;
-		for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
-		{
-			if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
-			{
-				sBoomerang[i].boomerangCreate(pHero);
-				//YuXi
-				//++sBoomNum;
-				printf("FIRE!!!");
-				break;
-			}
-		}
+		//for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		//{
+		//	if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
+		//	{
+		//		pHero.playerFire(sProjectiles[i]);
+		//		//YuXi
+		//		//++sBoomNum;
+		//		printf("FIRE!!!");
+		//		break;
+		//	}
+		//}
+		pHero.playerFire(sProjectiles);
 	}
 
-	if (AEInputCheckTriggered(AEVK_P))
-	{
-		pHero.powerRange += 1;
-	}
+	//Yuxi
+	//if (AEInputCheckTriggered(AEVK_P))
+	//{
+	//	pHero.powerRange += 1;
+	//}
 
-	if (AEInputCheckTriggered(AEVK_M))
-	{
-		pHero.projectileMax += 1;
-	}
+	//if (AEInputCheckTriggered(AEVK_M))
+	//{
+	//	pHero.projectileMax += 1;
+	//}
 	
 	//Update object instances physics and behavior
 	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -544,14 +570,15 @@ void GameStatePlatformUpdate(void)
 		//testing the auto fire for enemies
 		if (sEnemies[i].innerState == INNER_STATE::INNER_STATE_ON_ENTER)
 		{
-			for (int j = 0; j < GAME_OBJ_NUM_MAX; j++)
-			{
-				if (sBoomerang[j].flag == 0)
-				{
-					sBoomerang[j].ProjectileCreate(pHero, sEnemies[i]);
-					break;
-				}
-			}
+			sEnemies[i].enemyFire(pHero, sProjectiles);
+			//for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			//{
+			//	if (sProjectiles[j].flag == 0)
+			//	{
+			//		sEnemies[i].enemyFire(pHero, sProjectiles[j]);
+			//		break;
+			//	}
+			//}
 		}
 	}
 	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
@@ -615,17 +642,17 @@ void GameStatePlatformUpdate(void)
 	pHero.gameObjInstUpdatePos();
 	pHero.gameObjInstBoundingBox();
 
-	for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		// skip non-active object
-		if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
+		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
 			continue;
 
-		sBoomerang[i].gameObjInstUpdatePos();
-		sBoomerang[i].gameObjInstBoundingBox();
-		if (sBoomerang[i].pObject->type == TYPE_OBJECT_BULLET)
+		sProjectiles[i].gameObjInstUpdatePos();
+		sProjectiles[i].gameObjInstBoundingBox();
+		if (sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
-			sBoomerang[i].ProjectileUpdate();
+			sProjectiles[i].ProjectileUpdate();
 
 			//counter set to 1 because the veloci
 			//if (sBoomerang[i].counter > 1)
@@ -634,7 +661,7 @@ void GameStatePlatformUpdate(void)
 			//}
 		}
 		else
-		sBoomerang[i].boomerangReturn(pHero);
+			sProjectiles[i].boomerangUpdate(pHero);
 	}
 
 	//Check for grid collision
@@ -788,19 +815,21 @@ void GameStatePlatformUpdate(void)
 	}
 	for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
 	{
-		if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
+		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
 			continue;
 
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].pObject->type == TYPE_OBJECT_BULLET)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
+			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
 			//printf("DIE\n");
 		}
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBoomerang[i].boundingBox, sBoomerang[i].velCurr)) == true && sBoomerang[i].projectileReturning == true)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
+			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG  && sProjectiles[i].boomerangReturning == true)
 		{
 			printf("returned\n");
 			//YuXi
 			//--sBoomNum;
-			sBoomerang[i].gameObjInstDestroy();
+			sProjectiles[i].gameObjInstDestroy();
 		}
 	}
 	
@@ -828,12 +857,12 @@ void GameStatePlatformUpdate(void)
 
 		sParticles[i].gameObjInstTransformMatrix();
 	}
-	for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
-		if (0 == (sBoomerang[i].flag & FLAG_ACTIVE))
+		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
 			continue;
 
-		sBoomerang[i].gameObjInstTransformMatrix();
+		sProjectiles[i].gameObjInstTransformMatrix();
 	}
 	pHero.gameObjInstTransformMatrix();
 
@@ -988,6 +1017,7 @@ void GameStatePlatformDraw(void)
 		// skip non-active object
 		if (0 == (sParticles[i].flag & FLAG_ACTIVE) || 0 == (sParticles[i].flag & FLAG_VISIBLE))
 			continue;
+
 		sParticles[i].gameObjInstDrawObject(&MapTransform);
 		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -1008,12 +1038,13 @@ void GameStatePlatformDraw(void)
 		//AEGfxMeshDraw(sParticles[i].pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 		//Don't forget to concatenate the MapTransform matrix with the transformation of each game object instance
 	}
-	for (i = 0; i < GAME_OBJ_NUM_MAX; i++)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		// skip non-active object
-		if (0 == (sBoomerang[i].flag & FLAG_ACTIVE) || 0 == (sBoomerang[i].flag & FLAG_VISIBLE))
+		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE) || 0 == (sProjectiles[i].flag & FLAG_VISIBLE))
 			continue;
-		sBoomerang[i].gameObjInstDrawObject(&MapTransform);
+
+		sProjectiles[i].gameObjInstDrawObject(&MapTransform);
 		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -1085,10 +1116,7 @@ void GameStatePlatformFree(void)
 	{
 		sEnemies[i].gameObjInstDestroy();
 		sCoins[i].gameObjInstDestroy();
-	}
-	for (unsigned int i = 0; i < GAME_OBJ_NUM_MAX; i++)
-	{
-		sBoomerang[i].gameObjInstDestroy();
+		sProjectiles[i].gameObjInstDestroy();
 	}
 	pWhiteInstance.gameObjInstDestroy();
 	pBlackInstance.gameObjInstDestroy();
@@ -1115,7 +1143,7 @@ void GameStatePlatformUnload(void)
 	free(sCoins);
 	free(sGameObjList);
 	free(sParticles);
-	free(sBoomerang);
+	free(sProjectiles);
 
 	/*********
 	Free the map data

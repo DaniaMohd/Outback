@@ -1,4 +1,5 @@
 #include "main.h"
+//#include "GameObjects.h"
 
 /******************************************************************************/
 /*!
@@ -19,7 +20,6 @@ void  GameObjInst::gameObjInstCreate(unsigned int type, float scale1, AEVec2* pP
 	velCurr = pVel ? *pVel : zero;
 	dirCurr = dir;
 	dirFaceR = true;
-	//Hello
 }
 
 /******************************************************************************/
@@ -114,24 +114,25 @@ void GameObjInst::gameObjInstDrawObject(AEMtx33* map)
 
 /******************************************************************************/
 /*!
-	Creates characters
+	Creates Enemy
 */
 /******************************************************************************/
-void Character::characterCreate(unsigned int type, float scale1, AEVec2* pPos, AEVec2* pVel, float dir, enum STATE startState)
+void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 {
-	gameObjInstCreate(type, scale1, pPos, pVel, dir);
+	AEVec2 vel;
+	AEVec2Zero(&vel);
+	gameObjInstCreate(enemyType, 1.0f, pPos, &vel, 0);
 
-	state = startState;
+	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
 }
-
 
 /******************************************************************************/
 /*!
 	Enemy state behaviour
 */
 /******************************************************************************/
-void Character::EnemyStateMachine()
+void Enemy::EnemyStateMachine()
 {
 	switch (state)
 	{
@@ -212,59 +213,105 @@ void Character::EnemyStateMachine()
 	}
 }
 
-
-
-void Character::ProjectileCreate(Character player, Character enemy)
+/******************************************************************************/
+/*!
+	Enemy creates bullet
+*/
+/******************************************************************************/
+void Enemy::enemyFire(Player character, Projectile *bullet)
 {
-	float x = (player.posCurr.x - enemy.posCurr.x) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
-	float y = (player.posCurr.y - enemy.posCurr.y) / sqrt(pow(player.posCurr.x - enemy.posCurr.x, 2.0f) + pow(player.posCurr.y - enemy.posCurr.y, 2.0f));
+	// Weird warning if there are no (double) cast
+	float x = (float)(((double)character.posCurr.x - posCurr.x) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
+	float y = (float)(((double)character.posCurr.y - posCurr.y) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
 
-	float angle = acos(x);
-	AEVec2 vel = { x*10,y*10 };
-	if (enemy.posCurr.y > player.posCurr.y)
+	float angle = (float)acos(x);
+	
+	//bullet velocity
+	//float x or y * 10(velocity)
+	AEVec2 vel = { x * 10,y * 10 };
+	//flip the angle if the bullet is suppose to go downwards
+	if (posCurr.y > character.posCurr.y)
 	{
 		angle *= -1;
 	}
-	gameObjInstCreate(TYPE_OBJECT_BULLET, 1.0f, &enemy.posCurr, &vel, angle);
-	counter = 0;
-
-}
-
-void Character::ProjectileUpdate()
-{
-	counter += g_dt;
-	if (counter > 2)
+	
+	//find empty slot in the projectile array
+	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
-		flag = 0;
+		if (bullet[i].flag == 0)
+		{
+			bullet[i].ProjectileCreate(&posCurr, &vel, angle);
+			break;
+		}
 	}
+	//bullet.ProjectileCreate(&posCurr, &vel, angle);
 }
 
 /******************************************************************************/
 /*!
-	Creates projectile based on who shot it
+	Creates player
 */
 /******************************************************************************/
-void Character::boomerangCreate(Character character)
+void Player::playerCreate(AEVec2* pPos)
+{
+	AEVec2 vel;
+	AEVec2Zero(&vel);
+	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
+	boomerangRange = 10.0f;
+}
+
+/******************************************************************************/
+/*!
+	Player creates boomerang
+*/
+/******************************************************************************/
+void Player::playerFire(Projectile *boomerang)
+{
+	AEVec2 vel;
+	AEVec2Zero(&vel);
+	//boomerang.projectileRange = 10 + 5 * powerRange;
+	//boomerang.projectileTime = zero;
+	//boomerang.initialPos = posCurr;
+	//boomerang.projectileReturning = false;
+
+	vel.x = (dirFaceR) ? 10.0f : -10.0f;
+	//if (dirFaceR)
+	//{
+	//	vel.x = 10;
+	//}
+	//else
+	//{
+	//	vel.x = -10;
+	//}
+
+	//find empty slot in the projectile array
+	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		if (boomerang[i].flag == 0)
+		{
+			boomerang[i].boomerangCreate(&posCurr, &vel, boomerangRange);
+			break;
+		}
+	}
+	//boomerang.boomerangCreate(&posCurr, &vel, boomerangRange);
+}
+
+/******************************************************************************/
+/*!
+	Creates boomerang
+*/
+/******************************************************************************/
+void Projectile::boomerangCreate(AEVec2* startPosition, AEVec2* vel, float range)
 {
 	AEVec2 zero;
 	AEVec2Zero(&zero);
-	AEVec2 vel;
-	AEVec2Zero(&vel);
 
-	projectileRange = 10 + 5 * character.powerRange;
-	projectileTime = zero;
-	initialPos = character.posCurr;
-	projectileReturning = false;
-	if (character.dirFaceR)
-	{
-		vel.x = 10;
-	}
-	else
-	{
-		vel.x = -10;
-	}
-	// replaace type object with boomerang
-	gameObjInstCreate(TYPE_OBJECT_ENEMY1, 1.0f, &character.posCurr, &vel, character.dirCurr);
+	gameObjInstCreate(TYPE_OBJECT_BOOMERANG, 1.0f, startPosition, vel, 0);
+	boomerangTime = zero;
+	boomerangReturning = false;
+	projectileRange = range;
+	initialPos.x = startPosition->x;
+	initialPos.y = startPosition->y;
 }
 
 /******************************************************************************/
@@ -272,22 +319,50 @@ void Character::boomerangCreate(Character character)
 	Boomerang returns to whoever threw it
 */
 /******************************************************************************/
-void Character::boomerangReturn(Character character)
+void Projectile::boomerangUpdate(Player character)
 {
-	if (projectileReturning)
+	if (boomerangReturning)
 	{
 		float x_distance = posCurr.x - character.posCurr.x;
 		float y_distance = posCurr.y - character.posCurr.y;
-		velCurr.x = -x_distance / (projectileTime.x -= g_dt);
-		velCurr.y = -y_distance / (projectileTime.y -= g_dt);
+		velCurr.x = -x_distance / (boomerangTime.x -= g_dt);
+		velCurr.y = -y_distance / (boomerangTime.y -= g_dt);
 	}
 	else
 	{
-		projectileTime.x += g_dt;
-		projectileTime.y += g_dt;
+		boomerangTime.x += g_dt;
+		boomerangTime.y += g_dt;
 		if (posCurr.x >= initialPos.x + projectileRange || posCurr.x <= initialPos.x - projectileRange)
 		{
-			projectileReturning = true;
+			boomerangReturning = true;
 		}
 	}
 }
+
+/******************************************************************************/
+/*!
+	Creates bullet
+*/
+/******************************************************************************/
+void Projectile::ProjectileCreate(AEVec2* startPosition, AEVec2* vel, float angle)
+{
+	gameObjInstCreate(TYPE_OBJECT_BULLET, 1.0f, startPosition, vel, angle);
+	//resets counter
+	counter = 0;
+}
+
+/******************************************************************************/
+/*!
+	Updates bullet
+*/
+/******************************************************************************/
+void Projectile::ProjectileUpdate()
+{
+	counter += g_dt;
+	//time before bullet despawns
+	if (counter > 2)
+	{
+		flag = 0;
+	}
+}
+

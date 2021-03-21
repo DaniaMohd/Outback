@@ -1,9 +1,9 @@
 /******************************************************************************/
 /*!
 \file		main.h
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
+\author
+\par    	email:
+\date   	??/??/2021
 \brief      This file contains the definition for the main function.
 
 Copyright (C) 2021 DigiPen Institute of Technology.
