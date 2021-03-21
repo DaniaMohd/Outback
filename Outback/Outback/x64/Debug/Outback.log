@@ -1,4 +1,18 @@
-﻿  GameState_Platform.cpp
-C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(466,3): warning C4456: declaration of 'i' hides previous local declaration
-C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(386,6): message : see declaration of 'i'
-  Outback.vcxproj -> C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
+﻿  Bullet.cpp
+  Collision.cpp
+  GameObjects.cpp
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(101,10): warning C4101: 'cellTranslation': unreferenced local variable
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(218,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(219,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(221,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(253,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  GameStateMgr.cpp
+  GameState_Platform.cpp
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(466,3): warning C4456: declaration of 'i' hides previous local declaration
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(386,6): message : see declaration of 'i'
+  main.cpp
+  MainMenu.cpp
+  Map.cpp
+  Win.cpp
+  Generating Code...
+  Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe

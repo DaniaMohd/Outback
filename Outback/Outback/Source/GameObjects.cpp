@@ -19,6 +19,7 @@ void  GameObjInst::gameObjInstCreate(unsigned int type, float scale1, AEVec2* pP
 	velCurr = pVel ? *pVel : zero;
 	dirCurr = dir;
 	dirFaceR = true;
+	//Hello
 }
 
 /******************************************************************************/
