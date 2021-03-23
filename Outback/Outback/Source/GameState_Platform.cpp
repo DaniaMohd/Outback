@@ -164,7 +164,7 @@ void GameStatePlatformLoad(void)
 
 	pObj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "Failed to create Enemy Mesh!");
-	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Enemy.png");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Spider.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create Enemy Texture!");
 
 
