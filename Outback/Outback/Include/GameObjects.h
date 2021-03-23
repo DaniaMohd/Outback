@@ -30,7 +30,8 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_COIN,			//4
 	TYPE_OBJECT_PARTICLES,		//5
 	TYPE_OBJECT_BULLET,			//6
-	TYPE_OBJECT_BOOMERANG		//7
+	TYPE_OBJECT_BOOMERANG,		//7
+	TYPE_OBJECT_HEALTH			//8
 };
 
 enum class STATE
@@ -95,7 +96,9 @@ public:
 	int				detectionRange;
 	int				firingRange;
 
-	//int			healthPoints;
+	float			totalHealth = 100.0f;
+	float			currentHealth;
+
 	//int			damage;
 
 	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
@@ -115,7 +118,15 @@ public:
 
 	float			boomerangRange;
 
-	//int			healthPoints;
+	float			    fullHealth = 100.0f;
+	float				currentHealth;
+	AEGfxVertexList* fullhp1;
+	AEGfxVertexList* fullhp2;
+	AEGfxVertexList* currenthp1;
+	AEGfxVertexList* currenthp2;
+	AEGfxTexture* fullBarText;
+	AEGfxTexture* currentBarText;
+
 	//int			damage;
 
 	void			playerCreate(AEVec2* pPos);

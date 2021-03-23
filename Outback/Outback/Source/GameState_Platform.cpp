@@ -294,6 +294,28 @@ void GameStatePlatformLoad(void)
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
+
+	//==========================================================
+	pObj = sGameObjList + sGameObjNum++;
+	pHero.currentHealth = pHero.fullHealth;	//health changable
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
+		pHero.fullHealth-30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
+	pHero.fullhp1 = AEGfxMeshEnd();
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		pHero.fullHealth-30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		pHero.fullHealth-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	pHero.fullhp2 = AEGfxMeshEnd();
+	pHero.fullBarText = AEGfxTextureLoad("..\\Resources\\Textures\\fullhealth.png");
+	AE_ASSERT_MESG(pHero.fullBarText, "Failed to create health");
+	pHero.currentBarText = AEGfxTextureLoad("..\\Resources\\Textures\\currenthealth.png");
+	AE_ASSERT_MESG(pHero.currentBarText, "Failed to create health");
+	//==============================================================================
+
 }
 
 /******************************************************************************/
@@ -866,6 +888,7 @@ void GameStatePlatformUpdate(void)
 	}
 	pHero.gameObjInstTransformMatrix();
 
+	
 	if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
 	{
 		// Camera fixed
@@ -882,6 +905,19 @@ void GameStatePlatformUpdate(void)
 			camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
 	}
 	AEGfxSetCamPosition(camX, camY);
+
+	//test health become 0
+	if (AEInputCheckTriggered(AEVK_L))
+	{
+		printf("%f\n", pHero.fullHealth);
+		pHero.currentHealth -= 10.0f;
+		printf("%f\n", pHero.currentHealth);
+		if (pHero.currentHealth == 0.0f)
+		{
+			printf("GAME OVER!!");
+		}
+	}
+	
 }
 
 /******************************************************************************/
@@ -1102,6 +1138,70 @@ void GameStatePlatformDraw(void)
 		}
 		onChange = false;
 	}
+
+	//=============================================================
+	//DRAWING OF CURRENT HEALTH DISPLAY - XY
+
+	AEGfxMeshStart();
+	// This rectangle has 2 triangles: currenthp1 and currenthp2
+	AEGfxTriAdd(
+		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
+		pHero.currentHealth-30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
+	pHero.currenthp1 = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pHero.currenthp1, "Failed to create mesh 2!!");
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		pHero.currentHealth-30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		pHero.currentHealth-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	pHero.currenthp2 = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pHero.currenthp2, "Failed to create mesh 2!!");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//ltriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.fullhp1, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.fullhp2, AE_GFX_MDM_TRIANGLES);
+
+	// current health =======================================
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 1
+	AEGfxSetPosition(-300.0f, 200.0f);
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.currenthp1, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.currenthp2, AE_GFX_MDM_TRIANGLES);
+
+
+	//========================================================================
 }
 
 /******************************************************************************/

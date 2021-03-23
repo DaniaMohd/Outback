@@ -1,3 +1,2 @@
-﻿  GameObjects.cpp
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(102,10): warning C4101: 'cellTranslation': unreferenced local variable
-  Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
+﻿  GameState_Platform.cpp
+  Outback.vcxproj -> C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\\Bin\OutbackD.exe
