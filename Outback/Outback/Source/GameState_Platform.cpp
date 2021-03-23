@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \file		GameState_Platform.cpp
-\author 	
+\author
 \par    	email:
 \date   	??/??/2021
 \brief      This file contains the definition for the Game State Platform function.
@@ -26,11 +26,11 @@ static int				TotalCoins;
 static int              CoinsCollected;
 
 // list of original objects
-GameObj*				sGameObjList;
+GameObj* sGameObjList;
 unsigned long			sGameObjNum;
 
 // list of enemies
-static Enemy*			sEnemies;
+static Enemy* sEnemies;
 static unsigned int		sEnemyNum;
 
 ////Bullet
@@ -38,14 +38,14 @@ static unsigned int		sEnemyNum;
 //unsigned int			sBulletNum;
 
 // list of coins
-static GameObjInst*		sCoins;
+static GameObjInst* sCoins;
 static unsigned int		sCoinNum;
 
 // list of particles
-static GameObjInst*		sParticles;
+static GameObjInst* sParticles;
 
 // list of enemies
-static Projectile*		sProjectiles;
+static Projectile* sProjectiles;
 static unsigned int		sBoomNum;
 
 // Binary map data
@@ -70,17 +70,17 @@ static bool             onChange = true; //when touching an enemy or coin
 /******************************************************************************/
 void GameStatePlatformLoad(void)
 {
-	sGameObjList = (GameObj *)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObj));
+	sGameObjList = (GameObj*)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObj));
 	sGameObjNum = 0;
 
-	sEnemies = (Enemy *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Enemy));
+	sEnemies = (Enemy*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Enemy));
 	sEnemyNum = 0;
 
-	sCoins = (GameObjInst *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
+	sCoins = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
-	sParticles = (GameObjInst *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
+	sParticles = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
-	sProjectiles = (Projectile *)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Projectile));
+	sProjectiles = (Projectile*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Projectile));
 
 
 	GameObj* pObj;
@@ -92,16 +92,18 @@ void GameStatePlatformLoad(void)
 
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-0.5f, -0.5f, 0xFF0000FF, 0.0f, 0.0f,
-		0.5f, -0.5f, 0xFF0000FF, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+		-0.5f, -0.5f, 0xFF5FCDE4, 0.0f, 0.0f,
+		0.5f, -0.5f, 0xFF5FCDE4, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF5FCDE4, 0.0f, 0.0f);
 
 	AEGfxTriAdd(
-		0.5f, -0.5f, 0xFF0000FF, 0.0f, 0.0f,
-		0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0xFF0000FF, 0.0f, 0.0f);
+		0.5f, -0.5f, 0xFF5FCDE4, 0.0f, 0.0f,
+		0.5f, 0.5f, 0xFF5FCDE4, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0xFF5FCDE4, 0.0f, 0.0f);
 	pObj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Background.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create background Texture!");
 
 
 	//Creating the white object
@@ -285,7 +287,7 @@ void GameStatePlatformLoad(void)
 	// Whole level fits in the screen
 	if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
 	{
-		AEMtx33Scale(&scale, (float)(AEGetWindowWidth()/BINARY_MAP_WIDTH), (float)(AEGetWindowHeight() / BINARY_MAP_HEIGHT));
+		AEMtx33Scale(&scale, (float)(AEGetWindowWidth() / BINARY_MAP_WIDTH), (float)(AEGetWindowHeight() / BINARY_MAP_HEIGHT));
 	}
 	else
 	{
@@ -331,7 +333,7 @@ void GameStatePlatformInit(void)
 	// to their initial positions in MapData
 
 	/***********
-	Loop through all the array elements of MapData 
+	Loop through all the array elements of MapData
 	(which was initialized in the "GameStatePlatformLoad" function
 	from the .txt file
 		if the element represents a collidable or non collidable area
@@ -340,20 +342,20 @@ void GameStatePlatformInit(void)
 		if the element represents the hero
 			Create a hero instance
 			Set its position depending on its array indices in MapData
-			Save its array indices in Hero_Initial_X and Hero_Initial_Y 
+			Save its array indices in Hero_Initial_X and Hero_Initial_Y
 			(Used when the hero dies and its position needs to be reset)
 
 		if the element represents an enemy
 			Create an enemy instance
 			Set its position depending on its array indices in MapData
-			
+
 		if the element represents a coin
 			Create a coin instance
 			Set its position depending on its array indices in MapData
-			
+
 	***********/
-	for(y = 0; y < BINARY_MAP_HEIGHT; ++y)
-		for(x = 0; x < BINARY_MAP_WIDTH; ++x)
+	for (y = 0; y < BINARY_MAP_HEIGHT; ++y)
+		for (x = 0; x < BINARY_MAP_WIDTH; ++x)
 		{
 			if (MapData[y][x] == TYPE_OBJECT_EMPTY || MapData[y][x] == TYPE_OBJECT_COLLISION)
 				continue;
@@ -521,7 +523,7 @@ void GameStatePlatformUpdate(void)
 	//printf("CD: %f", pHero.counter);
 
 	if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
-	//if (AEInputCheckTriggered(AEVK_J) && pHero.counter == 0)
+		//if (AEInputCheckTriggered(AEVK_J) && pHero.counter == 0)
 	{
 		//Yuxi
 		pHero.counter = 0.1;
@@ -550,9 +552,9 @@ void GameStatePlatformUpdate(void)
 	{
 		pHero.projectileMax += 1;
 	}
-	
+
 	//Update object instances physics and behavior
-	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		// skip non-active object
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
@@ -585,7 +587,7 @@ void GameStatePlatformUpdate(void)
 	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
 
 	//Update object instances positions
-	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		// skip non-active object
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
@@ -666,7 +668,7 @@ void GameStatePlatformUpdate(void)
 	}
 
 	//Check for grid collision
-	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		// skip non-active object
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
@@ -682,7 +684,7 @@ void GameStatePlatformUpdate(void)
 		if collision from top
 			Snap to cell on Y axis
 			Velocity Y = 0
-	
+
 		if collision from left
 			Snap to cell on X axis
 			Velocity X = 0
@@ -756,8 +758,8 @@ void GameStatePlatformUpdate(void)
 				Remove the coin and decrement the coin counter.
 				Quit the game level to the menu in case no more coins are left
 	**********/
-	
-	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
 			continue;
@@ -828,26 +830,41 @@ void GameStatePlatformUpdate(void)
 
 				if (CollisionIntersection_RectRect(sEnemies[j].boundingBox, sEnemies[j].velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr) == true)
 				{
-					sEnemies[j].healthPoints -= pHero.damage;
-					printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+					if (sEnemies[j].hit1 == false && sProjectiles[i].boomerangReturning == false)
+					{
+						sEnemies[j].healthPoints -= pHero.damage;
+						sEnemies[j].hit1 = true;
+						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+					}
+					if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
+					{
+						sEnemies[j].healthPoints -= pHero.damage;
+						sEnemies[j].hit2 = true;
+						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+					}
 					if (sEnemies[j].healthPoints <= 0)
 					{
 						sEnemies[j].gameObjInstDestroy();
 						printf("enemy ded\n");
 					}
 				}
+				else
+				{
+					sEnemies[j].hit1 = false;
+					sEnemies[j].hit2 = false;
+				}
 
 			}
 		}
 
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
 			//printf("DIE\n");
 		}
 		//boomerang returning to player
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
-			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG  && sProjectiles[i].boomerangReturning == true)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
+			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG && sProjectiles[i].boomerangReturning == true)
 		{
 			//printf("returned\n");
 			//YuXi
@@ -855,9 +872,9 @@ void GameStatePlatformUpdate(void)
 			sProjectiles[i].gameObjInstDestroy();
 		}
 	}
-	
+
 	//Computing the transformation matrices of the game object instances
-	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		// skip non-active object
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
@@ -922,16 +939,16 @@ void GameStatePlatformDraw(void)
 	//Drawing the tile map
 
 	/******REMINDER*****
-	You need to concatenate MapTransform with the transformation matrix 
-	of any object you want to draw. MapTransform transform the instance 
+	You need to concatenate MapTransform with the transformation matrix
+	of any object you want to draw. MapTransform transform the instance
 	from the normalized coordinates system of the binary map
 	*******************/
 
 	/*********
 	for each array element in BinaryCollisionArray (2 loops)
-		Compute the cell's translation matrix acoording to its 
+		Compute the cell's translation matrix acoording to its
 		X and Y coordinates and save it in "cellTranslation"
-		Concatenate MapTransform with the cell's transformation 
+		Concatenate MapTransform with the cell's transformation
 		and save the result in "cellFinalTransformation"
 		Send the resultant matrix to the graphics manager using "AEGfxSetTransform"
 
@@ -941,8 +958,8 @@ void GameStatePlatformDraw(void)
 	*********/
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
-	for(i = 0; i < BINARY_MAP_HEIGHT; ++i)
-		for(j = 0; j < BINARY_MAP_WIDTH; ++j)
+	for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
+		for (j = 0; j < BINARY_MAP_WIDTH; ++j)
 		{
 			x = (float)j;
 			y = (float)i;
@@ -1111,7 +1128,7 @@ void GameStatePlatformDraw(void)
 	{
 		char strBuffer[100];
 		memset(strBuffer, 0, 100 * sizeof(char));
-		sprintf_s(strBuffer, "Lives Left: %i", HeroLives);	
+		sprintf_s(strBuffer, "Lives Left: %i", HeroLives);
 		printf("%s \n", strBuffer);
 		sprintf_s(strBuffer, "Coins Collected: %i", CoinsCollected);
 		printf("%s \n", strBuffer);

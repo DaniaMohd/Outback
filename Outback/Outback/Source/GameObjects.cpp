@@ -127,6 +127,8 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
 	healthPoints = 100;
+	hit1 = false;
+	hit2 = false;
 }
 
 /******************************************************************************/

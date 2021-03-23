@@ -95,6 +95,10 @@ public:
 	int				healthPoints;
 	//int			damage;
 
+
+	bool			hit1;
+	bool			hit2;
+
 	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
 	void			EnemyStateMachine();		//State machine functions
 
