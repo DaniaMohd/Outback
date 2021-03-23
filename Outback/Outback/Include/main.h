@@ -24,7 +24,7 @@ extern double	g_appTime;
 
 // ---------------------------------------------------------------------------
 // includes
-
+#include <fmod.hpp>
 #include "AEEngine.h"
 #include "math.h"
 
