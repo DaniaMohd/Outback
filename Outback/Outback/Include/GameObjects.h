@@ -92,7 +92,7 @@ public:
 	int				detectionRange;
 	int				firingRange;
 
-	//int			healthPoints;
+	int				healthPoints;
 	//int			damage;
 
 	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
@@ -113,7 +113,7 @@ public:
 	float			boomerangRange;
 
 	//int			healthPoints;
-	//int			damage;
+	int				damage;
 
 	int				projectileMax;
 	int				powerRange;

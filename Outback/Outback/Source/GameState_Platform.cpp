@@ -404,7 +404,7 @@ void GameStatePlatformInit(void)
 /******************************************************************************/
 void GameStatePlatformUpdate(void)
 {
-	int i;
+	int i, j;
 	//Handle Input
 	/***********
 	if right is pressed
@@ -814,10 +814,31 @@ void GameStatePlatformUpdate(void)
 			}
 		}
 	}
-	for (i = 0; i < GAME_OBJ_NUM_MAX; ++i)
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
 			continue;
+
+		if (sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG)
+		{
+			for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
+			{
+				if (0 == (sEnemies[j].flag & FLAG_ACTIVE))
+					continue;
+
+				if (CollisionIntersection_RectRect(sEnemies[j].boundingBox, sEnemies[j].velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr) == true)
+				{
+					sEnemies[j].healthPoints -= pHero.damage;
+					printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+					if (sEnemies[j].healthPoints <= 0)
+					{
+						sEnemies[j].gameObjInstDestroy();
+						printf("enemy ded\n");
+					}
+				}
+
+			}
+		}
 
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
@@ -828,7 +849,7 @@ void GameStatePlatformUpdate(void)
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG  && sProjectiles[i].boomerangReturning == true)
 		{
-			printf("returned\n");
+			//printf("returned\n");
 			//YuXi
 			--sBoomNum;
 			sProjectiles[i].gameObjInstDestroy();

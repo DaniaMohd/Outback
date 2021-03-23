@@ -125,6 +125,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
+	healthPoints = 100;
 }
 
 /******************************************************************************/
@@ -257,8 +258,9 @@ void Player::playerCreate(AEVec2* pPos)
 	AEVec2 vel;
 	AEVec2Zero(&vel);
 	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
-	boomerangRange = 10.0f;
+	boomerangRange = 5.0f;
 	projectileMax = 1;
+	damage = 1;
 }
 
 /******************************************************************************/
@@ -270,12 +272,12 @@ void Player::playerFire(Projectile *boomerang)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
-	boomerangRange = 10 + 5 * powerRange;
+	boomerangRange = 5 + 1 * powerRange;
 	//boomerang.projectileTime = zero;
 	//boomerang.initialPos = posCurr;
 	//boomerang.projectileReturning = false;
-
-	vel.x = (dirFaceR) ? 10.0f : -10.0f;
+	float tmp = 0.5 * powerRange;
+	vel.x = (dirFaceR) ? 10.0f + tmp : -10.0f - tmp;
 	//if (dirFaceR)
 	//{
 	//	vel.x = 10;
