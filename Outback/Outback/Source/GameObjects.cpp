@@ -121,8 +121,8 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
-	pPos->y += 1; //cuz enemy resized 2 times bigger
-	gameObjInstCreate(enemyType, 2.0f, pPos, &vel, 0);
+	//pPos->y += 1; //cuz enemy resized 2 times bigger
+	gameObjInstCreate(enemyType, 1.0f, pPos, &vel, 0);
 
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
@@ -279,7 +279,7 @@ void Player::playerFire(Projectile *boomerang)
 	//boomerang.projectileTime = zero;
 	//boomerang.initialPos = posCurr;
 	//boomerang.projectileReturning = false;
-	float tmp = 0.5 * powerRange;
+	float tmp = 0.5 * powerSpeed;
 	vel.x = (dirFaceR) ? 10.0f + tmp : -10.0f - tmp;
 	//if (dirFaceR)
 	//{
@@ -372,3 +372,38 @@ void Projectile::ProjectileUpdate()
 	}
 }
 
+void GameObjInst::PowerUpCreate(AEVec2 pos)
+{
+	int powerNum = rand() % 3;
+	AEVec2 zero;
+	AEVec2Zero(&zero);
+	switch (powerNum)
+	{
+	case 0:
+		gameObjInstCreate(TYPE_OBJECT_DAMAGE, 1.0f, &pos, &zero, 0);
+		break;
+	case 1:
+		gameObjInstCreate(TYPE_OBJECT_RANGE, 1.0f, &pos, &zero, 0);
+		break;
+	case 2:
+		gameObjInstCreate(TYPE_OBJECT_SPEED, 1.0f, &pos, &zero, 0);
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::RangeUp()
+{
+	powerRange += 1;
+}
+
+void Player::DamageUp()
+{
+	damage += 1;
+}
+
+void Player::SpeedUp()
+{
+	powerSpeed += 1;
+}

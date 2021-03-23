@@ -1,15 +1,3 @@
-﻿  Bullet.cpp
-  Collision.cpp
-  GameObjects.cpp
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(102,10): warning C4101: 'cellTranslation': unreferenced local variable
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(278,21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(282,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  GameStateMgr.cpp
-  GameState_Platform.cpp
-C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(525,48): warning C4018: '<': signed/unsigned mismatch
-  main.cpp
-  MainMenu.cpp
-  Map.cpp
-  Win.cpp
-  Generating Code...
-  Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
+﻿  GameState_Platform.cpp
+C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(577,48): warning C4018: '<': signed/unsigned mismatch
+  Outback.vcxproj -> C:\Users\limyu\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe

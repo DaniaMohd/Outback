@@ -30,7 +30,10 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_COIN,			//4
 	TYPE_OBJECT_PARTICLES,		//5
 	TYPE_OBJECT_BULLET,			//6
-	TYPE_OBJECT_BOOMERANG		//7
+	TYPE_OBJECT_BOOMERANG,		//7
+	TYPE_OBJECT_DAMAGE,			//8
+	TYPE_OBJECT_RANGE,			//9
+	TYPE_OBJECT_SPEED			//10
 };
 
 enum class STATE
@@ -77,6 +80,7 @@ public:
 	void			gameObjInstUpdatePos();
 	void			gameObjInstTransformMatrix();
 	void			gameObjInstDrawObject(AEMtx33* map);
+	void			PowerUpCreate(AEVec2 pos);
 };
 
 class Enemy : public GameObjInst
@@ -121,9 +125,14 @@ public:
 
 	int				projectileMax;
 	int				powerRange;
+	int				powerDamage;
+	int				powerSpeed;
 
 	void			playerCreate(AEVec2* pPos);
 	void			playerFire(Projectile *boomerang);
+	void RangeUp();
+	void DamageUp();
+	void SpeedUp();
 	
 	//probably additional functions to aid in upgrade pickups
 };

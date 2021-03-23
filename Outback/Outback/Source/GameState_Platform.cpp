@@ -249,6 +249,66 @@ void GameStatePlatformLoad(void)
 	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
 	AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 
+	//speed
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_DAMAGE;
+
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create Speed Mesh!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DamageUp.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
+
+	//range
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_RANGE;
+
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DistanceUp.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
+
+	//damage
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_SPEED;
+
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\SpeedUp.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+
 	// Loading the levels
 	if (gGameStateCurr == GS_LEVEL1)
 	{
@@ -309,6 +369,7 @@ void GameStatePlatformInit(void)
 
 	TotalCoins = 0;
 	CoinsCollected = 0;
+	sBoomNum = 0;
 
 	//Create an object instance representing the black cell.
 	//This object instance should not be visible. When rendering the grid cells, each time we have
@@ -469,18 +530,9 @@ void GameStatePlatformUpdate(void)
 	// Jump
 	if ((AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_UP)) && pHero.gridCollisionFlag & COLLISION_BOTTOM)
 	{
-		if (CoinsCollected >= 0 && CoinsCollected < 16)
-		{
-			pHero.velCurr.y = JUMP_VELOCITY;
-		}
-		else if (CoinsCollected >= 15 && CoinsCollected < 31)
-		{
-			pHero.velCurr.y = JUMP_VELOCITY * 1.5;
-		}
-		else if (CoinsCollected >= 30)
-		{
-			pHero.velCurr.y = JUMP_VELOCITY * 2;
-		}
+
+		pHero.velCurr.y = JUMP_VELOCITY;
+
 		pHero.gridCollisionFlag = 0;
 	}
 
@@ -545,7 +597,8 @@ void GameStatePlatformUpdate(void)
 	//Yuxi
 	if (AEInputCheckTriggered(AEVK_P))
 	{
-		pHero.powerRange += 1;
+		//pHero.powerRange += 1;
+		printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.damage, pHero.powerRange, pHero.powerSpeed);
 	}
 
 	if (AEInputCheckTriggered(AEVK_M))
@@ -793,7 +846,24 @@ void GameStatePlatformUpdate(void)
 
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sCoins[i].boundingBox, sCoins[i].velCurr)) == true)
 		{
-			onChange = true;
+			if (sCoins[i].pObject->type == TYPE_OBJECT_COIN)
+			{
+				sCoins[i].PowerUpCreate(sCoins[i].posCurr);
+			}
+			if (sCoins[i].pObject->type == TYPE_OBJECT_DAMAGE)
+			{
+				pHero.DamageUp();
+			}
+			else if (sCoins[i].pObject->type == TYPE_OBJECT_RANGE)
+			{
+				pHero.RangeUp();
+			}
+			else if (sCoins[i].pObject->type == TYPE_OBJECT_SPEED)
+			{
+				pHero.SpeedUp();
+			}
+			sCoins[i].gameObjInstDestroy();
+			/*onChange = true;
 
 			sCoins[i].gameObjInstDestroy();
 
@@ -813,7 +883,18 @@ void GameStatePlatformUpdate(void)
 				{
 					gGameStateNext = GS_WIN;
 				}
+			}*/
+		}
+		for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
+		{
+			if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sCoins[i].boundingBox, sCoins[i].velCurr)) == true)
+			{
+				if (sProjectiles[j].pObject->type == TYPE_OBJECT_BOOMERANG && sCoins[i].pObject->type == TYPE_OBJECT_COIN)
+				{
+					sCoins[i].PowerUpCreate(sCoins[i].posCurr);
+				}
 			}
+
 		}
 	}
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -1032,6 +1113,12 @@ void GameStatePlatformDraw(void)
 		// skip non-active object
 		if (0 == (sCoins[i].flag & FLAG_ACTIVE) || 0 == (sCoins[i].flag & FLAG_VISIBLE))
 			continue;
+		/*switch (sCoins[i].pObject->type)
+		{
+		case TYPE_OBJECT_DAMAGE:
+			
+		}*/
+
 		sCoins[i].gameObjInstDrawObject(&MapTransform);
 		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
