@@ -46,7 +46,7 @@ static GameObjInst*		sParticles;
 
 // list of enemies
 static Projectile*		sProjectiles;
-static unsigned int		sProjectileNum;
+static unsigned int		sBoomNum;
 
 // Binary map data
 static GameObjInst		pBlackInstance;
@@ -520,11 +520,11 @@ void GameStatePlatformUpdate(void)
 	}
 	//printf("CD: %f", pHero.counter);
 
-	//if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
-	if (AEInputCheckTriggered(AEVK_J) && pHero.counter == 0)
+	if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
+	//if (AEInputCheckTriggered(AEVK_J) && pHero.counter == 0)
 	{
 		//Yuxi
-		pHero.counter = 1;
+		pHero.counter = 0.1;
 		//for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 		//{
 		//	if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
@@ -537,18 +537,19 @@ void GameStatePlatformUpdate(void)
 		//	}
 		//}
 		pHero.playerFire(sProjectiles);
+		++sBoomNum;
 	}
 
 	//Yuxi
-	//if (AEInputCheckTriggered(AEVK_P))
-	//{
-	//	pHero.powerRange += 1;
-	//}
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		pHero.powerRange += 1;
+	}
 
-	//if (AEInputCheckTriggered(AEVK_M))
-	//{
-	//	pHero.projectileMax += 1;
-	//}
+	if (AEInputCheckTriggered(AEVK_M))
+	{
+		pHero.projectileMax += 1;
+	}
 	
 	//Update object instances physics and behavior
 	for(i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -823,12 +824,13 @@ void GameStatePlatformUpdate(void)
 		{
 			//printf("DIE\n");
 		}
+		//boomerang returning to player
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true 
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG  && sProjectiles[i].boomerangReturning == true)
 		{
 			printf("returned\n");
 			//YuXi
-			//--sBoomNum;
+			--sBoomNum;
 			sProjectiles[i].gameObjInstDestroy();
 		}
 	}

@@ -258,6 +258,7 @@ void Player::playerCreate(AEVec2* pPos)
 	AEVec2Zero(&vel);
 	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
 	boomerangRange = 10.0f;
+	projectileMax = 1;
 }
 
 /******************************************************************************/
@@ -269,7 +270,7 @@ void Player::playerFire(Projectile *boomerang)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
-	//boomerang.projectileRange = 10 + 5 * powerRange;
+	boomerangRange = 10 + 5 * powerRange;
 	//boomerang.projectileTime = zero;
 	//boomerang.initialPos = posCurr;
 	//boomerang.projectileReturning = false;

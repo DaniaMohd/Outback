@@ -77,9 +77,6 @@ public:
 	void			gameObjInstUpdatePos();
 	void			gameObjInstTransformMatrix();
 	void			gameObjInstDrawObject(AEMtx33* map);
-
-	//int				projectileMax;
-	//int				powerRange;
 };
 
 class Enemy : public GameObjInst
@@ -117,6 +114,9 @@ public:
 
 	//int			healthPoints;
 	//int			damage;
+
+	int				projectileMax;
+	int				powerRange;
 
 	void			playerCreate(AEVec2* pPos);
 	void			playerFire(Projectile *boomerang);
