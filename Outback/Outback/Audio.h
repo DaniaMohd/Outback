@@ -1,10 +1,11 @@
 /****************************************************************************** /
 /*!
-\file		Music.cpp
-\author 	DigiPen
-\par    	email: digipen\@digipen.edu
-\date
-\brief
+\file		Audio.h
+\author 	Lim Sim Chee, Shannon
+\par    	email: lim.s@digipen.edu
+\date		17th March 2021
+\brief		This file contains the declarations of the functions for the music
+			and the sound effects of the game
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
