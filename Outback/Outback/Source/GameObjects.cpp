@@ -1,6 +1,6 @@
 #include "main.h"
-//#include "GameObjects.h"
 
+//GameObjInst functions
 /******************************************************************************/
 /*!
 	Creates game object
@@ -58,6 +58,7 @@ void GameObjInst::gameObjInstUpdatePos()
 		dirFaceR = false;
 	else if (velCurr.x > 0)
 		dirFaceR = true;
+	//### probs can update gravity and collisionflag here
 }
 
 /******************************************************************************/
@@ -112,6 +113,37 @@ void GameObjInst::gameObjInstDrawObject(AEMtx33* map)
 	//Don't forget to concatenate the MapTransform matrix with the transformation of each game object instance
 }
 
+/******************************************************************************/
+/*!
+	Spawns random upgrades
+*/
+/******************************************************************************/
+void GameObjInst::PowerUpCreate(AEVec2 pos)
+{
+	int powerNum = rand() % 3;
+	AEVec2 zero;
+	AEVec2Zero(&zero);
+	switch (powerNum)
+	{
+	case 0:
+		gameObjInstCreate(TYPE_OBJECT_DAMAGE, 1.0f, &pos, &zero, 0);
+		break;
+	case 1:
+		gameObjInstCreate(TYPE_OBJECT_RANGE, 1.0f, &pos, &zero, 0);
+		break;
+	case 2:
+		gameObjInstCreate(TYPE_OBJECT_SPEED, 1.0f, &pos, &zero, 0);
+		break;
+	default:
+		break;
+	}
+}
+
+
+
+
+
+//Enemy functions
 /******************************************************************************/
 /*!
 	Creates Enemy
@@ -248,9 +280,13 @@ void Enemy::enemyFire(Player character, Projectile *bullet)
 			break;
 		}
 	}
-	//bullet.ProjectileCreate(&posCurr, &vel, angle);
 }
 
+
+
+
+
+//Player functions
 /******************************************************************************/
 /*!
 	Creates player
@@ -261,9 +297,9 @@ void Player::playerCreate(AEVec2* pPos)
 	AEVec2 vel;
 	AEVec2Zero(&vel);
 	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
-	boomerangRange = 5.0f;
+	powerRange = 5.0f;
 	projectileMax = 1;
-	damage = 1;
+	powerDamage = 1;
 }
 
 /******************************************************************************/
@@ -275,33 +311,44 @@ void Player::playerFire(Projectile *boomerang)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
-	boomerangRange = 5 + 1 * powerRange;
-	//boomerang.projectileTime = zero;
-	//boomerang.initialPos = posCurr;
-	//boomerang.projectileReturning = false;
+
+	//### need to tweak
+	//initial speed of boomerang
 	float tmp = 0.5 * powerSpeed;
 	vel.x = (dirFaceR) ? 10.0f + tmp : -10.0f - tmp;
-	//if (dirFaceR)
-	//{
-	//	vel.x = 10;
-	//}
-	//else
-	//{
-	//	vel.x = -10;
-	//}
 
 	//find empty slot in the projectile array
 	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		if (boomerang[i].flag == 0)
 		{
-			boomerang[i].boomerangCreate(&posCurr, &vel, boomerangRange);
+			boomerang[i].boomerangCreate(&posCurr, &vel, powerRange);
 			break;
 		}
 	}
-	//boomerang.boomerangCreate(&posCurr, &vel, boomerangRange);
 }
 
+void Player::RangeUp()
+{
+	powerRange += 1;
+}
+
+void Player::DamageUp()
+{
+	powerDamage += 1;
+}
+
+void Player::SpeedUp()
+{
+	powerSpeed += 1;
+}
+//### need a counter for what upgrades player got?
+
+
+
+
+
+//Projectile functions
 /******************************************************************************/
 /*!
 	Creates boomerang
@@ -316,8 +363,7 @@ void Projectile::boomerangCreate(AEVec2* startPosition, AEVec2* vel, float range
 	boomerangTime = zero;
 	boomerangReturning = false;
 	projectileRange = range;
-	initialPos.x = startPosition->x;
-	initialPos.y = startPosition->y;
+	initialPos = *startPosition;
 }
 
 /******************************************************************************/
@@ -370,40 +416,4 @@ void Projectile::ProjectileUpdate()
 	{
 		flag = 0;
 	}
-}
-
-void GameObjInst::PowerUpCreate(AEVec2 pos)
-{
-	int powerNum = rand() % 3;
-	AEVec2 zero;
-	AEVec2Zero(&zero);
-	switch (powerNum)
-	{
-	case 0:
-		gameObjInstCreate(TYPE_OBJECT_DAMAGE, 1.0f, &pos, &zero, 0);
-		break;
-	case 1:
-		gameObjInstCreate(TYPE_OBJECT_RANGE, 1.0f, &pos, &zero, 0);
-		break;
-	case 2:
-		gameObjInstCreate(TYPE_OBJECT_SPEED, 1.0f, &pos, &zero, 0);
-		break;
-	default:
-		break;
-	}
-}
-
-void Player::RangeUp()
-{
-	powerRange += 1;
-}
-
-void Player::DamageUp()
-{
-	damage += 1;
-}
-
-void Player::SpeedUp()
-{
-	powerSpeed += 1;
 }
