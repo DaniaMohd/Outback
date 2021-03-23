@@ -7,6 +7,9 @@
     <Filter Include="Include">
       <UniqueIdentifier>{3d7170a0-85fc-47f8-b120-5ac1703c9d0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\FMOD">
+      <UniqueIdentifier>{440f6dca-b69f-48b8-b0d1-eaa5d2295158}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Collision.cpp">
@@ -68,5 +71,40 @@
     <ClInclude Include="Bullet.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="Include\fmod.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod.hpp">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_codec.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_common.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_dsp.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_dsp_effects.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_errors.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\fmod_output.h">
+      <Filter>Include\FMOD</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\fmod.cs">
+      <Filter>Include\FMOD</Filter>
+    </None>
+    <None Include="Include\fmod_dsp.cs">
+      <Filter>Include\FMOD</Filter>
+    </None>
+    <None Include="Include\fmod_errors.cs">
+      <Filter>Include\FMOD</Filter>
+    </None>
   </ItemGroup>
 </Project>

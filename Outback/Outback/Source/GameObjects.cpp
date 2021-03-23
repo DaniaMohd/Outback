@@ -121,7 +121,8 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
-	gameObjInstCreate(enemyType, 1.0f, pPos, &vel, 0);
+	pPos->y += 1; //cuz enemy resized 2 times bigger
+	gameObjInstCreate(enemyType, 2.0f, pPos, &vel, 0);
 
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;

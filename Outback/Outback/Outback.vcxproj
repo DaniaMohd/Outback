@@ -24,6 +24,14 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Include\Collision.h" />
+    <ClInclude Include="Include\fmod.h" />
+    <ClInclude Include="Include\fmod.hpp" />
+    <ClInclude Include="Include\fmod_codec.h" />
+    <ClInclude Include="Include\fmod_common.h" />
+    <ClInclude Include="Include\fmod_dsp.h" />
+    <ClInclude Include="Include\fmod_dsp_effects.h" />
+    <ClInclude Include="Include\fmod_errors.h" />
+    <ClInclude Include="Include\fmod_output.h" />
     <ClInclude Include="Include\GameObjects.h" />
     <ClInclude Include="Include\GameStateList.h" />
     <ClInclude Include="Include\GameStateMgr.h" />
@@ -32,6 +40,11 @@
     <ClInclude Include="Include\MainMenu.h" />
     <ClInclude Include="Include\Map.h" />
     <ClInclude Include="Include\Win.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\fmod.cs" />
+    <None Include="Include\fmod_dsp.cs" />
+    <None Include="Include\fmod_errors.cs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A3BAEC71-F1B8-4A73-A1DB-AD0E92F9541D}</ProjectGuid>
