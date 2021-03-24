@@ -15,9 +15,11 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "main.h"
 
 extern s8 fontID;
+extern s8 fontTitle;
 f32 curMainMenu = 0.15f;
 
 AEGfxVertexList *vertex = 0;
+AEGfxTexture	*texture = 0;
 
 /******************************************************************************/
 /*!
@@ -27,6 +29,28 @@ AEGfxVertexList *vertex = 0;
 void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
+
+	/*
+	GameObj* pObj;
+	pObj = sGameObjList + sGameObjNum++;
+	pObj->type = TYPE_OBJECT_EMPTY;
+
+	//BG Image Mesh
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-10.5f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		10.5f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		10.5, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		10.5f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+	pObj->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(vertex, "Failed to create BG Mesh!");
+	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
+	AE_ASSERT_MESG(pObj->pTex, "Failed to create Block Texture!");
+	*/
 
 	//Highlight
 	AEGfxMeshStart();
@@ -127,22 +151,22 @@ void GameStateMainMenuDraw()
 
 	//For the highlight
 	// Set position for the highlight
-	AEGfxSetPosition(0.0f, 20.0f);
 	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetPosition(0.0f, 30.0f);
 
 	//The title's position
-	AEGfxPrint(fontID, strBuffer, -0.8f, 0.40f, 2.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Level 1", -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Level 2", -0.15f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Level 3", -0.15f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "EXIT", -0.15f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "LEVEL 1", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "LEVEL 2", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "LEVEL 3", -0.7f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
-	AEGfxPrint(fontID, "--->", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
 	
 
 

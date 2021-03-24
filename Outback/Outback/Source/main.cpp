@@ -21,6 +21,7 @@ float	 g_dt;
 double	 g_appTime;
 
 s8 fontID = 0;
+s8 fontTitle = 0;
 /******************************************************************************/
 /*!
 	Starting point of the application
@@ -32,7 +33,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	UNREFERENCED_PARAMETER(command_line);
 	// Initialize the system
 	AESysInit (instanceH, show, 800, 600, 1, 60, false, NULL);
-	fontID = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 28);
+	fontTitle = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 28 * 3);
+	fontID = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 22);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.5f);
 
 	GameStateMgrInit(GS_MAINMENU);
