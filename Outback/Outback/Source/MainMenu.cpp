@@ -16,7 +16,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 extern s8 fontID;
 extern s8 fontTitle;
-f32 curMainMenu = 0.15f;
+f32 curMainMenu = 0.15f * 360;
 
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
@@ -37,6 +37,7 @@ void GameStateMainMenuLoad()
 				-400.5f, -400.5f, 0xFFFF0000, 0.0f, 1.0f,
 				 400.5f, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
 				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+
 	AEGfxTriAdd( 400.5,  -400.5f, 0xFFFF0000, 1.0f, 1.0f,
 				 400.5f,  400.5f, 0xFFFF0000, 1.0f, 0.0f,
 				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
@@ -50,13 +51,13 @@ void GameStateMainMenuLoad()
 	//Highlight
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-10.5f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
-		10.5f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+		-50.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		 50.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-50.0f,  10.5f, 0xFFFF0000, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		10.5, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		10.5f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
-		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+		 50.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		 50.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 
 	vertex = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertex, "Failed to create Enemy Mesh!");
@@ -90,34 +91,34 @@ void GameStateMainMenuUpdate()
 		cursor -= 0.15f
 	*/
 
-	if (curMainMenu > 0.15f)
-		curMainMenu = -0.3f;
+	if (curMainMenu > 0.15f * 360)
+		curMainMenu = -0.3f * 270;
 
-	if (curMainMenu < -0.3f)
-		curMainMenu = 0.15f;
+	if (curMainMenu < -0.3f * 360)
+		curMainMenu = 0.15f * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
-		curMainMenu += 0.15f;
+		curMainMenu += 0.15f * 300;
 
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
-		curMainMenu -= 0.15f;
+		curMainMenu -= 0.15f * 300;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
 	{
 		gGameStateNext = GS_LEVEL1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.0f)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
 	{
 		gGameStateNext = GS_LEVEL2;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.15f)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.15f * 300)
 	{
 		gGameStateNext = GS_LEVEL3;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f * 300
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
@@ -150,7 +151,7 @@ void GameStateMainMenuDraw()
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
 	// Set position for the highlight
-	AEGfxSetPosition(0.0f, 30.0f);
+	AEGfxSetPosition(-230, curMainMenu);
 
 	//The title's position
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -161,7 +162,7 @@ void GameStateMainMenuDraw()
 	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
-	AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
