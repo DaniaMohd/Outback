@@ -17,6 +17,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 extern s8 fontID;
 f32 curMainMenu = 0.15f;
 
+AEGfxVertexList *vertex = 0;
+
 /******************************************************************************/
 /*!
 	"Load" Main menu
@@ -25,6 +27,20 @@ f32 curMainMenu = 0.15f;
 void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
+
+	//Highlight
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-10.5f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		10.5f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		10.5, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		10.5f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+	vertex = AEGfxMeshEnd();
+	AE_ASSERT_MESG(vertex, "Failed to create Enemy Mesh!");
 }
 
 /******************************************************************************/
@@ -96,24 +112,40 @@ void GameStateMainMenuUpdate()
 /******************************************************************************/
 void GameStateMainMenuDraw()
 {
+	//Make rectangle mesh
+	//render behind
+	
+
 	char strBuffer[100];
 	memset(strBuffer, 0, 100 * sizeof(char));
-	sprintf_s(strBuffer, "PLATFORMER GAME");
+	sprintf_s(strBuffer, "OUTBACK");
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
-	AEGfxPrint(fontID, strBuffer, -0.35f, 0.40f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	//For the highlight
+	// Set position for the highlight
+	AEGfxSetPosition(0.0f, 20.0f);
+	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+
+	//The title's position
+	AEGfxPrint(fontID, strBuffer, -0.8f, 0.40f, 2.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Level 1", -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Level 2", -0.15f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Level 3", -0.15f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "EXIT", -0.15f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+	//The arrow to select
 	AEGfxPrint(fontID, "--->", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
+	
+
+
 }
 
 /******************************************************************************/
@@ -123,6 +155,8 @@ void GameStateMainMenuDraw()
 /******************************************************************************/
 void GameStateMainMenuFree()
 {
+	// Freeing the objects and textures
+	AEGfxMeshFree(vertex);
 
 }
 
