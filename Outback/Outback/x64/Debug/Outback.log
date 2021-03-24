@@ -1,2 +1,3 @@
-﻿  MainMenu.cpp
+﻿  GameState_Platform.cpp
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(557,43): warning C4018: '<': signed/unsigned mismatch
   Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe

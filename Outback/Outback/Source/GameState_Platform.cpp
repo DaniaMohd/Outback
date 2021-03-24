@@ -52,7 +52,7 @@ static AEMtx33			MapTransform;
 // Hero instance
 static Player			pHero;
 
-const int				PIXEL = 20;
+const int				PIXEL = 40;
 
 float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
@@ -554,7 +554,7 @@ void GameStatePlatformUpdate(void)
 	}
 
 	//firing
-	if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
+	if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
 	{
 		pHero.playerFire(sProjectiles);
 		++sBoomNum;
@@ -564,6 +564,12 @@ void GameStatePlatformUpdate(void)
 	if (AEInputCheckTriggered(AEVK_P))
 	{
 		printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed);
+		printf("%f\t%f\n", camX, camY);
+	}
+	//debug
+	if (AEInputCheckTriggered(AEVK_M))
+	{
+		pHero.SpeedUp();
 	}
 
 	//Enemy update
@@ -882,12 +888,10 @@ void GameStatePlatformUpdate(void)
 	}
 	else
 	{
+		//### add camera stopping when at the walls
 		// Camera tracking
-		if (camX != AEGetWindowWidth() / 2)
-			camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
-
-		if (camY != AEGetWindowHeight() / 2)
-			camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+		camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+		camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
 	}
 	AEGfxSetCamPosition(camX, camY);
 }

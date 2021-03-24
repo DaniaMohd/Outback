@@ -17,6 +17,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 extern s8 fontID;
 extern s8 fontTitle;
 f32 curMainMenu = 0.15f * 360;
+int curr = 0;
 
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
@@ -91,6 +92,12 @@ void GameStateMainMenuUpdate()
 		cursor -= 0.15f
 	*/
 
+	if (curr > 3)
+		curr = 0;
+
+	if (curr < 0)
+		curr = 3;
+
 	if (curMainMenu > 0.15f * 360)
 		curMainMenu = -0.3f * 270;
 
@@ -98,27 +105,33 @@ void GameStateMainMenuUpdate()
 		curMainMenu = 0.15f * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
+	{
 		curMainMenu += 0.15f * 300;
+		curr--;
+	}
 
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
+	{
 		curMainMenu -= 0.15f * 300;
+		curr++;
+	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 0)
 	{
 		gGameStateNext = GS_LEVEL1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 1)
 	{
 		gGameStateNext = GS_LEVEL2;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 2)
 	{
 		gGameStateNext = GS_LEVEL3;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f * 360
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 3
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
