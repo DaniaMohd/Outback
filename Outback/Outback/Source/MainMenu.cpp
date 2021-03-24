@@ -18,7 +18,7 @@ extern s8 fontID;
 extern s8 fontTitle;
 f32 curMainMenu = 0.15f;
 
-AEGfxVertexList *vertex = 0;
+AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
 
 /******************************************************************************/
@@ -30,23 +30,22 @@ void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
 
-	/*
+	
 	//BG Image Mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-10.5f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
-		10.5f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
-	AEGfxTriAdd(
-		10.5, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		10.5f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
-		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+				-400.5f, -400.5f, 0xFFFF0000, 0.0f, 1.0f,
+				 400.5f, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
+				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd( 400.5,  -400.5f, 0xFFFF0000, 1.0f, 1.0f,
+				 400.5f,  400.5f, 0xFFFF0000, 1.0f, 0.0f,
+				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
 
-	vertex = AEGfxMeshEnd();
-	AE_ASSERT_MESG(vertex, "Failed to create BG Mesh!");
-	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
+	vertexBG = AEGfxMeshEnd();
+	AE_ASSERT_MESG(vertexBG, "Failed to create BG Mesh!");
+	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.jfif");
 	AE_ASSERT_MESG(texture, "Failed to create BG Texture!");
-	*/
+	
 
 	//Highlight
 	AEGfxMeshStart();
@@ -140,7 +139,8 @@ void GameStateMainMenuDraw()
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(0.5f, 0.5f);
 	AEGfxTextureSet(texture, 0, 0);
-	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxMeshDraw(vertexBG, AE_GFX_MDM_TRIANGLES);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -179,8 +179,9 @@ void GameStateMainMenuFree()
 {
 	// Freeing the objects and textures
 	AEGfxMeshFree(vertex);
+	AEGfxMeshFree(vertexBG);
 
-	//AEGfxTextureUnload(texture);
+	AEGfxTextureUnload(texture);
 
 }
 

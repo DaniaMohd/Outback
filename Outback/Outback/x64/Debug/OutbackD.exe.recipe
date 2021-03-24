@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-<<<<<<< Updated upstream
-  <ProjectOutputs>C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\Bin\OutbackD.exe</ProjectOutputs>
-=======
   <ProjectOutputs>C:\Users\gorec\Documents\GAM 150 GITHUB\Outback\Outback\Bin\OutbackD.exe</ProjectOutputs>
->>>>>>> Stashed changes
   <ContentFiles></ContentFiles>
   <SatelliteDlls></SatelliteDlls>
   <NonRecipeFileRefs></NonRecipeFileRefs>

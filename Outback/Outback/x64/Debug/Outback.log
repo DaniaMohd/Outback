@@ -1,9 +1,2 @@
-<<<<<<< Updated upstream
-﻿  GameState_Platform.cpp
-C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\Outback\Source\GameState_Platform.cpp(537,48): warning C4018: '<': signed/unsigned mismatch
-C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\Outback\Source\GameState_Platform.cpp(683,62): warning C4244: '=': conversion from 'f64' to 'float', possible loss of data
-  Outback.vcxproj -> C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\\Bin\OutbackD.exe
-=======
 ﻿  MainMenu.cpp
   Outback.vcxproj -> C:\Users\gorec\Documents\GAM 150 GITHUB\Outback\Outback\\Bin\OutbackD.exe
->>>>>>> Stashed changes
