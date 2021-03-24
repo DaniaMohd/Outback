@@ -92,13 +92,13 @@ void GameStateMainMenuUpdate()
 	*/
 
 	if (curMainMenu > 0.15f * 360)
-		curMainMenu = -0.3f * 360;
+		curMainMenu = -0.3f * 270;
 
-	if (curMainMenu < -0.3f * 300)
+	if (curMainMenu < -0.3f * 360)
 		curMainMenu = 0.15f * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
-		curMainMenu += 0.15f * 360;
+		curMainMenu += 0.15f * 300;
 
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
 		curMainMenu -= 0.15f * 300;
