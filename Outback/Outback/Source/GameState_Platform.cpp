@@ -358,6 +358,28 @@ void GameStatePlatformLoad(void)
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
+
+	//==========================================================HEALTH
+	pObj = sGameObjList + sGameObjNum++;
+	pHero.currentHealth = pHero.fullHealth;	//health changable
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
+		pHero.fullHealth - 30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
+	pHero.fullhp1 = AEGfxMeshEnd();
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		pHero.fullHealth - 30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		pHero.fullHealth - 30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	pHero.fullhp2 = AEGfxMeshEnd();
+	pHero.fullBarText = AEGfxTextureLoad("..\\Resources\\Textures\\fullhealth.png");
+	AE_ASSERT_MESG(pHero.fullBarText, "Failed to create health");
+	pHero.currentBarText = AEGfxTextureLoad("..\\Resources\\Textures\\currenthealth.png");
+	AE_ASSERT_MESG(pHero.currentBarText, "Failed to create health");
+	//==============================================================================
+
 }
 
 /******************************************************************************/
@@ -427,6 +449,8 @@ void GameStatePlatformInit(void)
 				TotalCoins++;
 			}
 		}
+	pHero.invincibleTimer = 0.0f;
+	pHero.invincibleWHit = 0.0f;
 }
 
 /******************************************************************************/
@@ -649,16 +673,27 @@ void GameStatePlatformUpdate(void)
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
 			continue;
 
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true && pHero.invincibleTimer==0.0f)
 		{
 			onChange = true;
-			HeroLives--;
-
-			if (HeroLives > 0)
+			pHero.currentHealth-=10.0f;
+			pHero.invincibleWHit = 1.0f;
+			if (pHero.invincibleWHit == 1.0f)
 			{
-				AEVec2Set(&pHero.posCurr, (float)Hero_Initial_X + 0.5f, (float)Hero_Initial_Y + 0.5f);
+				pHero.invincibleTimer = AEFrameRateControllerGetFrameTime();
+				pHero.invincibleWHit = 0.0f;
+				
 			}
 
+			if (pHero.currentHealth == 0.0f)
+			{
+				HeroLives--;
+				pHero.currentHealth = pHero.fullHealth;
+				if (HeroLives > 0)
+				{
+					AEVec2Set(&pHero.posCurr, (float)Hero_Initial_X + 0.5f, (float)Hero_Initial_Y + 0.5f);
+				}
+			}
 			else if (HeroLives == 0)
 			{
 				printf("Try Again!\n");
@@ -667,6 +702,7 @@ void GameStatePlatformUpdate(void)
 				HeroLives = 3;
 			}
 		}
+		pHero.invincibleTimer = 0.0f;
 	}
 
 	//checks if player touches coin
@@ -924,6 +960,72 @@ void GameStatePlatformDraw(void)
 		}
 		onChange = false;
 	}
+
+
+	//=============================================================
+//DRAWING OF CURRENT HEALTH DISPLAY - XY
+
+	AEGfxMeshStart();
+	// This rectangle has 2 triangles: currenthp1 and currenthp2
+	AEGfxTriAdd(
+		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
+		pHero.currentHealth - 30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
+	pHero.currenthp1 = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pHero.currenthp1, "Failed to create mesh 2!!");
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		pHero.currentHealth - 30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		pHero.currentHealth - 30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
+	pHero.currenthp2 = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pHero.currenthp2, "Failed to create mesh 2!!");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//ltriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.fullhp1, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.fullhp2, AE_GFX_MDM_TRIANGLES);
+
+	// current health =======================================
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 1
+	AEGfxSetPosition(-300.0f, 200.0f);
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.currenthp1, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// Set position for object 2
+	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
+	// No tint
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set texture
+	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
+	// Drawing the mesh (list of triangles)
+	AEGfxMeshDraw(pHero.currenthp2, AE_GFX_MDM_TRIANGLES);
+
+
+	//========================================================================
+
 }
 
 /******************************************************************************/
