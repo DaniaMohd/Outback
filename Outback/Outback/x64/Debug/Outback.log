@@ -1,17 +1,2 @@
-﻿  Bullet.cpp
-  Collision.cpp
-  GameObjects.cpp
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(103,10): warning C4101: 'cellTranslation': unreferenced local variable
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(321,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(329,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(354,15): warning C4458: declaration of 'scale' hides class member
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Include\GameObjects.h(66,10): message : see declaration of 'GameObjInst::scale'
-  GameStateMgr.cpp
-  GameState_Platform.cpp
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(557,43): warning C4018: '<': signed/unsigned mismatch
-  main.cpp
-  MainMenu.cpp
-  Map.cpp
-  Win.cpp
-  Generating Code...
+﻿  main.cpp
   Outback.vcxproj -> C:\Users\Shannieee\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe

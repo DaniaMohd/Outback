@@ -62,6 +62,8 @@ void GameStateMainMenuLoad()
 
 	vertex = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertex, "Failed to create Enemy Mesh!");
+
+	MainMenuBGMLoad();
 }
 
 /******************************************************************************/
@@ -71,7 +73,7 @@ void GameStateMainMenuLoad()
 /******************************************************************************/
 void GameStateMainMenuInit()
 {
-
+	AudioEngineInit();
 }
 
 /******************************************************************************/
@@ -206,5 +208,5 @@ void GameStateMainMenuFree()
 /******************************************************************************/
 void GameStateMainMenuUnload()
 {
-
+	MainMenuBGMUnload();
 }
