@@ -31,10 +31,6 @@ void GameStateMainMenuLoad()
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
 
 	/*
-	GameObj* pObj;
-	pObj = sGameObjList + sGameObjNum++;
-	pObj->type = TYPE_OBJECT_EMPTY;
-
 	//BG Image Mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -46,10 +42,10 @@ void GameStateMainMenuLoad()
 		10.5f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
 		-10.5f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 
-	pObj->pMesh = AEGfxMeshEnd();
+	vertex = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertex, "Failed to create BG Mesh!");
-	pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
-	AE_ASSERT_MESG(pObj->pTex, "Failed to create Block Texture!");
+	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
+	AE_ASSERT_MESG(texture, "Failed to create BG Texture!");
 	*/
 
 	//Highlight
@@ -136,22 +132,24 @@ void GameStateMainMenuUpdate()
 /******************************************************************************/
 void GameStateMainMenuDraw()
 {
-	//Make rectangle mesh
-	//render behind
-	
-
 	char strBuffer[100];
 	memset(strBuffer, 0, 100 * sizeof(char));
 	sprintf_s(strBuffer, "OUTBACK");
 
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	//For BG image
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetPosition(0.5f, 0.5f);
+	AEGfxTextureSet(texture, 0, 0);
+	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
 
 	//For the highlight
-	// Set position for the highlight
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+	// Set position for the highlight
 	AEGfxSetPosition(0.0f, 30.0f);
 
 	//The title's position
@@ -181,6 +179,8 @@ void GameStateMainMenuFree()
 {
 	// Freeing the objects and textures
 	AEGfxMeshFree(vertex);
+
+	//AEGfxTextureUnload(texture);
 
 }
 
