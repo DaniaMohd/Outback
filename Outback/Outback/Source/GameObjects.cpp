@@ -161,6 +161,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 	healthPoints = 100;
 	hit1 = false;
 	hit2 = false;
+	damage = 10;
 }
 
 /******************************************************************************/
@@ -172,80 +173,80 @@ void Enemy::EnemyStateMachine()
 {
 	switch (state)
 	{
-		case STATE::STATE_GOING_LEFT:
+	case STATE::STATE_GOING_LEFT:
+	{
+		switch (innerState)
 		{
-			switch (innerState)
+		case INNER_STATE::INNER_STATE_ON_ENTER:
+		{
+			velCurr.x = -MOVE_VELOCITY_ENEMY;
+			innerState = INNER_STATE::INNER_STATE_ON_UPDATE;
+		}
+		break;
+
+		case INNER_STATE::INNER_STATE_ON_UPDATE:
+		{
+			if (gridCollisionFlag & COLLISION_LEFT || !(GetCellValue((int)(posCurr.x - 0.5f), (int)(posCurr.y - 1.0f))))
 			{
-				case INNER_STATE::INNER_STATE_ON_ENTER:
-				{
-					velCurr.x = -MOVE_VELOCITY_ENEMY;
-					innerState = INNER_STATE::INNER_STATE_ON_UPDATE;
-				}
-				break;
-
-				case INNER_STATE::INNER_STATE_ON_UPDATE:
-				{
-					if (gridCollisionFlag & COLLISION_LEFT || !(GetCellValue((int)(posCurr.x - 0.5f), (int)(posCurr.y - 1.0f))))
-					{
-						counter = ENEMY_IDLE_TIME;
-						innerState = INNER_STATE::INNER_STATE_ON_EXIT;
-						velCurr.x = 0;
-						SnapToCell(&posCurr.x);
-					}
-				}
-				break;
-
-				case INNER_STATE::INNER_STATE_ON_EXIT:
-				{
-					counter -= g_dt;
-					if (counter <= 0)
-					{
-						state = STATE::STATE_GOING_RIGHT;
-						innerState = INNER_STATE::INNER_STATE_ON_ENTER;
-					}
-				}
-				break;
+				counter = ENEMY_IDLE_TIME;
+				innerState = INNER_STATE::INNER_STATE_ON_EXIT;
+				velCurr.x = 0;
+				SnapToCell(&posCurr.x);
 			}
 		}
 		break;
 
-		case STATE::STATE_GOING_RIGHT:
+		case INNER_STATE::INNER_STATE_ON_EXIT:
 		{
-			switch (innerState)
+			counter -= g_dt;
+			if (counter <= 0)
 			{
-				case INNER_STATE::INNER_STATE_ON_ENTER:
-				{
-					velCurr.x = MOVE_VELOCITY_ENEMY;
-					innerState = INNER_STATE::INNER_STATE_ON_UPDATE;
-				}
-				break;
-
-				case INNER_STATE::INNER_STATE_ON_UPDATE:
-				{
-					if (gridCollisionFlag & COLLISION_RIGHT || !(GetCellValue((int)(posCurr.x + 0.5f), (int)(posCurr.y - 1.0f))))
-					{
-						counter = ENEMY_IDLE_TIME;
-						innerState = INNER_STATE::INNER_STATE_ON_EXIT;
-						velCurr.x = 0;
-						SnapToCell(&posCurr.x);
-					}
-				}
-				break;
-
-				case INNER_STATE::INNER_STATE_ON_EXIT:
-				{
-					counter -= g_dt;
-					if (counter <= 0)
-					{
-						state = STATE::STATE_GOING_LEFT;
-						innerState = INNER_STATE::INNER_STATE_ON_ENTER;
-					}
-
-				}
-				break;
+				state = STATE::STATE_GOING_RIGHT;
+				innerState = INNER_STATE::INNER_STATE_ON_ENTER;
 			}
 		}
 		break;
+		}
+	}
+	break;
+
+	case STATE::STATE_GOING_RIGHT:
+	{
+		switch (innerState)
+		{
+		case INNER_STATE::INNER_STATE_ON_ENTER:
+		{
+			velCurr.x = MOVE_VELOCITY_ENEMY;
+			innerState = INNER_STATE::INNER_STATE_ON_UPDATE;
+		}
+		break;
+
+		case INNER_STATE::INNER_STATE_ON_UPDATE:
+		{
+			if (gridCollisionFlag & COLLISION_RIGHT || !(GetCellValue((int)(posCurr.x + 0.5f), (int)(posCurr.y - 1.0f))))
+			{
+				counter = ENEMY_IDLE_TIME;
+				innerState = INNER_STATE::INNER_STATE_ON_EXIT;
+				velCurr.x = 0;
+				SnapToCell(&posCurr.x);
+			}
+		}
+		break;
+
+		case INNER_STATE::INNER_STATE_ON_EXIT:
+		{
+			counter -= g_dt;
+			if (counter <= 0)
+			{
+				state = STATE::STATE_GOING_LEFT;
+				innerState = INNER_STATE::INNER_STATE_ON_ENTER;
+			}
+
+		}
+		break;
+		}
+	}
+	break;
 	}
 }
 
@@ -254,23 +255,23 @@ void Enemy::EnemyStateMachine()
 	Enemy creates bullet
 */
 /******************************************************************************/
-void Enemy::enemyFire(Player character, Projectile *bullet)
+void Enemy::enemyFire(Player character, Projectile* bullet)
 {
 	// Weird warning if there are no (double) cast
 	float x = (float)(((double)character.posCurr.x - posCurr.x) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
 	float y = (float)(((double)character.posCurr.y - posCurr.y) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
 
 	float angle = (float)acos(x);
-	
+
 	//bullet velocity
 	//float x or y * 10(velocity)
-	AEVec2 vel = { x * 10,y * 10 };
+	AEVec2 vel = { x * 5, y * 5 };
 	//flip the angle if the bullet is suppose to go downwards
 	if (posCurr.y > character.posCurr.y)
 	{
 		angle *= -1;
 	}
-	
+
 	//find empty slot in the projectile array
 	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -297,9 +298,12 @@ void Player::playerCreate(AEVec2* pPos)
 	AEVec2 vel;
 	AEVec2Zero(&vel);
 	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
-	powerRange = 5.0f;
+	powerRange = 5;
+	powerDamage = 10;
+	powerSpeed = 5;
 	projectileMax = 1;
-	powerDamage = 1;
+	maxHealth = currentHealth = 100;
+	counter = invincibleTimer = 0.25f;
 }
 
 /******************************************************************************/
@@ -307,7 +311,7 @@ void Player::playerCreate(AEVec2* pPos)
 	Player creates boomerang
 */
 /******************************************************************************/
-void Player::playerFire(Projectile *boomerang)
+void Player::playerFire(Projectile* boomerang)
 {
 	AEVec2 vel;
 	AEVec2Zero(&vel);
@@ -328,19 +332,70 @@ void Player::playerFire(Projectile *boomerang)
 	}
 }
 
+/******************************************************************************/
+/*!
+	Display player health
+*/
+/******************************************************************************/
+void Player::healthDisplay(float camX, float camY)
+{
+	//Position of health base based off the camera position
+	float X = camX;
+	float Y = camY - 275.0f;
+	float barHeight = 25.0f;
+	float barWidth = 400.0f;
+
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+	AEGfxSetTransparency(1.0f);
+
+	AEMtx33 scale, trans, result;
+
+	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
+	{
+		//current health bar
+		if (sGameObjList[i].type == 99)
+		{
+			//change position
+			X = camX - ((maxHealth - currentHealth) / 2.0f / maxHealth) * (AEGetWindowWidth() / 2);
+			//health bar size
+			AEMtx33Scale(&scale, (barWidth * ((float)currentHealth / maxHealth)), barHeight);
+			AEMtx33Trans(&trans, X, Y);
+			AEMtx33Concat(&result, &trans, &scale);
+			AEGfxSetTransform(result.m);
+			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
+			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
+		}
+		//max health bar
+		if (sGameObjList[i].type == 100)
+		{
+			X = camX;
+			//health bar size
+			AEMtx33Scale(&scale, barWidth, barHeight);
+			AEMtx33Trans(&trans, X, Y);
+			AEMtx33Concat(&result, &trans, &scale);
+			AEGfxSetTransform(result.m);
+			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
+			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
+		}
+	}
+}
+
 void Player::RangeUp()
 {
-	powerRange += 1;
+	powerRange += 5;
 }
 
 void Player::DamageUp()
 {
-	powerDamage += 1;
+	powerDamage += 10;
 }
 
 void Player::SpeedUp()
 {
-	powerSpeed += 1;
+	powerSpeed += 5;
 }
 //### need a counter for what upgrades player got?
 

@@ -103,22 +103,22 @@ void GameStateMainMenuUpdate()
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
 		curMainMenu -= 0.15f * 300;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
 	{
 		gGameStateNext = GS_LEVEL1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
 	{
 		gGameStateNext = GS_LEVEL2;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 360)
 	{
 		gGameStateNext = GS_LEVEL3;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f * 300
+	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f * 360
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
