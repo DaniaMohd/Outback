@@ -117,7 +117,17 @@ public:
 
 	float	boomerangRange;
 
-	//int	healthPoints;
+	//HEALTH
+	float			    fullHealth = 100.0f;
+	float				currentHealth;
+	AEGfxVertexList* fullhp1;
+	AEGfxVertexList* fullhp2;
+	AEGfxVertexList* currenthp1;
+	AEGfxVertexList* currenthp2;
+	AEGfxTexture* fullBarText;
+	AEGfxTexture* currentBarText;
+	float invincibleWHit;
+	float invincibleTimer;
 
 	int		projectileMax;
 	int		powerRange;
