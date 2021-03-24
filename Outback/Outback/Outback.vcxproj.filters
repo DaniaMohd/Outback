@@ -39,6 +39,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Collision.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Include\fmod_output.h">
       <Filter>Include\FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

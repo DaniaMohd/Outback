@@ -38,6 +38,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.5f);
 
 	GameStateMgrInit(GS_MAINMENU);
+	AudioEngineLoad();
 
 	while(gGameStateCurr != GS_QUIT)
 	{
@@ -84,6 +85,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		gGameStatePrev = gGameStateCurr;
 		gGameStateCurr = gGameStateNext;
 	}
+	AudioEngineUnload();
 
 	// free the system
 	AESysExit();
