@@ -60,6 +60,11 @@ void GameObjInst::gameObjInstUpdatePos()
 		dirFaceR = false;
 	else if (velCurr.x > 0)
 		dirFaceR = true;
+
+	if (pObject->type == TYPE_OBJECT_BOOMERANG)
+	{
+		dirCurr -= 10.0f * PI * g_dt;
+	}
 	//### probs can update gravity and collisionflag here
 }
 
@@ -71,7 +76,7 @@ void GameObjInst::gameObjInstUpdatePos()
 void GameObjInst::gameObjInstTransformMatrix()
 {
 	AEMtx33 scale1, rot, trans, result;
-	if (pObject->type == TYPE_OBJECT_BULLET)
+	if (pObject->type == TYPE_OBJECT_BULLET )
 	{
 		AEMtx33Scale(&scale1, scale, scale);
 	}
