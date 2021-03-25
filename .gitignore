@@ -356,3 +356,11 @@ Outback/.vs/Outback/v16/Browse.VC.db
 *.pdb
 *.idb
 *.obj
+*.pdb
+*.tlog
+*.tlog
+*.tlog
+*.log
+*.obj
+*.db
+Outback/.vs/Outback/v16/.suo
