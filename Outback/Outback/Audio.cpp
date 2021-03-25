@@ -16,7 +16,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "main.h"
 
 FMOD::System	* Syst;
-FMOD::Sound		* mainMenuBGM/*, * Level1BGM, * Level2BGM, * Level3BGM,
+FMOD::Sound		* mainMenuBGM, * Level1BGM, * Level2BGM/*, * Level3BGM,
 				* GameOverBGM, * Jump, * highScore, * beeSFX, * emuSFX,
 				* spiderSFX, * lootSFX, * boomerangSFX, * keySelect,
 				* playerSFX*/;
@@ -95,16 +95,32 @@ void MainMenuBGMLoad()
 	}
 }
 
-//void Level1BGMLoad()
-//{
-//
-//}
-//
-//void Level2BGMLoad()
-//{
-//
-//}
-//
+void Level1BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Grassland.wav", FMOD_LOOP_NORMAL, 0, &Level1BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level1BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
+
+void Level2BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Desert.wav", FMOD_LOOP_NORMAL, 0, &Level2BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level2BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
+
 //void Level3BGMLoad()
 //{
 //
@@ -121,16 +137,18 @@ void MainMenuBGMUnload()
 	if (result != FMOD_RESULT::FMOD_OK) return;
 }
 
-//void Level1BGMUnload()
-//{
-//
-//}
-//
-//void Level2BGMUnload()
-//{
-//
-//}
-//
+void Level1BGMUnload()
+{
+	result = Level1BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
+void Level2BGMUnload()
+{
+	result = Level2BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
 //void Level3BGMUnload()
 //{
 //
