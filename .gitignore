@@ -351,3 +351,4 @@ MigrationBackup/
 *.data
 
 *.db
+Outback/.vs/Outback/v16/Browse.VC.db
