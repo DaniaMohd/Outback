@@ -16,7 +16,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "main.h"
 
 FMOD::System	* Syst;
-FMOD::Sound		* mainMenuBGM, * Level1BGM/*, * Level2BGM, * Level3BGM,
+FMOD::Sound		* mainMenuBGM, * Level1BGM, * Level2BGM/*, * Level3BGM,
 				* GameOverBGM, * Jump, * highScore, * beeSFX, * emuSFX,
 				* spiderSFX, * lootSFX, * boomerangSFX, * keySelect,
 				* playerSFX*/;
@@ -108,11 +108,19 @@ void Level1BGMLoad()
 	}
 }
 
-//void Level2BGMLoad()
-//{
-//
-//}
-//
+void Level2BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Desert.wav", FMOD_LOOP_NORMAL, 0, &Level2BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level2BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
+
 //void Level3BGMLoad()
 //{
 //
@@ -135,11 +143,12 @@ void Level1BGMUnload()
 	if (result != FMOD_RESULT::FMOD_OK) return;
 }
 
-//void Level2BGMUnload()
-//{
-//
-//}
-//
+void Level2BGMUnload()
+{
+	result = Level2BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
 //void Level3BGMUnload()
 //{
 //
