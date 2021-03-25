@@ -36,6 +36,13 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_SPEED			//10
 };
 
+//### Particle Types
+enum PARTICLE_TYPE
+{
+	P_TRAIL,			//0
+	P_HIT				//1
+};
+
 enum class STATE
 {
 	STATE_NONE,
@@ -54,14 +61,14 @@ enum class INNER_STATE
 struct GameObj
 {
 	unsigned long		type;		// object type
-	AEGfxVertexList* pMesh;		// This will hold the triangles which will form the shape of the object
-	AEGfxTexture* pTex;		// texture
+	AEGfxVertexList*	pMesh;		// This will hold the triangles which will form the shape of the object
+	AEGfxTexture*		pTex;		// texture
 };
 
 class GameObjInst
 {
 public:
-	GameObj* pObject;	// pointer to the 'original'
+	GameObj*		pObject;	// pointer to the 'original'
 	unsigned int	flag;		// bit flag or-ed together
 	float			scale;		// scale of object
 	AEVec2			posCurr;	// object current position
@@ -82,6 +89,8 @@ public:
 	void			gameObjInstDrawObject(AEMtx33* map);	//draw game object instances
 
 	void			PowerUpCreate(AEVec2 pos);	//creates power ups
+
+	void			particleEffect(GameObjInst* particle, unsigned int type);
 	//### should add particle effects here
 };
 

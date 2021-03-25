@@ -1,3 +1,7 @@
-﻿  GameState_Platform.cpp
-C:\Users\Shannieee\Documents\GitHub\Outback\Outback\Outback\Source\GameState_Platform.cpp(560,43): warning C4018: '<': signed/unsigned mismatch
-  Outback.vcxproj -> C:\Users\Shannieee\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
+﻿  GameObjects.cpp
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(105,10): warning C4101: 'cellTranslation': unreferenced local variable
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(391,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(399,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(428,15): warning C4458: declaration of 'scale' hides class member
+C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\Outback\Include\GameObjects.h(73,10): message : see declaration of 'GameObjInst::scale'
+  Outback.vcxproj -> C:\Users\javin\OneDrive\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
