@@ -352,3 +352,7 @@ MigrationBackup/
 
 *.db
 Outback/.vs/Outback/v16/Browse.VC.db
+*.tlog
+*.pdb
+*.idb
+*.obj
