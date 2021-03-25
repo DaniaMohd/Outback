@@ -1,2 +1,7 @@
-﻿  main.cpp
-  Outback.vcxproj -> C:\Users\Shannieee\Documents\GitHub\Outback\Outback\\Bin\OutbackD.exe
+﻿  GameObjects.cpp
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(105,10): warning C4101: 'cellTranslation': unreferenced local variable
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(323,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(331,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Source\GameObjects.cpp(360,15): warning C4458: declaration of 'scale' hides class member
+C:\Users\zzz\Documents\GitHub\Outback\Outback\Outback\Include\GameObjects.h(66,10): message : see declaration of 'GameObjInst::scale'
+  Outback.vcxproj -> C:\Users\zzz\Documents\GitHub\Outback\Outback\Bin\OutbackD.exe

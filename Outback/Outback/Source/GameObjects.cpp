@@ -1,5 +1,7 @@
 #include "main.h"
 
+extern s8 fontID;
+
 //GameObjInst functions
 /******************************************************************************/
 /*!
@@ -345,6 +347,10 @@ void Player::healthDisplay(float camX, float camY)
 	float barHeight = 25.0f;
 	float barWidth = 400.0f;
 
+	char strBuffer[100];
+	memset(strBuffer, 0, 100 * sizeof(char));
+	sprintf_s(strBuffer, "%4d  /%4d", currentHealth, maxHealth);
+
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -381,6 +387,7 @@ void Player::healthDisplay(float camX, float camY)
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 	}
+	AEGfxPrint(fontID, strBuffer, -0.1f, Y/(AEGetWindowHeight()/2) -0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Player::RangeUp()
