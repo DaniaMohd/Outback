@@ -16,10 +16,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "main.h"
 
 FMOD::System	* Syst;
-FMOD::Sound		* mainMenuBGM/*, * Level1BGM, * Level2BGM, * Level3BGM,
+FMOD::Sound		* mainMenuBGM, * Level1BGM, * Level2BGM, * Level3BGM,
 				* GameOverBGM, * Jump, * highScore, * beeSFX, * emuSFX,
 				* spiderSFX, * lootSFX, * boomerangSFX, * keySelect,
-				* playerSFX*/;
+				* playerSFX;
 FMOD::Channel	* channel1/*, * channel2, * channel3*/;
 FMOD_RESULT		result;
 unsigned int	version;
@@ -95,25 +95,59 @@ void MainMenuBGMLoad()
 	}
 }
 
-//void Level1BGMLoad()
-//{
-//
-//}
-//
-//void Level2BGMLoad()
-//{
-//
-//}
-//
-//void Level3BGMLoad()
-//{
-//
-//}
-//
-//void GameOverBGMLoad()
-//{
-//
-//}
+void Level1BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Grassland.wav", FMOD_LOOP_NORMAL, 0, &Level1BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level1BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
+
+void Level2BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Desert.wav", FMOD_LOOP_NORMAL, 0, &Level2BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level2BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
+
+void Level3BGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_Wetlands.wav", FMOD_LOOP_NORMAL, 0, &Level3BGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(Level3BGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+
+}
+
+
+void GameOverBGMLoad()
+{
+	result = Syst->createSound("..\\Resources\\Music\\Outback_GameOver.wav", FMOD_LOOP_NORMAL, 0, &GameOverBGM);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (!setMute)
+	{
+		channel1->setVolume(volume);
+		result = Syst->playSound(GameOverBGM, 0, false, &channel1);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+	}
+}
 
 void MainMenuBGMUnload()
 {
@@ -121,23 +155,27 @@ void MainMenuBGMUnload()
 	if (result != FMOD_RESULT::FMOD_OK) return;
 }
 
-//void Level1BGMUnload()
-//{
-//
-//}
-//
-//void Level2BGMUnload()
-//{
-//
-//}
-//
-//void Level3BGMUnload()
-//{
-//
-//}
-//
-//void GameOverBGMUnload()
-//{
-//
-//}
+void Level1BGMUnload()
+{
+	result = Level1BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
+void Level2BGMUnload()
+{
+	result = Level2BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
+void Level3BGMUnload()
+{
+	result = Level3BGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
+
+void GameOverBGMUnload()
+{
+	result = GameOverBGM->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
+}
 
