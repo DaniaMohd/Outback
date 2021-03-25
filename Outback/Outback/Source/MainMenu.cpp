@@ -48,7 +48,7 @@ void GameStateMainMenuLoad()
 
 	vertexBG = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertexBG, "Failed to create BG Mesh!");
-	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.jfif");
+	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
 	AE_ASSERT_MESG(texture, "Failed to create BG Texture!");
 	
 
