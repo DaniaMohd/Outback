@@ -30,22 +30,21 @@ AEGfxTexture	*texture = 0;
 void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
-
 	
 	//BG Image Mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-				-400.5f, -400.5f, 0xFFFF0000, 0.0f, 1.0f,
-				 400.5f, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
-				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+				-400.0f, -300.0f, 0xFFFF0000, 0.0f, 1.0f,
+				 400.0f, -300.0f, 0xFFFF0000, 1.0f, 1.0f,
+				-400.0f,  300.0f, 0xFFFF0000, 0.0f, 0.0f);
 
-	AEGfxTriAdd( 400.5,  -400.5f, 0xFFFF0000, 1.0f, 1.0f,
-				 400.5f,  400.5f, 0xFFFF0000, 1.0f, 0.0f,
-				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd( 400.0f,  -300.0f, 0xFFFF0000, 1.0f, 1.0f,
+				 400.0f,  300.0f, 0xFFFF0000, 1.0f, 0.0f,
+				-400.0f,  300.0f, 0xFFFF0000, 0.0f, 0.0f);
 
 	vertexBG = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertexBG, "Failed to create BG Mesh!");
-	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.jfif");
+	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Background2.png");
 	AE_ASSERT_MESG(texture, "Failed to create BG Texture!");
 	
 
@@ -153,7 +152,7 @@ void GameStateMainMenuDraw()
 
 	//For BG image
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(0.5f, 0.5f);
+	AEGfxSetPosition(0.0f, 0.0f);
 	AEGfxTextureSet(texture, 0, 0);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxMeshDraw(vertexBG, AE_GFX_MDM_TRIANGLES);
