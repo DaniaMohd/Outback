@@ -371,15 +371,12 @@ void GameStatePlatformLoad(void)
 	// Loading the levels
 	if (gGameStateCurr == GS_LEVEL1)
 	{
-		Level1BGMLoad();
 		//Importing Data
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt"))
 			gGameStateNext = GS_QUIT;
 	}
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
-		Level2BGMLoad();
-
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported1.txt"))
 			gGameStateNext = GS_QUIT;
 	}
@@ -1054,6 +1051,4 @@ void GameStatePlatformUnload(void)
 	Free the map data
 	*********/
 	FreeMapData();
-	Level1BGMUnload();
-	Level2BGMUnload();
 }
