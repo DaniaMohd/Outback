@@ -341,6 +341,7 @@ void GameStatePlatformLoad(void)
 	}
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
+		Level3BGMLoad();
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported2.txt"))
 			gGameStateNext = GS_QUIT;
 	}
@@ -1078,4 +1079,5 @@ void GameStatePlatformUnload(void)
 	FreeMapData();
 	Level1BGMUnload();
 	Level2BGMUnload();
+	Level3BGMUnload();
 }
