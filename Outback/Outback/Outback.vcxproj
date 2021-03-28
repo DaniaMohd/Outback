@@ -15,11 +15,13 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
     <ClCompile Include="Source\GameObjects.cpp" />
+    <ClCompile Include="Source\GameOverScreen.cpp" />
     <ClCompile Include="Source\GameStateMgr.cpp" />
     <ClCompile Include="Source\GameState_Platform.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\PauseScreen.cpp" />
     <ClCompile Include="Source\Win.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,12 +37,14 @@
     <ClInclude Include="Include\fmod_errors.h" />
     <ClInclude Include="Include\fmod_output.h" />
     <ClInclude Include="Include\GameObjects.h" />
+    <ClInclude Include="Include\GameOverScreen.h" />
     <ClInclude Include="Include\GameStateList.h" />
     <ClInclude Include="Include\GameStateMgr.h" />
     <ClInclude Include="Include\GameState_Platform.h" />
     <ClInclude Include="Include\main.h" />
     <ClInclude Include="Include\MainMenu.h" />
     <ClInclude Include="Include\Map.h" />
+    <ClInclude Include="Include\PauseScreen.h" />
     <ClInclude Include="Include\Win.h" />
   </ItemGroup>
   <ItemGroup>

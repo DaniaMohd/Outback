@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	fontID = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 22);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.5f);
 
-	GameStateMgrInit(GS_MAINMENU);
+	GameStateMgrInit(GS_PAUSE);
 	AudioEngineLoad();
 
 	while(gGameStateCurr != GS_QUIT)

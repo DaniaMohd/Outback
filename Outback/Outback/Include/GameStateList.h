@@ -29,7 +29,9 @@ enum
 	// special game state. Do not change
 	GS_RESTART,
 	GS_QUIT, 
-	GS_NUM
+	GS_NUM,
+	GS_PAUSE,
+	GS_GAMEOVER
 };
 
 // ---------------------------------------------------------------------------
