@@ -6,7 +6,7 @@
 \date		14th March 2021
 \brief		This file contains the definitions of the functions needed to run
 			the pasuescreen of the game
-
+			//to be deleted
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.

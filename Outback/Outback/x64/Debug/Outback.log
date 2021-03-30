@@ -1,2 +1,4 @@
-﻿  main.cpp
+﻿  GameOverScreen.cpp
+C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\Outback\Source\GameOverScreen.cpp(106,69): warning C4305: 'argument': truncation from 'double' to 'f32'
+C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\Outback\Source\GameOverScreen.cpp(107,65): warning C4305: 'argument': truncation from 'double' to 'f32'
   Outback.vcxproj -> C:\Users\xuany\OneDrive\Documents\GitHub\Generic_Game_Name\Outback\Outback\\Bin\OutbackD.exe

@@ -17,6 +17,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 extern s8 fontID;
 f32 currGG = -0.39f;
+int selection = 0;
 char gameOverMsg[100], brestart[100], mainMenu[100], quit[100], barrow[100], bcomment[100];
 
 
@@ -50,13 +51,19 @@ void OBGameOverInit()
 void OBGameOverUpdate()
 {
 	if (AEInputCheckTriggered(AEVK_RIGHT))
+	{
 		currGG += 0.30f;
+		selection += 1;
+	}
 
 	if (AEInputCheckTriggered(AEVK_LEFT))
+	{
 		currGG -= 0.30f;
+		selection -= 1;
+	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && currGG >= 0.21f)
-		gGameStateNext = GS_RESTART;
+	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 2)
+		gGameStateNext = GS_LEVEL1;
 
 	//if (AEInputCheckTriggered(AEVK_RETURN) && currPause == 0.15f)
 		//gGameStateNext = OB_INSTRUCTIONS;
@@ -67,18 +74,24 @@ void OBGameOverUpdate()
 	//if (AEInputCheckTriggered(AEVK_RETURN) && currGG == -0.15f)
 		//gGameStateNext = OB_CREDITS;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && (currGG > -0.09f && currGG < -0.21))
+	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 1)
 		gGameStateNext = GS_MAINMENU;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && (currGG > -0.39f && currGG < -0.09)
+	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 0
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 		gGameStateNext = GS_QUIT;
 
 	if (currGG > 0.22f)
+	{
 		currGG = -0.39f;
-
+		selection = 0;
+	}
 	if (currGG < -0.40f)
+	{
 		currGG = 0.21f;
+		selection = 2;
+	}
+
 }
 
 void OBGameOverDraw()
