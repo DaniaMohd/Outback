@@ -58,6 +58,10 @@ float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
 
 static bool             onChange = true; //when touching an enemy or coin
+//YuXi
+bool					win;
+static GameObjInst		sGoal;
+static int				totalGoals = 3;
 
 /******************************************************************************/
 /*!
@@ -258,6 +262,28 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
 	}
 
+	//Goal
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_GOAL;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Goal Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Hero.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
+	}
+
 	//Damage upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -419,6 +445,7 @@ void GameStatePlatformInit(void)
 	TotalCoins = 0;
 	CoinsCollected = 0;
 	sBoomNum = 0;
+	win = false;
 
 	//Empty and Collidable blocks
 	{
@@ -472,6 +499,15 @@ void GameStatePlatformInit(void)
 				SnapToCell(&sCoins[TotalCoins].posCurr.x);
 				SnapToCell(&sCoins[TotalCoins].posCurr.y);
 				TotalCoins++;
+			}
+			//Yu Xi
+			else if (MapData[y][x] == TYPE_OBJECT_GOAL)
+			{
+				printf("A\n");
+				sGoal.gameObjInstCreate(TYPE_OBJECT_GOAL, 1.0f, &Pos, nullptr, 0.0f);
+
+				SnapToCell(&sGoal.posCurr.x);
+				SnapToCell(&sGoal.posCurr.y);
 			}
 		}
 }
@@ -552,6 +588,32 @@ void GameStatePlatformUpdate(void)
 	{
 		pHero.SpeedUp();
 	}
+	
+	//Next stage
+	if (AEInputCheckReleased(AEVK_N))
+	{
+		win = true;
+		if (win == true)
+		{
+			switch (gGameStateCurr)
+			{
+			case GS_LEVEL1:
+				gGameStateNext = GS_LEVEL2;
+				win = false;
+				break;
+			case GS_LEVEL2:
+				gGameStateNext = GS_LEVEL3;
+				win = false;
+				break;
+			case GS_LEVEL3:
+				gGameStateNext = GS_WIN;
+				win = false;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
 	//Enemy update
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -571,6 +633,9 @@ void GameStatePlatformUpdate(void)
 			sEnemies[i].enemyFire(pHero, sProjectiles);
 		}
 	}
+
+	//Yu Xi goal update
+	sGoal.gameObjInstBoundingBox();
 
 	//player update
 	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
@@ -678,6 +743,27 @@ void GameStatePlatformUpdate(void)
 	pHero.counter += g_dt;
 	pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
 
+	//Check if player touches goal
+	if((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sGoal.boundingBox, sGoal.velCurr)) == true)
+	{
+		switch (gGameStateCurr)
+		{
+		case GS_LEVEL1:
+			gGameStateNext = GS_LEVEL2;
+			win = false;
+			break;
+		case GS_LEVEL2:
+			gGameStateNext = GS_LEVEL3;
+			win = false;
+			break;
+		case GS_LEVEL3:
+			gGameStateNext = GS_WIN;
+			win = false;
+			break;
+		default:
+			break;
+		}
+	}
 
 	//check if player touches an enemy
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -838,6 +924,9 @@ void GameStatePlatformUpdate(void)
 	}
 	pHero.gameObjInstTransformMatrix();
 
+	//Yu Xi
+	sGoal.gameObjInstTransformMatrix();
+
 	//### death
 	if (pHero.currentHealth <= 0)
 	{
@@ -962,7 +1051,11 @@ void GameStatePlatformDraw(void)
 
 		sProjectiles[i].gameObjInstDrawObject(&MapTransform);
 	}
+
 	pHero.gameObjInstDrawObject(&MapTransform);
+
+	//Yu Xi
+	sGoal.gameObjInstDrawObject(&MapTransform);
 
 	//draw health bar
 	pHero.healthDisplay(camX, camY);
@@ -1006,6 +1099,7 @@ void GameStatePlatformFree(void)
 	pWhiteInstance.gameObjInstDestroy();
 	pBlackInstance.gameObjInstDestroy();
 	pHero.gameObjInstDestroy();
+	sGoal.gameObjInstDestroy();
 }
 
 /******************************************************************************/
