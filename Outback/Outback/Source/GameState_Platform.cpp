@@ -34,14 +34,14 @@ static Enemy* sEnemies;
 static unsigned int		sEnemyNum;
 
 // list of coins
-static GameObjInst*		sCoins;
+static GameObjInst* sCoins;
 static unsigned int		sCoinNum;
 
 // list of particles
-static GameObjInst*		sParticles;
+static GameObjInst* sParticles;
 
 // list of enemies
-static Projectile*		sProjectiles;
+static Projectile* sProjectiles;
 static unsigned int		sBoomNum;
 
 // Binary map data
@@ -52,7 +52,7 @@ static AEMtx33			MapTransform;
 // Hero instance
 static Player			pHero;
 
-const int				PIXEL = 20;
+const int				PIXEL = 40;
 
 float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
@@ -255,7 +255,7 @@ void GameStatePlatformLoad(void)
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
 		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Boomerang.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
 	}
 
 	//Damage upgrade
@@ -277,7 +277,7 @@ void GameStatePlatformLoad(void)
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Speed Mesh!");
 		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DamageUp.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
 	//Range upgrade
@@ -321,6 +321,50 @@ void GameStatePlatformLoad(void)
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
 		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\SpeedUp.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
+	}
+
+	//max health
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = 100;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFF000000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFF000000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFF000000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFF000000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFF000000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFF000000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\fullhealth.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
+	//current health
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = 99;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\currenthealth.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
@@ -328,6 +372,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
+
 		//Importing Data
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt"))
 			gGameStateNext = GS_QUIT;
@@ -342,6 +387,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
+
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported2.txt"))
 			gGameStateNext = GS_QUIT;
 	}
@@ -362,28 +408,6 @@ void GameStatePlatformLoad(void)
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
-
-	//==========================================================HEALTH
-	pObj = sGameObjList + sGameObjNum++;
-	pHero.currentHealth = pHero.fullHealth;	//health changable
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
-		pHero.fullHealth - 30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
-		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
-	pHero.fullhp1 = AEGfxMeshEnd();
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		pHero.fullHealth - 30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		pHero.fullHealth - 30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	pHero.fullhp2 = AEGfxMeshEnd();
-	pHero.fullBarText = AEGfxTextureLoad("..\\Resources\\Textures\\fullhealth.png");
-	AE_ASSERT_MESG(pHero.fullBarText, "Failed to create health");
-	pHero.currentBarText = AEGfxTextureLoad("..\\Resources\\Textures\\currenthealth.png");
-	AE_ASSERT_MESG(pHero.currentBarText, "Failed to create health");
-	//==============================================================================
-
 }
 
 /******************************************************************************/
@@ -453,8 +477,6 @@ void GameStatePlatformInit(void)
 				TotalCoins++;
 			}
 		}
-	pHero.invincibleTimer = 0.0f;
-	pHero.invincibleWHit = 0.0f;
 }
 
 /******************************************************************************/
@@ -538,7 +560,7 @@ void GameStatePlatformUpdate(void)
 	}
 
 	//firing
-	if (AEInputCheckTriggered(AEVK_J) && sBoomNum < pHero.projectileMax)
+	if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
 	{
 		pHero.playerFire(sProjectiles);
 		++sBoomNum;
@@ -548,6 +570,12 @@ void GameStatePlatformUpdate(void)
 	if (AEInputCheckTriggered(AEVK_P))
 	{
 		printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed);
+		printf("%f\t%f\n", camX, camY);
+	}
+	//debug
+	if (AEInputCheckTriggered(AEVK_M))
+	{
+		pHero.SpeedUp();
 	}
 
 	//Enemy update
@@ -568,7 +596,7 @@ void GameStatePlatformUpdate(void)
 			sEnemies[i].enemyFire(pHero, sProjectiles);
 		}
 	}
-	
+
 	//player update
 	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
 	pHero.gameObjInstUpdatePos();
@@ -671,42 +699,28 @@ void GameStatePlatformUpdate(void)
 		pHero.velCurr.x = 0;
 	}
 
+	//play invicibility
+	pHero.counter += g_dt;
+	pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
+
+
 	//check if player touches an enemy
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
 			continue;
 
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true && pHero.invincibleTimer==0.0f)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true)
 		{
-			onChange = true;
-			pHero.currentHealth-=10.0f;
-			pHero.invincibleWHit = 1.0f;
-			if (pHero.invincibleWHit == 1.0f)
-			{
-				pHero.invincibleTimer = AEFrameRateControllerGetFrameTime();
-				pHero.invincibleWHit = 0.0f;
-				
-			}
 
-			if (pHero.currentHealth == 0.0f)
+			if (pHero.counter >= pHero.invincibleTimer)
 			{
-				HeroLives--;
-				pHero.currentHealth = pHero.fullHealth;
-				if (HeroLives > 0)
-				{
-					AEVec2Set(&pHero.posCurr, (float)Hero_Initial_X + 0.5f, (float)Hero_Initial_Y + 0.5f);
-				}
-			}
-			else if (HeroLives == 0)
-			{
-				printf("Try Again!\n");
-				gGameStateNext = GS_RESTART;
-
-				HeroLives = 3;
+				onChange = true;
+				pHero.currentHealth -= sEnemies[i].damage;
+				pHero.counter = 0;
 			}
 		}
-		pHero.invincibleTimer = 0.0f;
+		//pHero.invincibleTimer = 0.0f;
 	}
 
 	//checks if player touches coin
@@ -746,12 +760,12 @@ void GameStatePlatformUpdate(void)
 		}
 	}
 
-	//### checks if boomerang hits enemy, can also put enemy fire hits player
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
 		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
 			continue;
 
+		//checks if boomernang hits enemy
 		if (sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG)
 		{
 			for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
@@ -776,10 +790,11 @@ void GameStatePlatformUpdate(void)
 					if (sEnemies[j].healthPoints <= 0)
 					{
 						sEnemies[j].gameObjInstDestroy();
+						sEnemyNum--;
 						printf("enemy ded\n");
 					}
 				}
-				else if(sEnemies[j].hit1 == true)
+				else if (sEnemies[j].hit1 == true)
 				{
 					sEnemies[j].hit1 = false;
 				}
@@ -795,7 +810,12 @@ void GameStatePlatformUpdate(void)
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
-			//printf("DIE\n");
+			if (pHero.counter >= pHero.invincibleTimer)
+			{
+				onChange = true;
+				pHero.currentHealth -= 1;
+				pHero.counter = 0;
+			}
 		}
 
 		//boomerang returning to player
@@ -841,6 +861,30 @@ void GameStatePlatformUpdate(void)
 	}
 	pHero.gameObjInstTransformMatrix();
 
+	//### death
+	if (pHero.currentHealth <= 0)
+	{
+		HeroLives--;
+		pHero.currentHealth = pHero.maxHealth;
+		if (HeroLives > 0)
+		{
+			AEVec2Set(&pHero.posCurr, (float)Hero_Initial_X + 0.5f, (float)Hero_Initial_Y + 0.5f);
+		}
+	}
+	else if (HeroLives == 0)
+	{
+		printf("Try Again!\n");
+		gGameStateNext = GS_RESTART;
+
+		HeroLives = 3;
+	}
+	//### win
+	if (sEnemyNum <= 0)
+	{
+		printf("Win!\n");
+		gGameStateNext = GS_MAINMENU;
+	}
+
 	//camera settings
 	if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
 	{
@@ -850,12 +894,10 @@ void GameStatePlatformUpdate(void)
 	}
 	else
 	{
+		//### add camera stopping when at the walls
 		// Camera tracking
-		if (camX != AEGetWindowWidth() / 2)
-			camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
-
-		if (camY != AEGetWindowHeight() / 2)
-			camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+		camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+		camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
 	}
 	AEGfxSetCamPosition(camX, camY);
 }
@@ -872,7 +914,7 @@ void GameStatePlatformDraw(void)
 	int i, j;
 	AEMtx33 cellTranslation, cellFinalTransformation;
 
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
 		for (j = 0; j < BINARY_MAP_WIDTH; ++j)
@@ -945,6 +987,9 @@ void GameStatePlatformDraw(void)
 	}
 	pHero.gameObjInstDrawObject(&MapTransform);
 
+	//draw health bar
+	pHero.healthDisplay(camX, camY);
+
 	//printing debug
 	if (onChange == true)
 	{
@@ -964,71 +1009,6 @@ void GameStatePlatformDraw(void)
 		}
 		onChange = false;
 	}
-
-
-	//=============================================================
-//DRAWING OF CURRENT HEALTH DISPLAY - XY
-
-	AEGfxMeshStart();
-	// This rectangle has 2 triangles: currenthp1 and currenthp2
-	AEGfxTriAdd(
-		-30.0f, -20.0f, 0x00FF00FF, 0.0f, 0.0f,
-		pHero.currentHealth - 30.0f, -20.0f, 0x00FFFF00, 0.0f, 0.0f,
-		-30.0f, 20.0f, 0x0000FFFF, 0.0f, 0.0f);
-	pHero.currenthp1 = AEGfxMeshEnd();
-	AE_ASSERT_MESG(pHero.currenthp1, "Failed to create mesh 2!!");
-
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		pHero.currentHealth - 30.0f, -20.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		-30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		pHero.currentHealth - 30.0f, 20.0f, 0x00FFFFFF, 0.0f, 0.0f);
-	pHero.currenthp2 = AEGfxMeshEnd();
-	AE_ASSERT_MESG(pHero.currenthp2, "Failed to create mesh 2!!");
-
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set position for object 2
-	AEGfxSetPosition(-300.0f, 200.0f);	//ltriangle
-	// No tint
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// Set texture
-	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
-	// Drawing the mesh (list of triangles)
-	AEGfxMeshDraw(pHero.fullhp1, AE_GFX_MDM_TRIANGLES);
-
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set position for object 2
-	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
-	// No tint
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// Set texture
-	AEGfxTextureSet(pHero.fullBarText, 0.0f, 0.0f);
-	// Drawing the mesh (list of triangles)
-	AEGfxMeshDraw(pHero.fullhp2, AE_GFX_MDM_TRIANGLES);
-
-	// current health =======================================
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set position for object 1
-	AEGfxSetPosition(-300.0f, 200.0f);
-	// No tint
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// Set texture
-	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
-	// Drawing the mesh (list of triangles)
-	AEGfxMeshDraw(pHero.currenthp1, AE_GFX_MDM_TRIANGLES);
-
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	// Set position for object 2
-	AEGfxSetPosition(-300.0f, 200.0f);	//rtriangle
-	// No tint
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	// Set texture
-	AEGfxTextureSet(pHero.currentBarText, 0.0f, 0.0f);
-	// Drawing the mesh (list of triangles)
-	AEGfxMeshDraw(pHero.currenthp2, AE_GFX_MDM_TRIANGLES);
-
-
-	//========================================================================
 
 }
 
@@ -1077,6 +1057,11 @@ void GameStatePlatformUnload(void)
 	Free the map data
 	*********/
 	FreeMapData();
+
+
+	/*********
+	Unload the audio
+	*********/
 	Level1BGMUnload();
 	Level2BGMUnload();
 	Level3BGMUnload();

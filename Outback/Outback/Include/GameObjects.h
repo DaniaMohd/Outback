@@ -1,3 +1,16 @@
+/******************************************************************************/
+/*!
+\file		GameObjects.h
+\author
+\par    	email:
+\date   	??/??/2021
+\brief      This file contains the declaration for the game objects.
+
+Copyright (C) 2021 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the
+prior written consent of DigiPen Institute of Technology is prohibited.
+ */
+ /******************************************************************************/
 
 const unsigned int	GAME_OBJ_NUM_MAX = 32;	//The total number of different objects (Shapes)
 const unsigned int	GAME_OBJ_INST_NUM_MAX = 1024;	//The total number of different game object instances
@@ -36,6 +49,13 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_SPEED			//10
 };
 
+//### Particle Types
+enum PARTICLE_TYPE
+{
+	P_TRAIL,			//0
+	P_HIT				//1
+};
+
 enum class STATE
 {
 	STATE_NONE,
@@ -54,14 +74,14 @@ enum class INNER_STATE
 struct GameObj
 {
 	unsigned long		type;		// object type
-	AEGfxVertexList*	pMesh;		// This will hold the triangles which will form the shape of the object
-	AEGfxTexture*		pTex;		// texture
+	AEGfxVertexList* pMesh;		// This will hold the triangles which will form the shape of the object
+	AEGfxTexture* pTex;		// texture
 };
 
 class GameObjInst
 {
 public:
-	GameObj*		pObject;	// pointer to the 'original'
+	GameObj* pObject;	// pointer to the 'original'
 	unsigned int	flag;		// bit flag or-ed together
 	float			scale;		// scale of object
 	AEVec2			posCurr;	// object current position
@@ -69,7 +89,7 @@ public:
 	float			dirCurr;	// object current direction
 	bool			dirFaceR;	// check is object is facing the right
 	AEMtx33			transform;	// object drawing matrix
-	
+
 	double			counter;	//General purpose counter (This variable will be used for the enemy state machine)
 
 	AABB			boundingBox;// object bouding box that encapsulates the object
@@ -82,30 +102,32 @@ public:
 	void			gameObjInstDrawObject(AEMtx33* map);	//draw game object instances
 
 	void			PowerUpCreate(AEVec2 pos);	//creates power ups
+
+	void			particleEffect(GameObjInst* particle, unsigned int type);
 	//### should add particle effects here
 };
 
 class Enemy : public GameObjInst
 {
 public:
-	int		gridCollisionFlag;
+	int				gridCollisionFlag;
 
-	enum	STATE state;
-	enum	INNER_STATE innerState;
+	enum			STATE state;
+	enum			INNER_STATE innerState;
 
-	int		detectionRange;
-	int		firingRange;
+	int	detectionRange;
+	int	firingRange;
 
-	int		healthPoints;
-	//int	damage;
+	int	healthPoints;
+	int	damage;
 
-	bool	hit1;	//hit detection from the front
-	bool	hit2;	//hit detection from the back
+	bool			hit1;	//hit detection from the front
+	bool			hit2;	//hit detection from the back
 
-	void	enemyCreate(unsigned int enemyType, AEVec2* pPos);
-	void	EnemyStateMachine();		//State machine functions
+	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
+	void			EnemyStateMachine();		//State machine functions
 
-	void	enemyFire(Player character, Projectile *bullet);//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
+	void			enemyFire(Player character, Projectile* bullet);//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
 
 	//### enemy charging function, input player
 };
@@ -113,34 +135,30 @@ public:
 class Player : public GameObjInst
 {
 public:
-	int		gridCollisionFlag;
+	int				gridCollisionFlag;
 
-	float	boomerangRange;
+	float			boomerangRange;
 
 	//HEALTH
-	float			    fullHealth = 100.0f;
-	float				currentHealth;
-	AEGfxVertexList* fullhp1;
-	AEGfxVertexList* fullhp2;
-	AEGfxVertexList* currenthp1;
-	AEGfxVertexList* currenthp2;
-	AEGfxTexture* fullBarText;
-	AEGfxTexture* currentBarText;
-	float invincibleWHit;
-	float invincibleTimer;
+	int 			maxHealth;
+	int				currentHealth;
 
-	int		projectileMax;
-	int		powerRange;
-	int		powerDamage;
-	int		powerSpeed;
+	//How long player is invicible after touching enemy
+	float			invincibleTimer;
 
-	void	playerCreate(AEVec2* pPos);
-	void	playerFire(Projectile *boomerang);
+	int	projectileMax;
+	int	powerRange;
+	int	powerDamage;
+	int	powerSpeed;
 
-	void	RangeUp();
-	void	DamageUp();
-	void	SpeedUp();
-	
+	void			playerCreate(AEVec2* pPos);
+	void			playerFire(Projectile* boomerang);
+	void			healthDisplay(float camX, float camY);
+
+	void			RangeUp();
+	void			DamageUp();
+	void			SpeedUp();
+
 	//### probably additional functions to aid in upgrade pickups
 };
 
@@ -159,9 +177,9 @@ public:
 	void		ProjectileUpdate();
 };
 
-//### function of input type player and enemy pointer to spawn enemies arounf the player
+//### function of input type player and enemy pointer to spawn enemies around the player
 
-extern GameObj*				sGameObjList;
+extern GameObj* sGameObjList;
 extern unsigned long		sGameObjNum;
 
 //### extern to carry over player data, probs

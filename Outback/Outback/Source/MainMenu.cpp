@@ -17,9 +17,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 extern s8 fontID;
 extern s8 fontTitle;
 f32 curMainMenu = 0.15f * 360;
+int curr = 0;
 
-AEGfxVertexList *vertex = 0, *vertexBG = 0;
-AEGfxTexture	*texture = 0;
+AEGfxVertexList* vertex = 0, * vertexBG = 0;
+AEGfxTexture* texture = 0;
 
 /******************************************************************************/
 /*!
@@ -30,33 +31,36 @@ void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
 
-	
+	float camX = BINARY_MAP_WIDTH / 2;
+	float camY = BINARY_MAP_HEIGHT / 2;
+	AEGfxSetCamPosition(camX, camY);
+
 	//BG Image Mesh
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-				-400.5f, -400.5f, 0xFFFF0000, 0.0f, 1.0f,
-				 400.5f, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
-				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+		-400.5f, -400.5f, 0xFFFF0000, 0.0f, 1.0f,
+		400.5f, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-400.5f, 400.5f, 0xFFFF0000, 0.0f, 0.0f);
 
-	AEGfxTriAdd( 400.5,  -400.5f, 0xFFFF0000, 1.0f, 1.0f,
-				 400.5f,  400.5f, 0xFFFF0000, 1.0f, 0.0f,
-				-400.5f,  400.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(400.5, -400.5f, 0xFFFF0000, 1.0f, 1.0f,
+		400.5f, 400.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-400.5f, 400.5f, 0xFFFF0000, 0.0f, 0.0f);
 
 	vertexBG = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertexBG, "Failed to create BG Mesh!");
 	texture = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.jfif");
 	AE_ASSERT_MESG(texture, "Failed to create BG Texture!");
-	
+
 
 	//Highlight
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		-50.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
-		 50.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		-50.0f,  10.5f, 0xFFFF0000, 0.0f, 0.0f);
+		50.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		 50.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		 50.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		50.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		50.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
 		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 
 	vertex = AEGfxMeshEnd();
@@ -93,6 +97,12 @@ void GameStateMainMenuUpdate()
 		cursor -= 0.15f
 	*/
 
+	if (curr > 3)
+		curr = 0;
+
+	if (curr < 0)
+		curr = 3;
+
 	if (curMainMenu > 0.15f * 360)
 		curMainMenu = -0.3f * 270;
 
@@ -100,27 +110,33 @@ void GameStateMainMenuUpdate()
 		curMainMenu = 0.15f * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
+	{
 		curMainMenu += 0.15f * 300;
+		curr--;
+	}
 
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
+	{
 		curMainMenu -= 0.15f * 300;
+		curr++;
+	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 0)
 	{
 		gGameStateNext = GS_LEVEL1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == 0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 1)
 	{
 		gGameStateNext = GS_LEVEL2;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.15f * 300)
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 2)
 	{
 		gGameStateNext = GS_LEVEL3;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curMainMenu == -0.3f * 300
+	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 3
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
@@ -161,14 +177,14 @@ void GameStateMainMenuDraw()
 	AEGfxPrint(fontID, "LEVEL 1", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL 2", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL 3", -0.7f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "EXIT", -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
 	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
-	
+
 
 
 }
