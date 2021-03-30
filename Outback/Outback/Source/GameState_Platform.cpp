@@ -202,13 +202,13 @@ void GameStatePlatformLoad(void)
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
-			-0.1f, -0.1f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.1f, -0.1f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.1f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
 		AEGfxTriAdd(
-			0.1f, -0.1f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.1f, 0.1f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.1f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
@@ -372,7 +372,6 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
-
 		//Importing Data
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt"))
 			gGameStateNext = GS_QUIT;
@@ -380,14 +379,12 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
-
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported1.txt"))
 			gGameStateNext = GS_QUIT;
 	}
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
-
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported2.txt"))
 			gGameStateNext = GS_QUIT;
 	}
@@ -494,18 +491,7 @@ void GameStatePlatformUpdate(void)
 		pHero.velCurr.x = -MOVE_VELOCITY_HERO;
 		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
 		{
-			//### should probs make this into a function
-			for (unsigned int k = 0; k < GAME_OBJ_INST_NUM_MAX; k++)
-			{
-				if (sParticles[k].flag == 0)
-				{
-					AEVec2 pos = { pHero.posCurr.x + 0.5f, pHero.posCurr.y - 0.5f };
-					AEVec2 vel = { AERandFloat() * 10 , AERandFloat() * 10 };
-					sParticles[k].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 1.0f, &pos, &vel, 0);
-					sParticles[k].counter = 0.25;
-					break;
-				}
-			}
+			pHero.particleEffect(sParticles, P_TRAIL);
 		}
 	}
 	// Right
@@ -514,18 +500,7 @@ void GameStatePlatformUpdate(void)
 		pHero.velCurr.x = MOVE_VELOCITY_HERO;
 		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
 		{
-			//### should probs make this into a function
-			for (unsigned int k = 0; k < GAME_OBJ_INST_NUM_MAX; k++)
-			{
-				if (sParticles[k].flag == 0)
-				{
-					AEVec2 pos = { pHero.posCurr.x - 0.5f, pHero.posCurr.y - 0.5f };
-					AEVec2 vel = { AERandFloat() * -10 , AERandFloat() * 10 };
-					sParticles[k].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 1.0f, &pos, &vel, 0);
-					sParticles[k].counter = 0.25;
-					break;
-				}
-			}
+			pHero.particleEffect(sParticles, P_TRAIL);
 		}
 	}
 	else
@@ -779,12 +754,14 @@ void GameStatePlatformUpdate(void)
 					{
 						sEnemies[j].healthPoints -= pHero.powerDamage;
 						sEnemies[j].hit1 = true;
+						sEnemies[j].particleEffect(sParticles, P_HIT);
 						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
 					}
 					if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
 					{
 						sEnemies[j].healthPoints -= pHero.powerDamage;
 						sEnemies[j].hit2 = true;
+						sEnemies[j].particleEffect(sParticles, P_HIT);
 						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
 					}
 					if (sEnemies[j].healthPoints <= 0)
@@ -1058,10 +1035,6 @@ void GameStatePlatformUnload(void)
 	*********/
 	FreeMapData();
 
-
-	/*********
-	Unload the audio
-	*********/
 	Level1BGMUnload();
 	Level2BGMUnload();
 	Level3BGMUnload();

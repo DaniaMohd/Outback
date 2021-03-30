@@ -74,6 +74,11 @@ void GameObjInst::gameObjInstUpdatePos()
 		dirFaceR = false;
 	else if (velCurr.x > 0)
 		dirFaceR = true;
+
+	if (pObject->type == TYPE_OBJECT_BOOMERANG)
+	{
+		dirCurr -= 10.0f * PI * g_dt;
+	}
 	//### probs can update gravity and collisionflag here
 }
 
@@ -127,6 +132,74 @@ void GameObjInst::gameObjInstDrawObject(AEMtx33* map)
 	AEGfxTextureSet(pObject->pTex, 0, 0);
 	AEGfxMeshDraw(pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 	//Don't forget to concatenate the MapTransform matrix with the transformation of each game object instance
+}
+
+/******************************************************************************/
+/*!
+	Particle effects
+*/
+/******************************************************************************/
+void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
+{
+	AEVec2 pos; //position to come out from
+	AEVec2 vel;
+	if (type == P_TRAIL)
+	{
+		for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			if (particle[i].flag == 0)
+			{
+				if (dirFaceR)
+				{
+					pos = { posCurr.x - 0.5f, posCurr.y - 0.5f };
+					vel = { AERandFloat() * -10 , AERandFloat() * 10 };
+				}
+				else
+				{
+					pos = { posCurr.x + 0.5f, posCurr.y - 0.5f };
+					vel = { AERandFloat() * 10 , AERandFloat() * 10 };
+				}
+
+				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 0.25f, &pos, &vel, 0);
+				particle[i].counter = 0.25;
+				break;
+			}
+		}
+	}
+	if (type == P_HIT)
+	{
+		for (unsigned int i = 0, j = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			pos = { posCurr.x, posCurr.y };
+			if (particle[i].flag == 0)
+			{
+				if (j >= 4)
+				{
+					break;
+				}
+				else if (j == 0)
+				{
+					vel = { 5 , 5 };
+				}
+				else if (j == 1)
+				{
+					vel = { -5 , 5 };
+				}
+				else if (j == 2)
+				{
+					vel = { 5 , -5 };
+				}
+				else if (j == 3)
+				{
+					vel = { -5 , -5 };
+				}
+
+				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 0.25f, &pos, &vel, 0);
+				particle[i].counter = 0.25;
+				j++;
+			}
+		}
+	}
 }
 
 /******************************************************************************/
