@@ -237,6 +237,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 	hit1 = false;
 	hit2 = false;
 	damage = 10;
+	detectionRadius = 10.0f;
 }
 
 /******************************************************************************/
@@ -327,33 +328,67 @@ void Enemy::EnemyStateMachine()
 
 /******************************************************************************/
 /*!
+	Enemy grid collision flag update
+*/
+/******************************************************************************/
+void Enemy::enemyGridFlag()
+{
+	if (gridCollisionFlag & COLLISION_BOTTOM)
+	{
+		SnapToCell(&posCurr.y);
+		velCurr.y = 0;
+	}
+	if (gridCollisionFlag & COLLISION_TOP)
+	{
+		SnapToCell(&posCurr.y);
+		velCurr.y = 0;
+	}
+	if (gridCollisionFlag & COLLISION_LEFT)
+	{
+		SnapToCell(&posCurr.x);
+		velCurr.x = 0;
+	}
+	if (gridCollisionFlag & COLLISION_RIGHT)
+	{
+		SnapToCell(&posCurr.x);
+		velCurr.x = 0;
+	}
+}
+
+/******************************************************************************/
+/*!
 	Enemy creates bullet
 */
 /******************************************************************************/
 void Enemy::enemyFire(Player character, Projectile* bullet)
 {
-	// Weird warning if there are no (double) cast
-	float x = (float)(((double)character.posCurr.x - posCurr.x) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
-	float y = (float)(((double)character.posCurr.y - posCurr.y) / sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f)));
-
-	float angle = (float)acos(x);
-
-	//bullet velocity
-	//float x or y * 10(velocity)
-	AEVec2 vel = { x * 5, y * 5 };
-	//flip the angle if the bullet is suppose to go downwards
-	if (posCurr.y > character.posCurr.y)
+	float mag = sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f));
+	if (mag <= detectionRadius)
 	{
-		angle *= -1;
-	}
+		// Weird warning if there are no (double) cast
+		// normalize
+		float x = (float)(((double)character.posCurr.x - posCurr.x) / mag);
+		float y = (float)(((double)character.posCurr.y - posCurr.y) / mag);
 
-	//find empty slot in the projectile array
-	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		if (bullet[i].flag == 0)
+		float angle = (float)acos(x);
+
+		//bullet velocity
+		//float x or y * 10(velocity)
+		AEVec2 vel = { x * 5, y * 5 };
+		//flip the angle if the bullet is suppose to go downwards
+		if (posCurr.y > character.posCurr.y)
 		{
-			bullet[i].ProjectileCreate(&posCurr, &vel, angle);
-			break;
+			angle *= -1;
+		}
+
+		//find empty slot in the projectile array
+		for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			if (bullet[i].flag == 0)
+			{
+				bullet[i].ProjectileCreate(&posCurr, &vel, angle);
+				break;
+			}
 		}
 	}
 }
@@ -409,6 +444,35 @@ void Player::playerFire(Projectile* boomerang)
 
 /******************************************************************************/
 /*!
+	Player grid collision flag update
+*/
+/******************************************************************************/
+void Player::playerGridFlag()
+{
+	if (gridCollisionFlag & COLLISION_BOTTOM)
+	{
+		SnapToCell(&posCurr.y);
+		velCurr.y = 0;
+	}
+	if (gridCollisionFlag & COLLISION_TOP)
+	{
+		SnapToCell(&posCurr.y);
+		velCurr.y = 0;
+	}
+	if (gridCollisionFlag & COLLISION_LEFT)
+	{
+		SnapToCell(&posCurr.x);
+		velCurr.x = 0;
+	}
+	if (gridCollisionFlag & COLLISION_RIGHT)
+	{
+		SnapToCell(&posCurr.x);
+		velCurr.x = 0;
+	}
+}
+
+/******************************************************************************/
+/*!
 	Display player health
 */
 /******************************************************************************/
@@ -435,7 +499,7 @@ void Player::healthDisplay(float camX, float camY)
 	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
 	{
 		//current health bar
-		if (sGameObjList[i].type == 99)
+		if (sGameObjList[i].type == TYPE_OBJECT_CURRHP)
 		{
 			//change position
 			X = camX - ((maxHealth - currentHealth) / 2.0f / maxHealth) * (AEGetWindowWidth() / 2);
@@ -448,7 +512,7 @@ void Player::healthDisplay(float camX, float camY)
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 		//max health bar
-		if (sGameObjList[i].type == 100)
+		if (sGameObjList[i].type == TYPE_OBJECT_MAXHP)
 		{
 			X = camX;
 			//health bar size
@@ -460,7 +524,7 @@ void Player::healthDisplay(float camX, float camY)
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 	}
-	AEGfxPrint(fontID, strBuffer, -0.1f, Y/(AEGetWindowHeight()/2) -0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, strBuffer, -0.1f, -275.0f / (AEGetWindowHeight() / 2) - 0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Player::RangeUp()
@@ -550,5 +614,71 @@ void Projectile::ProjectileUpdate()
 	if (counter > 2)
 	{
 		flag = 0;
+	}
+}
+
+
+
+
+
+void enemyspawning(Player player, Enemy* enemies)
+{
+	bool x_negative = rand() % 2;
+	bool y_negative = rand() % 2;
+
+	int x = rand() % 7;
+	int y = rand() % 5;
+
+	x += 3;
+	y += 3;
+	if (x_negative)
+	{
+		x *= -1;
+	}
+	if (y_negative)
+	{
+		y *= -1;
+	}
+
+	//int type;
+	//switch case for enemy type
+
+	AEVec2 pos;
+
+	pos.x = player.posCurr.x + x;
+	pos.y = player.posCurr.y + y;
+
+	while (0 != GetCellValue((int)pos.x, (int)pos.y))
+	{
+		x_negative = rand() % 2;
+		y_negative = rand() % 2;
+
+		x = rand() % 7;
+		y = rand() % 5;
+
+		x += 3;
+		y += 3;
+
+		if (x_negative)
+		{
+			x *= -1;
+		}
+		if (y_negative)
+		{
+			y *= -1;
+		}
+
+		pos.x = player.posCurr.x + x;
+		pos.y = player.posCurr.y + y;
+	}
+
+	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		if (enemies[i].flag == 0)
+		{
+			enemies[i].enemyCreate(TYPE_OBJECT_ENEMY1, &pos);
+			printf("Spawned\n");
+			break;
+		}
 	}
 }

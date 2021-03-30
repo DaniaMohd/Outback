@@ -8,7 +8,7 @@ const float			JUMP_VELOCITY = 12.5f;
 const float			MOVE_VELOCITY_HERO = 7.0f;
 const float			MOVE_VELOCITY_ENEMY = 7.5f;
 const double		ENEMY_IDLE_TIME = 2.0;
-const int			HERO_LIVES = 3;
+const int			HERO_LIVES = 3;	//dont need
 
 //Flags
 const unsigned int	FLAG_ACTIVE = 0x00000001;
@@ -26,16 +26,18 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_EMPTY,			//0
 	TYPE_OBJECT_COLLISION,		//1
 	TYPE_OBJECT_HERO,			//2
-	TYPE_OBJECT_ENEMY1,			//3
-	TYPE_OBJECT_COIN,			//4
-	TYPE_OBJECT_PARTICLES,		//5
-	TYPE_OBJECT_BULLET,			//6
-	TYPE_OBJECT_BOOMERANG,		//7
-	TYPE_OBJECT_GOAL,			//8
-	TYPE_OBJECT_DAMAGE,			//9
-	TYPE_OBJECT_RANGE,			//10
-	TYPE_OBJECT_SPEED			//11
-								
+	TYPE_OBJECT_GOAL,			//3
+	TYPE_OBJECT_ENEMY1,			//4
+	TYPE_OBJECT_COIN,			//5
+	TYPE_OBJECT_LADDER,			//6
+	TYPE_OBJECT_PARTICLES,		//7
+	TYPE_OBJECT_BULLET,			//8
+	TYPE_OBJECT_BOOMERANG,		//9
+	TYPE_OBJECT_DAMAGE,			//10
+	TYPE_OBJECT_RANGE,			//11
+	TYPE_OBJECT_SPEED,			//12
+	TYPE_OBJECT_MAXHP,			//13
+	TYPE_OBJECT_CURRHP			//14
 };
 
 //### Particle Types
@@ -104,18 +106,17 @@ public:
 	enum			STATE state;
 	enum			INNER_STATE innerState;
 
-	int	detectionRange;
-	int	firingRange;
+	float			detectionRadius;
 
-	int	healthPoints;
-	int	damage;
+	int				healthPoints;
+	int				damage;
 
 	bool			hit1;	//hit detection from the front
 	bool			hit2;	//hit detection from the back
 
 	void			enemyCreate(unsigned int enemyType, AEVec2* pPos);
 	void			EnemyStateMachine();		//State machine functions
-
+	void			enemyGridFlag();
 	void			enemyFire(Player character, Projectile* bullet);//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
 
 	//### enemy charging function, input player
@@ -142,6 +143,7 @@ public:
 
 	void			playerCreate(AEVec2* pPos);
 	void			playerFire(Projectile* boomerang);
+	void			playerGridFlag();
 	void			healthDisplay(float camX, float camY);
 
 	void			RangeUp();
@@ -167,8 +169,9 @@ public:
 };
 
 //### function of input type player and enemy pointer to spawn enemies around the player
+void enemyspawning(Player player, Enemy* enemies);
 
-extern GameObj* sGameObjList;
+extern GameObj*				sGameObjList;
 extern unsigned long		sGameObjNum;
 
 //### extern to carry over player data, probs

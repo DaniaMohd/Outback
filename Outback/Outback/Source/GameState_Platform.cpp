@@ -19,29 +19,22 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 	File globals
 */
 /******************************************************************************/
-static int				HeroLives;
-static int				Hero_Initial_X;
-static int				Hero_Initial_Y;
-static int				TotalCoins;
-static int              CoinsCollected;
 
 // list of original objects
 GameObj* sGameObjList;
 unsigned long			sGameObjNum;
 
 // list of enemies
-static Enemy* sEnemies;
-static unsigned int		sEnemyNum;
+static Enemy*			sEnemies;
 
 // list of coins
-static GameObjInst* sCoins;
-static unsigned int		sCoinNum;
+static GameObjInst*		sBlocks;
 
 // list of particles
-static GameObjInst* sParticles;
+static GameObjInst*		sParticles;
 
 // list of enemies
-static Projectile* sProjectiles;
+static Projectile*		sProjectiles;
 static unsigned int		sBoomNum;
 
 // Binary map data
@@ -76,9 +69,8 @@ void GameStatePlatformLoad(void)
 		sGameObjNum = 0;
 
 		sEnemies = (Enemy*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(Enemy));
-		sEnemyNum = 0;
 
-		sCoins = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
+		sBlocks = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
 		sParticles = (GameObjInst*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInst));
 
@@ -87,6 +79,7 @@ void GameStatePlatformLoad(void)
 
 	GameObj* pObj;
 
+	//0
 	//Creating the black object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -109,6 +102,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create background Texture!");
 	}
 
+	//1
 	//Creating the white object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -132,6 +126,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Block Texture!");
 	}
 
+	//2
 	//Creating the hero object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -154,114 +149,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Hero Texture!");
 	}
 
-	//Creating the enemey1 object
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_ENEMY1;
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Enemy Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Spider.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create Enemy Texture!");
-	}
-
-	//Creating the Coin object
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_COIN;
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Coin Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create Coin Texture!");
-	}
-
-	//Creating the Particle object
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_PARTICLES;
-
-		AEGfxMeshStart();
-
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
-	}
-
-	//Creating the Bullets
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_BULLET;
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\arrow.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
-	}
-
-	//Creating the Boomerang
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_BOOMERANG;
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Boomerang.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
-	}
-
+	//3
 	//Goal
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -284,6 +172,143 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 	}
 
+	//4
+	//Creating the enemey1 object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_ENEMY1;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Enemy Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Spider.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create Enemy Texture!");
+	}
+
+	//5
+	//Creating the Coin object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_COIN;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Coin Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create Coin Texture!");
+	}
+
+	//6
+	//Creating the Ladder object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_LADDER;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Ladder.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create Ladder!");
+	}
+	
+	//7
+	//Creating the Particle object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_PARTICLES;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
+	}
+
+	//8
+	//Creating the Bullets
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_BULLET;
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\arrow.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
+	}
+
+	//9
+	//Creating the Boomerang
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_BOOMERANG;
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "fail to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Boomerang.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
+	}
+	
+	//10
 	//Damage upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -306,6 +331,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
+	//11
 	//Range upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -328,6 +354,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 	}
 
+	//12
 	//Speed upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -350,10 +377,11 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
 	}
 
+	//13
 	//max health
 	{
 		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = 100;
+		pObj->type = TYPE_OBJECT_MAXHP;
 
 
 		AEGfxMeshStart();
@@ -372,10 +400,11 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
+	//14
 	//current health
 	{
 		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = 99;
+		pObj->type = TYPE_OBJECT_CURRHP;
 
 
 		AEGfxMeshStart();
@@ -442,8 +471,8 @@ void GameStatePlatformInit(void)
 {
 	int x, y;
 
-	TotalCoins = 0;
-	CoinsCollected = 0;
+	int blkCount = 0;
+	int enemyCount = 0;
 	sBoomNum = 0;
 	win = false;
 
@@ -458,12 +487,10 @@ void GameStatePlatformInit(void)
 		pWhiteInstance.flag |= FLAG_NON_COLLIDABLE;
 	}
 
-	//Setting the inital number of hero lives
-	HeroLives = HERO_LIVES;
-
 	AEVec2 Pos;
 
 	for (y = 0; y < BINARY_MAP_HEIGHT; ++y)
+	{
 		for (x = 0; x < BINARY_MAP_WIDTH; ++x)
 		{
 			if (MapData[y][x] == TYPE_OBJECT_EMPTY || MapData[y][x] == TYPE_OBJECT_COLLISION)
@@ -474,31 +501,36 @@ void GameStatePlatformInit(void)
 
 			if (MapData[y][x] == TYPE_OBJECT_HERO)
 			{
-				Hero_Initial_X = x;
-				Hero_Initial_Y = y;
-
 				pHero.playerCreate(&Pos);
 
 				SnapToCell(&pHero.posCurr.x);
 				SnapToCell(&pHero.posCurr.y);
 			}
 
-			else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
-			{
-				sEnemies[sEnemyNum].enemyCreate(TYPE_OBJECT_ENEMY1, &Pos);
+			//else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
+			//{
+			//	sEnemies[enemyCount].enemyCreate(TYPE_OBJECT_ENEMY1, &Pos);
 
-				SnapToCell(&sEnemies[sEnemyNum].posCurr.x);
-				SnapToCell(&sEnemies[sEnemyNum].posCurr.y);
-				sEnemyNum++;
-			}
+			//	SnapToCell(&sEnemies[enemyCount].posCurr.x);
+			//	SnapToCell(&sEnemies[enemyCount].posCurr.y);
+			//	enemyCount++;
+			//}
 
 			else if (MapData[y][x] == TYPE_OBJECT_COIN)
 			{
-				sCoins[TotalCoins].gameObjInstCreate(TYPE_OBJECT_COIN, 1.0f, &Pos, nullptr, 0.0f);
+				sBlocks[blkCount].gameObjInstCreate(TYPE_OBJECT_COIN, 1.0f, &Pos, nullptr, 0.0f);
 
-				SnapToCell(&sCoins[TotalCoins].posCurr.x);
-				SnapToCell(&sCoins[TotalCoins].posCurr.y);
-				TotalCoins++;
+				SnapToCell(&sBlocks[blkCount].posCurr.x);
+				SnapToCell(&sBlocks[blkCount].posCurr.y);
+				blkCount++;
+			}
+			else if (MapData[y][x] == TYPE_OBJECT_LADDER)
+			{
+				sBlocks[blkCount].gameObjInstCreate(TYPE_OBJECT_LADDER, 1.0f, &Pos, nullptr, 0.0f);
+
+				SnapToCell(&sBlocks[blkCount].posCurr.x);
+				SnapToCell(&sBlocks[blkCount].posCurr.y);
+				blkCount++;
 			}
 			//Yu Xi
 			else if (MapData[y][x] == TYPE_OBJECT_GOAL)
@@ -510,6 +542,12 @@ void GameStatePlatformInit(void)
 				SnapToCell(&sGoal.posCurr.y);
 			}
 		}
+	}
+	//### create multiple spawns
+	for (int a = 0; a < 10; a++)
+	{
+		enemyspawning(pHero, sEnemies);
+	}
 }
 
 /******************************************************************************/
@@ -586,7 +624,7 @@ void GameStatePlatformUpdate(void)
 	//debug
 	if (AEInputCheckTriggered(AEVK_M))
 	{
-		pHero.SpeedUp();
+		enemyspawning(pHero, sEnemies);
 	}
 	
 	//Next stage
@@ -657,13 +695,13 @@ void GameStatePlatformUpdate(void)
 		}
 	}
 
-	//Coin update
+	//Block update
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
-		if (0 == (sCoins[i].flag & FLAG_ACTIVE))
+		if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
 			continue;
 
-		sCoins[i].gameObjInstBoundingBox();
+		sBlocks[i].gameObjInstBoundingBox();
 	}
 
 	//Projectile Update
@@ -690,54 +728,12 @@ void GameStatePlatformUpdate(void)
 			continue;
 
 		sEnemies[i].gridCollisionFlag = CheckInstanceBinaryMapCollision(sEnemies[i].posCurr.x, sEnemies[i].posCurr.y, sEnemies[i].scale, sEnemies[i].scale);
-
-		//### should change to a function, probs in update
-		if (sEnemies[i].gridCollisionFlag & COLLISION_BOTTOM)
-		{
-			SnapToCell(&sEnemies[i].posCurr.y);
-			sEnemies[i].velCurr.y = 0;
-		}
-		if (sEnemies[i].gridCollisionFlag & COLLISION_TOP)
-		{
-			SnapToCell(&sEnemies[i].posCurr.y);
-			sEnemies[i].velCurr.y = 0;
-		}
-		if (sEnemies[i].gridCollisionFlag & COLLISION_LEFT)
-		{
-			SnapToCell(&sEnemies[i].posCurr.x);
-			sEnemies[i].velCurr.x = 0;
-		}
-		if (sEnemies[i].gridCollisionFlag & COLLISION_RIGHT)
-		{
-			SnapToCell(&sEnemies[i].posCurr.x);
-			sEnemies[i].velCurr.x = 0;
-		}
+		sEnemies[i].enemyGridFlag();
 	}
 
 	//Player grid collision
 	pHero.gridCollisionFlag = CheckInstanceBinaryMapCollision(pHero.posCurr.x, pHero.posCurr.y, pHero.scale, pHero.scale);
-
-	//### should change to a function, probs in update
-	if (pHero.gridCollisionFlag & COLLISION_BOTTOM)
-	{
-		SnapToCell(&pHero.posCurr.y);
-		pHero.velCurr.y = 0;
-	}
-	if (pHero.gridCollisionFlag & COLLISION_TOP)
-	{
-		SnapToCell(&pHero.posCurr.y);
-		pHero.velCurr.y = 0;
-	}
-	if (pHero.gridCollisionFlag & COLLISION_LEFT)
-	{
-		SnapToCell(&pHero.posCurr.x);
-		pHero.velCurr.x = 0;
-	}
-	if (pHero.gridCollisionFlag & COLLISION_RIGHT)
-	{
-		SnapToCell(&pHero.posCurr.x);
-		pHero.velCurr.x = 0;
-	}
+	pHero.playerGridFlag();
 
 	//play invicibility
 	pHero.counter += g_dt;
@@ -787,34 +783,47 @@ void GameStatePlatformUpdate(void)
 	//checks if player touches coin
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
-		if (0 == (sCoins[i].flag & FLAG_ACTIVE))
+		if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
 			continue;
 
 		//checks if player touches power up
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sCoins[i].boundingBox, sCoins[i].velCurr)) == true && sCoins[i].pObject->type != TYPE_OBJECT_COIN)
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true 
+			&& sBlocks[i].pObject->type != TYPE_OBJECT_COIN 
+			&& sBlocks[i].pObject->type != TYPE_OBJECT_LADDER)
 		{
-			if (sCoins[i].pObject->type == TYPE_OBJECT_DAMAGE)
+			if (sBlocks[i].pObject->type == TYPE_OBJECT_DAMAGE)
 			{
 				pHero.DamageUp();
 			}
-			else if (sCoins[i].pObject->type == TYPE_OBJECT_RANGE)
+			else if (sBlocks[i].pObject->type == TYPE_OBJECT_RANGE)
 			{
 				pHero.RangeUp();
 			}
-			else if (sCoins[i].pObject->type == TYPE_OBJECT_SPEED)
+			else if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
 			{
 				pHero.SpeedUp();
 			}
-			sCoins[i].gameObjInstDestroy();
+			sBlocks[i].gameObjInstDestroy();
 		}
+
+		//Ladder
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
+			&& sBlocks[i].pObject->type == TYPE_OBJECT_LADDER)
+		{
+			if (AEInputCheckCurr(AEVK_W))
+			{
+				pHero.velCurr.y = 5.0f;
+			}
+		}
+
 		//checks if boomerang hits coin
 		for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
 		{
-			if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sCoins[i].boundingBox, sCoins[i].velCurr)) == true)
+			if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true)
 			{
-				if (sProjectiles[j].pObject->type == TYPE_OBJECT_BOOMERANG && sCoins[i].pObject->type == TYPE_OBJECT_COIN)
+				if (sProjectiles[j].pObject->type == TYPE_OBJECT_BOOMERANG && sBlocks[i].pObject->type == TYPE_OBJECT_COIN)
 				{
-					sCoins[i].PowerUpCreate(sCoins[i].posCurr);
+					sBlocks[i].PowerUpCreate(sBlocks[i].posCurr);
 				}
 			}
 
@@ -853,7 +862,6 @@ void GameStatePlatformUpdate(void)
 					if (sEnemies[j].healthPoints <= 0)
 					{
 						sEnemies[j].gameObjInstDestroy();
-						sEnemyNum--;
 						printf("enemy ded\n");
 					}
 				}
@@ -865,7 +873,6 @@ void GameStatePlatformUpdate(void)
 				{
 					sEnemies[j].hit2 = false;
 				}
-
 			}
 		}
 
@@ -873,6 +880,7 @@ void GameStatePlatformUpdate(void)
 		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
 			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 		{
+			sProjectiles[i].gameObjInstDestroy();
 			if (pHero.counter >= pHero.invincibleTimer)
 			{
 				onChange = true;
@@ -890,37 +898,21 @@ void GameStatePlatformUpdate(void)
 		}
 	}
 
-	//### combine all this into 1 loop
 	//Computing the transformation matrices of the game object instances
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
-		// skip non-active object
-		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
-			continue;
+		//only active objects
+		if (1 == (sEnemies[i].flag & FLAG_ACTIVE))
+			sEnemies[i].gameObjInstTransformMatrix();
 
-		sEnemies[i].gameObjInstTransformMatrix();
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		// skip non-active object
-		if (0 == (sCoins[i].flag & FLAG_ACTIVE))
-			continue;
+		if (1 == (sBlocks[i].flag & FLAG_ACTIVE))
+			sBlocks[i].gameObjInstTransformMatrix();
 
-		sCoins[i].gameObjInstTransformMatrix();
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sParticles[i].flag & FLAG_ACTIVE))
-			continue;
+		if (1 == (sParticles[i].flag & FLAG_ACTIVE))
+			sParticles[i].gameObjInstTransformMatrix();
 
-		sParticles[i].gameObjInstTransformMatrix();
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
-			continue;
-
-		sProjectiles[i].gameObjInstTransformMatrix();
+		if (1 == (sProjectiles[i].flag & FLAG_ACTIVE))
+			sProjectiles[i].gameObjInstTransformMatrix();
 	}
 	pHero.gameObjInstTransformMatrix();
 
@@ -930,25 +922,7 @@ void GameStatePlatformUpdate(void)
 	//### death
 	if (pHero.currentHealth <= 0)
 	{
-		HeroLives--;
-		pHero.currentHealth = pHero.maxHealth;
-		if (HeroLives > 0)
-		{
-			AEVec2Set(&pHero.posCurr, (float)Hero_Initial_X + 0.5f, (float)Hero_Initial_Y + 0.5f);
-		}
-	}
-	else if (HeroLives == 0)
-	{
-		printf("Try Again!\n");
-		gGameStateNext = GS_RESTART;
-
-		HeroLives = 3;
-	}
-	//### win
-	if (sEnemyNum <= 0)
-	{
-		printf("Win!\n");
-		gGameStateNext = GS_MAINMENU;
+		gGameStateNext = GS_WIN;	//lose
 	}
 
 	//camera settings
@@ -960,10 +934,11 @@ void GameStatePlatformUpdate(void)
 	}
 	else
 	{
-		//### add camera stopping when at the walls
-		// Camera tracking
-		camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
-		camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+		// Camera does not go out of bounds
+		if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
+			camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+		if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
+			camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
 	}
 	AEGfxSetCamPosition(camX, camY);
 }
@@ -1018,38 +993,20 @@ void GameStatePlatformDraw(void)
 			}
 		}
 
-	//### combine all this into 1 loop
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
-		// skip non-active object
-		if (0 == (sEnemies[i].flag & FLAG_ACTIVE) || 0 == (sEnemies[i].flag & FLAG_VISIBLE))
-			continue;
+		//only active objects
+		if (1 == (sEnemies[i].flag & FLAG_ACTIVE) || 1 == (sEnemies[i].flag & FLAG_VISIBLE))
+			sEnemies[i].gameObjInstDrawObject(&MapTransform);
 
-		sEnemies[i].gameObjInstDrawObject(&MapTransform);
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		// skip non-active object
-		if (0 == (sCoins[i].flag & FLAG_ACTIVE) || 0 == (sCoins[i].flag & FLAG_VISIBLE))
-			continue;
+		if (1 == (sBlocks[i].flag & FLAG_ACTIVE) || 1 == (sBlocks[i].flag & FLAG_VISIBLE))
+			sBlocks[i].gameObjInstDrawObject(&MapTransform);
 
-		sCoins[i].gameObjInstDrawObject(&MapTransform);
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		// skip non-active object
-		if (0 == (sParticles[i].flag & FLAG_ACTIVE) || 0 == (sParticles[i].flag & FLAG_VISIBLE))
-			continue;
+		if (1 == (sParticles[i].flag & FLAG_ACTIVE) || 1 == (sParticles[i].flag & FLAG_VISIBLE))
+			sParticles[i].gameObjInstDrawObject(&MapTransform);
 
-		sParticles[i].gameObjInstDrawObject(&MapTransform);
-	}
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		// skip non-active object
-		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE) || 0 == (sProjectiles[i].flag & FLAG_VISIBLE))
-			continue;
-
-		sProjectiles[i].gameObjInstDrawObject(&MapTransform);
+		if (1 == (sProjectiles[i].flag & FLAG_ACTIVE) || 1 == (sProjectiles[i].flag & FLAG_VISIBLE))
+			sProjectiles[i].gameObjInstDrawObject(&MapTransform);
 	}
 
 	pHero.gameObjInstDrawObject(&MapTransform);
@@ -1063,23 +1020,9 @@ void GameStatePlatformDraw(void)
 	//printing debug
 	if (onChange == true)
 	{
-		char strBuffer[100];
-		memset(strBuffer, 0, 100 * sizeof(char));
-		sprintf_s(strBuffer, "Lives Left: %i", HeroLives);
-		printf("%s \n", strBuffer);
-		sprintf_s(strBuffer, "Coins Collected: %i", CoinsCollected);
-		printf("%s \n", strBuffer);
-		if (CoinsCollected == TotalCoins)
-		{
-			printf("YOU WON!!!\n");
-		}
-		if (CoinsCollected % 15 == 0 && CoinsCollected < 35 && CoinsCollected != 0)
-		{
-			printf("JUMP HEIGHT INCREASED!\n");
-		}
+		//printf("DEBUGGING!\n");
 		onChange = false;
 	}
-
 }
 
 /******************************************************************************/
@@ -1093,7 +1036,7 @@ void GameStatePlatformFree(void)
 	for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		sEnemies[i].gameObjInstDestroy();
-		sCoins[i].gameObjInstDestroy();
+		sBlocks[i].gameObjInstDestroy();
 		sProjectiles[i].gameObjInstDestroy();
 	}
 	pWhiteInstance.gameObjInstDestroy();
@@ -1119,7 +1062,7 @@ void GameStatePlatformUnload(void)
 	}
 
 	free(sEnemies);
-	free(sCoins);
+	free(sBlocks);
 	free(sGameObjList);
 	free(sParticles);
 	free(sProjectiles);
