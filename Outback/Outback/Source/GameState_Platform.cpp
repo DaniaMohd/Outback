@@ -615,43 +615,44 @@ void GameStatePlatformUpdate(void)
 		++sBoomNum;
 	}
 
-	//stats debug 
-	if (AEInputCheckTriggered(AEVK_P))
-	{
-		printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed);
-		printf("%f\t%f\n", camX, camY);
-	}
-	//debug
-	if (AEInputCheckTriggered(AEVK_M))
-	{
-		enemyspawning(pHero, sEnemies);
-	}
+	////stats debug 
+	//if (AEInputCheckTriggered(AEVK_P))
+	//{
+	//	printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed);
+	//	printf("%f\t%f\n", camX, camY);
+	//}
+
+	////debug
+	//if (AEInputCheckTriggered(AEVK_M))
+	//{
+	//	enemyspawning(pHero, sEnemies);
+	//}
 	
-	//Next stage
-	if (AEInputCheckReleased(AEVK_N))
-	{
-		win = true;
-		if (win == true)
-		{
-			switch (gGameStateCurr)
-			{
-			case GS_LEVEL1:
-				gGameStateNext = GS_LEVEL2;
-				win = false;
-				break;
-			case GS_LEVEL2:
-				gGameStateNext = GS_LEVEL3;
-				win = false;
-				break;
-			case GS_LEVEL3:
-				gGameStateNext = GS_WIN;
-				win = false;
-				break;
-			default:
-				break;
-			}
-		}
-	}
+	////Next stage
+	//if (AEInputCheckReleased(AEVK_N))
+	//{
+	//	win = true;
+	//	if (win == true)
+	//	{
+	//		switch (gGameStateCurr)
+	//		{
+	//		case GS_LEVEL1:
+	//			gGameStateNext = GS_LEVEL2;
+	//			win = false;
+	//			break;
+	//		case GS_LEVEL2:
+	//			gGameStateNext = GS_LEVEL3;
+	//			win = false;
+	//			break;
+	//		case GS_LEVEL3:
+	//			gGameStateNext = GS_WIN;
+	//			win = false;
+	//			break;
+	//		default:
+	//			break;
+	//		}
+	//	}
+	//}
 
 	//Enemy update
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
