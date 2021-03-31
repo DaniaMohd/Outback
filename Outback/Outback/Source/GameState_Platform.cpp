@@ -55,6 +55,8 @@ static bool             onChange = true; //when touching an enemy or coin
 bool					win;
 static GameObjInst		sGoal;
 static int				totalGoals = 3;
+bool					newGame = true;
+bool					endless = false;
 
 /******************************************************************************/
 /*!
@@ -502,6 +504,11 @@ void GameStatePlatformInit(void)
 			if (MapData[y][x] == TYPE_OBJECT_HERO)
 			{
 				pHero.playerCreate(&Pos);
+				if (newGame == true)
+				{
+					pHero.resetPower();
+					newGame = false;
+				}
 
 				SnapToCell(&pHero.posCurr.x);
 				SnapToCell(&pHero.posCurr.y);
@@ -630,7 +637,7 @@ void GameStatePlatformUpdate(void)
 	//Next stage
 	if (AEInputCheckReleased(AEVK_N))
 	{
-		win = true;
+		/*win = true;
 		if (win == true)
 		{
 			switch (gGameStateCurr)
@@ -650,6 +657,16 @@ void GameStatePlatformUpdate(void)
 			default:
 				break;
 			}
+		}*/
+		if (endless == true)
+		{
+			endless = false;
+			printf("not endless\n");
+		}
+		else if (endless == false)
+		{
+			endless = true;
+			printf("endless\n");
 		}
 	}
 
@@ -753,8 +770,17 @@ void GameStatePlatformUpdate(void)
 			win = false;
 			break;
 		case GS_LEVEL3:
-			gGameStateNext = GS_WIN;
-			win = false;
+			if (endless == false)
+			{
+				newGame = true;
+				gGameStateNext = GS_WIN;
+				win = false;
+			}
+			else
+			{
+				gGameStateNext = GS_LEVEL1;
+				win = false;
+			}
 			break;
 		default:
 			break;

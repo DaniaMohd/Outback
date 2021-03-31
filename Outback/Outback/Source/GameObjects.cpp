@@ -408,9 +408,9 @@ void Player::playerCreate(AEVec2* pPos)
 	AEVec2 vel;
 	AEVec2Zero(&vel);
 	gameObjInstCreate(TYPE_OBJECT_HERO, 1.0f, pPos, &vel, 0);
-	powerRange = 5;
+	/*powerRange = 5;
 	powerDamage = 10;
-	powerSpeed = 5;
+	powerSpeed = 5;*/
 	projectileMax = 1;
 	maxHealth = currentHealth = 100;
 	counter = invincibleTimer = 0.25f;
@@ -525,6 +525,13 @@ void Player::healthDisplay(float camX, float camY)
 		}
 	}
 	AEGfxPrint(fontID, strBuffer, -0.1f, -275.0f / (AEGetWindowHeight() / 2) - 0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void Player::resetPower()
+{
+	powerRange = 5;
+	powerDamage = 10;
+	powerSpeed = 5;
 }
 
 void Player::RangeUp()

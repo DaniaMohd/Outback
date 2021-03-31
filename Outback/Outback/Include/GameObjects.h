@@ -145,6 +145,7 @@ public:
 	void			playerFire(Projectile* boomerang);
 	void			playerGridFlag();
 	void			healthDisplay(float camX, float camY);
+	void			resetPower();
 
 	void			RangeUp();
 	void			DamageUp();
