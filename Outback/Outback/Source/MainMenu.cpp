@@ -18,6 +18,7 @@ extern s8 fontID;
 extern s8 fontTitle;
 f32 curMainMenu = 0.15f * 360;
 int curr = 0;
+bool endless;
 
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
@@ -77,6 +78,7 @@ void GameStateMainMenuLoad()
 void GameStateMainMenuInit()
 {
 	AudioEngineInit();
+	endless = false;
 }
 
 /******************************************************************************/
@@ -140,6 +142,18 @@ void GameStateMainMenuUpdate()
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
+	}
+
+	if (AEInputCheckTriggered(AEVK_N))
+	{
+		if (endless == true)
+		{
+			endless = false;
+		}
+		else if (endless == false)
+		{
+			endless = true;
+		}
 	}
 }
 

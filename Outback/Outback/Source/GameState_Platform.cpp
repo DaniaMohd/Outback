@@ -56,7 +56,7 @@ bool					win;
 static GameObjInst		sGoal;
 static int				totalGoals = 3;
 bool					newGame = true;
-bool					endless = false;
+extern bool				endless;
 
 /******************************************************************************/
 /*!
