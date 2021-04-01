@@ -195,7 +195,7 @@ void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
 /******************************************************************************/
 void GameObjInst::PowerUpCreate(AEVec2 pos)
 {
-	int powerNum = rand() % 3;
+	int powerNum = rand() % 6;
 	AEVec2 zero;
 	AEVec2Zero(&zero);
 	switch (powerNum)
@@ -208,6 +208,15 @@ void GameObjInst::PowerUpCreate(AEVec2 pos)
 		break;
 	case 2:
 		gameObjInstCreate(TYPE_OBJECT_SPEED, 1.0f, &pos, &zero, 0);
+		break;
+	case 3:
+		gameObjInstCreate(TYPE_OBJECT_HPUP, 1.0f, &pos, &zero, 0);
+		break;
+	case 4:
+		gameObjInstCreate(TYPE_OBJECT_VAMP, 1.0f, &pos, &zero, 0);
+		break;
+	case 5:
+		gameObjInstCreate(TYPE_OBJECT_REGEN, 1.0f, &pos, &zero, 0);
 		break;
 	default:
 		break;
@@ -233,7 +242,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
-	healthPoints = 100;
+	healthPoints = 50;
 	hit1 = false;
 	hit2 = false;
 	damage = 10;
@@ -412,7 +421,7 @@ void Player::playerCreate(AEVec2* pPos)
 	powerDamage = 10;
 	powerSpeed = 5;*/
 	projectileMax = 1;
-	maxHealth = currentHealth = 100;
+	//maxHealth = currentHealth = 100;
 	counter = invincibleTimer = 0.25f;
 }
 
@@ -428,15 +437,18 @@ void Player::playerFire(Projectile* boomerang)
 
 	//### need to tweak
 	//initial speed of boomerang
-	float tmp = 0.5 * powerSpeed;
+	float newSpeed = baseSpeed * (1 - 1 / (1 + 0.3f * powerSpeed));
+	float tmp = 0.5f * newSpeed;
 	vel.x = (dirFaceR) ? 10.0f + tmp : -10.0f - tmp;
+
+	float newRange = baseRange * (1 - 1 / (1 + 0.3f * powerRange));
 
 	//find empty slot in the projectile array
 	for (size_t i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		if (boomerang[i].flag == 0)
 		{
-			boomerang[i].boomerangCreate(&posCurr, &vel, powerRange);
+			boomerang[i].boomerangCreate(&posCurr, &vel, newRange);
 			break;
 		}
 	}
@@ -529,14 +541,20 @@ void Player::healthDisplay(float camX, float camY)
 
 void Player::resetPower()
 {
-	powerRange = 5;
+	maxHealth = currentHealth = 100;
+	baseRange = 20;
+	baseDamage = 10;
+	baseSpeed = 20;
+	powerRange = 1;
 	powerDamage = 10;
-	powerSpeed = 5;
+	powerSpeed = 1;
+	vampirism = 0;
+	regeneration = 0;
 }
 
 void Player::RangeUp()
 {
-	powerRange += 5;
+	powerRange += 1;
 }
 
 void Player::DamageUp()
@@ -546,7 +564,24 @@ void Player::DamageUp()
 
 void Player::SpeedUp()
 {
-	powerSpeed += 5;
+	powerSpeed += 1;
+}
+
+void Player::HpUp()
+{
+	int amt = 10;
+	currentHealth += amt;
+	maxHealth += amt;
+}
+
+void Player::VampUp()
+{
+	vampirism += 1;
+}
+
+void Player::RegenUp()
+{
+	regeneration += 5;
 }
 //### need a counter for what upgrades player got?
 

@@ -54,9 +54,14 @@ static bool             onChange = true; //when touching an enemy or coin
 //YuXi
 bool					win;
 static GameObjInst		sGoal;
-static int				totalGoals = 3;
+int						sGoalNum;
+int						spawnGoal;
+int						totalGoals;
 bool					newGame;
 extern bool				endless;
+int						ranSpawn;
+int						currSpawn;
+int						totalSpawn;
 
 /******************************************************************************/
 /*!
@@ -170,7 +175,7 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Goal Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Hero.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DoubleJumpUp.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 	}
 
@@ -425,6 +430,75 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
+	//15
+	//HP up
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_HPUP;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\HealthUp.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
+	//16
+	//HP up
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_VAMP;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\vampire.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
+	//17
+	//HP up
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_REGEN;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\RegenUp.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
 	// Loading the levels
 	if (gGameStateCurr == GS_LEVEL1)
 	{
@@ -471,12 +545,31 @@ void GameStatePlatformLoad(void)
 /******************************************************************************/
 void GameStatePlatformInit(void)
 {
+	sGoalNum = 0;
+	currSpawn = 0;
+	totalSpawn = 0;
+	totalGoals = 0;
+	for (int y = 0; y < BINARY_MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < BINARY_MAP_WIDTH; ++x)
+		{
+			if (MapData[y][x] == TYPE_OBJECT_HERO)
+				++totalSpawn;
+			else if (MapData[y][x] == TYPE_OBJECT_GOAL)
+				++totalGoals;
+		}
+	}
+	printf("spw: %d\ngl: %d\n", totalSpawn, totalGoals);
 	int x, y;
 
 	int blkCount = 0;
 	int enemyCount = 0;
 	sBoomNum = 0;
 	win = false;
+	
+	spawnGoal = rand() % totalGoals;
+	
+	ranSpawn = rand() % totalSpawn;
 
 	//Empty and Collidable blocks
 	{
@@ -503,15 +596,19 @@ void GameStatePlatformInit(void)
 
 			if (MapData[y][x] == TYPE_OBJECT_HERO)
 			{
-				pHero.playerCreate(&Pos);
-				if (newGame == true)
+				if (currSpawn == ranSpawn)
 				{
-					pHero.resetPower();
-					newGame = false;
-				}
+					pHero.playerCreate(&Pos);
+					if (newGame == true)
+					{
+						pHero.resetPower();
+						newGame = false;
+					}
 
-				SnapToCell(&pHero.posCurr.x);
-				SnapToCell(&pHero.posCurr.y);
+					SnapToCell(&pHero.posCurr.x);
+					SnapToCell(&pHero.posCurr.y);
+				}
+				++currSpawn;
 			}
 
 			//else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
@@ -542,14 +639,18 @@ void GameStatePlatformInit(void)
 			//Yu Xi
 			else if (MapData[y][x] == TYPE_OBJECT_GOAL)
 			{
-				printf("A\n");
-				sGoal.gameObjInstCreate(TYPE_OBJECT_GOAL, 1.0f, &Pos, nullptr, 0.0f);
+				if (sGoalNum == spawnGoal)
+				{
+					sGoal.gameObjInstCreate(TYPE_OBJECT_GOAL, 1.0f, &Pos, nullptr, 0.0f);
 
-				SnapToCell(&sGoal.posCurr.x);
-				SnapToCell(&sGoal.posCurr.y);
+					SnapToCell(&sGoal.posCurr.x);
+					SnapToCell(&sGoal.posCurr.y);
+				}
+				++sGoalNum;
 			}
 		}
 	}
+
 	//### create multiple spawns
 	for (int a = 0; a < 10; a++)
 	{
@@ -625,8 +726,8 @@ void GameStatePlatformUpdate(void)
 	//stats debug 
 	if (AEInputCheckTriggered(AEVK_P))
 	{
-		printf("damage: %d\nrange: %d\nspeed: %d\n\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed);
-		printf("%f\t%f\n", camX, camY);
+		printf("damage: %d\nrange: %d\nspeed: %d\n vamp: %d\n regen: %d\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed, pHero.vampirism, pHero.regeneration);
+		//printf("%f\t%f\n", camX, camY);
 	}
 	//debug
 	if (AEInputCheckTriggered(AEVK_M))
@@ -805,6 +906,11 @@ void GameStatePlatformUpdate(void)
 		//pHero.invincibleTimer = 0.0f;
 	}
 
+	if (pHero.currentHealth > pHero.maxHealth)
+	{
+		pHero.currentHealth = pHero.maxHealth;
+	}
+
 	//checks if player touches coin
 	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 	{
@@ -827,6 +933,18 @@ void GameStatePlatformUpdate(void)
 			else if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
 			{
 				pHero.SpeedUp();
+			}
+			else if (sBlocks[i].pObject->type == TYPE_OBJECT_HPUP)
+			{
+				pHero.HpUp();
+			}
+			else if (sBlocks[i].pObject->type == TYPE_OBJECT_VAMP)
+			{
+				pHero.VampUp();
+			}
+			else if (sBlocks[i].pObject->type == TYPE_OBJECT_REGEN)
+			{
+				pHero.RegenUp();
 			}
 			sBlocks[i].gameObjInstDestroy();
 		}
@@ -872,20 +990,23 @@ void GameStatePlatformUpdate(void)
 				{
 					if (sEnemies[j].hit1 == false && sProjectiles[i].boomerangReturning == false)
 					{
+						pHero.currentHealth += pHero.vampirism;
 						sEnemies[j].healthPoints -= pHero.powerDamage;
 						sEnemies[j].hit1 = true;
 						sEnemies[j].particleEffect(sParticles, P_HIT);
-						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+						//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
 					}
 					if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
 					{
+						pHero.currentHealth += pHero.vampirism;
 						sEnemies[j].healthPoints -= pHero.powerDamage;
 						sEnemies[j].hit2 = true;
 						sEnemies[j].particleEffect(sParticles, P_HIT);
-						printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+						//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
 					}
 					if (sEnemies[j].healthPoints <= 0)
 					{
+						pHero.currentHealth += pHero.regeneration;
 						sEnemies[j].gameObjInstDestroy();
 						printf("enemy ded\n");
 					}

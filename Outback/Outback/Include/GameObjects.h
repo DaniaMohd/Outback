@@ -37,7 +37,10 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_RANGE,			//11
 	TYPE_OBJECT_SPEED,			//12
 	TYPE_OBJECT_MAXHP,			//13
-	TYPE_OBJECT_CURRHP			//14
+	TYPE_OBJECT_CURRHP,			//14
+	TYPE_OBJECT_HPUP,			//15
+	TYPE_OBJECT_VAMP,			//16
+	TYPE_OBJECT_REGEN			//17
 };
 
 //### Particle Types
@@ -136,10 +139,17 @@ public:
 	//How long player is invicible after touching enemy
 	float			invincibleTimer;
 
+	int baseRange;
+	int baseDamage;
+	int baseSpeed;
+
 	int	projectileMax;
 	int	powerRange;
 	int	powerDamage;
 	int	powerSpeed;
+
+	int vampirism;
+	int regeneration;
 
 	void			playerCreate(AEVec2* pPos);
 	void			playerFire(Projectile* boomerang);
@@ -150,6 +160,9 @@ public:
 	void			RangeUp();
 	void			DamageUp();
 	void			SpeedUp();
+	void			HpUp();
+	void			VampUp();
+	void			RegenUp();
 
 	//### probably additional functions to aid in upgrade pickups
 };

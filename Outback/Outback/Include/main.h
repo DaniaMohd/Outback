@@ -27,6 +27,7 @@ extern double	g_appTime;
 #include "fmod.hpp"
 #include "AEEngine.h"
 #include "math.h"
+#include <vector>
 
 #include "GameStateMgr.h"
 #include "GameState_Platform.h"
