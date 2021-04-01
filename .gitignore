@@ -360,3 +360,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Outback/.vs/Outback/v16/.suo
+Outback/.vs/Outback/v16/Browse.VC.db
+Outback/Bin/OutbackD.exe
+Outback/Bin/OutbackD.ilk
+Outback/Bin/OutbackD.pdb
+Outback/Outback/x64/Debug/Outback.log
+Outback/Outback/x64/Debug/Outback.tlog/CL.command.1.tlog
+Outback/Outback/x64/Debug/Outback.tlog/CL.read.1.tlog
+Outback/Outback/x64/Debug/Outback.tlog/CL.write.1.tlog
+Outback/Outback/x64/Debug/Outback.tlog/link.read.1.tlog
+Outback/Outback/x64/Debug/Outback.tlog/link.write.1.tlog
+Outback/Outback/x64/Debug/vc142.idb
+Outback/Outback/x64/Debug/vc142.pdb
+Outback/Outback/x64/Debug/vc142.pdb
