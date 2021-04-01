@@ -19,6 +19,7 @@ extern s8 fontTitle;
 f32 curMainMenu = 0.15f * 360;
 int curr = 0;
 bool endless;
+extern bool newGame;
 
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
@@ -79,6 +80,7 @@ void GameStateMainMenuInit()
 {
 	AudioEngineInit();
 	endless = false;
+	newGame = true;
 }
 
 /******************************************************************************/

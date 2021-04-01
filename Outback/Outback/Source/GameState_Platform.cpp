@@ -55,7 +55,7 @@ static bool             onChange = true; //when touching an enemy or coin
 bool					win;
 static GameObjInst		sGoal;
 static int				totalGoals = 3;
-bool					newGame = true;
+bool					newGame;
 extern bool				endless;
 
 /******************************************************************************/
@@ -772,7 +772,6 @@ void GameStatePlatformUpdate(void)
 		case GS_LEVEL3:
 			if (endless == false)
 			{
-				newGame = true;
 				gGameStateNext = GS_WIN;
 				win = false;
 			}
