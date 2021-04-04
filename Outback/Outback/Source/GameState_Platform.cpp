@@ -919,7 +919,11 @@ void GameStatePlatformUpdate(void)
 					pHero.counter = 0;
 				}
 			}
-			//pHero.invincibleTimer = 0.0f;
+			if (sEnemies[i].posCurr.x < 0 || sEnemies[i].posCurr.x > BINARY_MAP_WIDTH || sEnemies[i].posCurr.y < 0 || sEnemies[i].posCurr.y > BINARY_MAP_HEIGHT)
+			{
+				sEnemies[i].gameObjInstDestroy();
+				enemyspawning(pHero, sEnemies);
+			}
 		}
 
 		if (pHero.currentHealth > pHero.maxHealth)
@@ -1084,6 +1088,7 @@ void GameStatePlatformUpdate(void)
 		//### death
 		if (pHero.currentHealth <= 0)
 		{
+			newGame = true;
 			gGameStateNext = GS_GAMEOVER;	//lose
 		}
 
@@ -1098,9 +1103,30 @@ void GameStatePlatformUpdate(void)
 		{
 			// Camera does not go out of bounds
 			if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
+			{
 				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+			}
 			if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
+			{
 				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+			}
+
+			if (pHero.posCurr.x < 10.0f)
+			{
+				camX = (float)(10.0f - BINARY_MAP_WIDTH / 2) * PIXEL;
+			}
+			if (pHero.posCurr.x > BINARY_MAP_WIDTH - 10.0f)
+			{
+				camX = (float)((BINARY_MAP_WIDTH - 10.0f) - BINARY_MAP_WIDTH / 2) * PIXEL;
+			}
+			if (pHero.posCurr.y < 7.5f)
+			{
+				camY = (float)(7.5f - BINARY_MAP_HEIGHT / 2) * PIXEL;
+			}
+			if (pHero.posCurr.y > BINARY_MAP_HEIGHT - 7.5f)
+			{
+				camY = (float)((BINARY_MAP_HEIGHT - 7.5f) - BINARY_MAP_HEIGHT / 2) * PIXEL;
+			}
 		}
 		AEGfxSetCamPosition(camX, camY);
 	}

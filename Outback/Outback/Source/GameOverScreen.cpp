@@ -21,7 +21,6 @@ int selection = 0;
 char gameOverMsg[100], brestart[100], mainMenu[100], quit[100], barrow[100], bcomment[100];
 
 
-
 void OBGameOverLoad()
 {
 	AEGfxSetBackgroundColor(0.10f, 0.00f, 0.08f);
@@ -63,7 +62,9 @@ void OBGameOverUpdate()
 	}
 
 	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 2)
+	{
 		gGameStateNext = GS_LEVEL1;
+	}
 
 	//if (AEInputCheckTriggered(AEVK_RETURN) && currPause == 0.15f)
 		//gGameStateNext = OB_INSTRUCTIONS;

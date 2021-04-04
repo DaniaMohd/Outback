@@ -506,7 +506,7 @@ void Player::healthDisplay(float camX, float camY)
 	AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 	AEGfxSetTransparency(1.0f);
 
-	AEMtx33 scale, trans, result;
+	AEMtx33 scale1, trans, result;
 
 	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
 	{
@@ -516,9 +516,9 @@ void Player::healthDisplay(float camX, float camY)
 			//change position
 			X = camX - ((maxHealth - currentHealth) / 2.0f / maxHealth) * (AEGetWindowWidth() / 2);
 			//health bar size
-			AEMtx33Scale(&scale, (barWidth * ((float)currentHealth / maxHealth)), barHeight);
+			AEMtx33Scale(&scale1, (barWidth * ((float)currentHealth / maxHealth)), barHeight);
 			AEMtx33Trans(&trans, X, Y);
-			AEMtx33Concat(&result, &trans, &scale);
+			AEMtx33Concat(&result, &trans, &scale1);
 			AEGfxSetTransform(result.m);
 			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
@@ -528,9 +528,9 @@ void Player::healthDisplay(float camX, float camY)
 		{
 			X = camX;
 			//health bar size
-			AEMtx33Scale(&scale, barWidth, barHeight);
+			AEMtx33Scale(&scale1, barWidth, barHeight);
 			AEMtx33Trans(&trans, X, Y);
-			AEMtx33Concat(&result, &trans, &scale);
+			AEMtx33Concat(&result, &trans, &scale1);
 			AEGfxSetTransform(result.m);
 			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
