@@ -62,7 +62,9 @@ extern bool				endless;
 int						ranSpawn;
 int						currSpawn;
 int						totalSpawn;
-bool					gameIsPaused = false;
+bool					gameIsPaused;
+AEGfxVertexList*		pauseMesh;
+AEGfxTexture*			pauseTex;
 
 /******************************************************************************/
 /*!
@@ -537,6 +539,24 @@ void GameStatePlatformLoad(void)
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
+
+	//-------------------------------------------------------------------------
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-150.0f * 2, -200.0f, 0x00FF00FF, 0.0f, 0.0f,
+		150.0f * 2, -200.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-150.0f * 2, 200.0f, 0x0000FFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		150.0f * 2, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-150.0f * 2, 200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		150.0f * 2, 200.0f, 0x00FFFFFF, 0.0f, 0.0f);
+
+	pauseMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(pauseMesh, "Failed to create range Mesh!");
+	pauseTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+	AE_ASSERT_MESG(pauseTex, "Failed to create damage texture!!");
+	//-------------------------------------------------------------------------
+
 }
 
 /******************************************************************************/
@@ -567,7 +587,8 @@ void GameStatePlatformInit(void)
 	int enemyCount = 0;
 	sBoomNum = 0;
 	win = false;
-	
+	gameIsPaused = false;
+
 	spawnGoal = rand() % totalGoals;
 	
 	ranSpawn = rand() % totalSpawn;
@@ -1119,75 +1140,85 @@ void GameStatePlatformDraw(void)
 	AEMtx33 cellTranslation, cellFinalTransformation;
 
 	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	if (gameIsPaused == false)
-	{
-		for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
-			for (j = 0; j < BINARY_MAP_WIDTH; ++j)
+	//AEGfxTextureSet(NULL, 0, 0);
+
+	for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
+		for (j = 0; j < BINARY_MAP_WIDTH; ++j)
+		{
+			x = (float)j;
+			y = (float)i;
+
+			SnapToCell(&x);
+			SnapToCell(&y);
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+
+			AEMtx33Trans(&cellTranslation, x, y);
+			AEMtx33Concat(&cellFinalTransformation, &MapTransform, &cellTranslation);
+			AEGfxSetTransform(cellFinalTransformation.m);
+
+			if (BinaryCollisionArray[i][j] == TYPE_OBJECT_EMPTY)
 			{
-				x = (float)j;
-				y = (float)i;
+				AEGfxTextureSet(pBlackInstance.pObject->pTex, 0, 0);
 
-				SnapToCell(&x);
-				SnapToCell(&y);
+				AEGfxSetTransparency(1.0f);
 
-				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-				AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-				AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
-
-				AEMtx33Trans(&cellTranslation, x, y);
-				AEMtx33Concat(&cellFinalTransformation, &MapTransform, &cellTranslation);
-				AEGfxSetTransform(cellFinalTransformation.m);
-
-				if (BinaryCollisionArray[i][j] == TYPE_OBJECT_EMPTY)
-				{
-					AEGfxTextureSet(pBlackInstance.pObject->pTex, 0, 0);
-
-					AEGfxSetTransparency(1.0f);
-
-					AEGfxMeshDraw(pBlackInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
-				}
-
-				if (BinaryCollisionArray[i][j] == TYPE_OBJECT_COLLISION)
-				{
-					AEGfxTextureSet(pWhiteInstance.pObject->pTex, 0, 0);
-
-					AEGfxSetTransparency(1.0f);
-
-					AEGfxMeshDraw(pWhiteInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
-				}
+				AEGfxMeshDraw(pBlackInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 			}
 
-		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-		{
-			//only active objects
-			if (1 == (sEnemies[i].flag & FLAG_ACTIVE) || 1 == (sEnemies[i].flag & FLAG_VISIBLE))
-				sEnemies[i].gameObjInstDrawObject(&MapTransform);
+			if (BinaryCollisionArray[i][j] == TYPE_OBJECT_COLLISION)
+			{
+				AEGfxTextureSet(pWhiteInstance.pObject->pTex, 0, 0);
 
-			if (1 == (sBlocks[i].flag & FLAG_ACTIVE) || 1 == (sBlocks[i].flag & FLAG_VISIBLE))
-				sBlocks[i].gameObjInstDrawObject(&MapTransform);
+				AEGfxSetTransparency(1.0f);
 
-			if (1 == (sParticles[i].flag & FLAG_ACTIVE) || 1 == (sParticles[i].flag & FLAG_VISIBLE))
-				sParticles[i].gameObjInstDrawObject(&MapTransform);
-
-			if (1 == (sProjectiles[i].flag & FLAG_ACTIVE) || 1 == (sProjectiles[i].flag & FLAG_VISIBLE))
-				sProjectiles[i].gameObjInstDrawObject(&MapTransform);
+				AEGfxMeshDraw(pWhiteInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+			}
 		}
 
-		pHero.gameObjInstDrawObject(&MapTransform);
+	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		//only active objects
+		if (1 == (sEnemies[i].flag & FLAG_ACTIVE) || 1 == (sEnemies[i].flag & FLAG_VISIBLE))
+			sEnemies[i].gameObjInstDrawObject(&MapTransform);
 
-		//Yu Xi
-		sGoal.gameObjInstDrawObject(&MapTransform);
+		if (1 == (sBlocks[i].flag & FLAG_ACTIVE) || 1 == (sBlocks[i].flag & FLAG_VISIBLE))
+			sBlocks[i].gameObjInstDrawObject(&MapTransform);
 
-		//draw health bar
-		pHero.healthDisplay(camX, camY);
+		if (1 == (sParticles[i].flag & FLAG_ACTIVE) || 1 == (sParticles[i].flag & FLAG_VISIBLE))
+			sParticles[i].gameObjInstDrawObject(&MapTransform);
 
-		//printing debug
-		if (onChange == true)
-		{
-			//printf("DEBUGGING!\n");
-			onChange = false;
-		}
+		if (1 == (sProjectiles[i].flag & FLAG_ACTIVE) || 1 == (sProjectiles[i].flag & FLAG_VISIBLE))
+			sProjectiles[i].gameObjInstDrawObject(&MapTransform);
+	}
+
+	pHero.gameObjInstDrawObject(&MapTransform);
+
+	//Yu Xi
+	sGoal.gameObjInstDrawObject(&MapTransform);
+
+	//draw health bar
+	pHero.healthDisplay(camX, camY);
+
+	//printing debug
+	if (onChange == true)
+	{
+		//printf("DEBUGGING!\n");
+		onChange = false;
+	}
+
+	if (gameIsPaused == true)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Set position for object 2
+		AEGfxSetPosition(0.0f, 0.0f);	//rtriangle
+		// No tint
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// Set texture
+		AEGfxTextureSet(pauseTex, 1, 1);
+		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
 	}
 }
 
