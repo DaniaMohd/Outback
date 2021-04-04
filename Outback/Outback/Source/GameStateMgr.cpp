@@ -102,6 +102,14 @@ void GameStateMgrUpdate()
 		GameStateFree = GameStateWinFree;
 		GameStateUnload = GameStateWinUnload;
 		break;
+	case GS_GAMEOVER:
+		GameStateLoad = OBGameOverLoad;
+		GameStateInit = OBGameOverInit;
+		GameStateUpdate = OBGameOverUpdate;
+		GameStateDraw = OBGameOverDraw;
+		GameStateFree = OBGameOverFree;
+		GameStateUnload = OBGameOverUnload;
+		break;
 	default:
 		AE_FATAL_ERROR("invalid state!!");
 	}

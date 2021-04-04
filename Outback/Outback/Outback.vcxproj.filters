@@ -42,6 +42,9 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameOverScreen.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Collision.h">
@@ -99,6 +102,9 @@
       <Filter>Include\FMOD</Filter>
     </ClInclude>
     <ClInclude Include="Include\Audio.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GameOverScreen.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

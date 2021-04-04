@@ -62,6 +62,7 @@ extern bool				endless;
 int						ranSpawn;
 int						currSpawn;
 int						totalSpawn;
+bool					gameIsPaused = false;
 
 /******************************************************************************/
 /*!
@@ -656,6 +657,7 @@ void GameStatePlatformInit(void)
 	{
 		enemyspawning(pHero, sEnemies);
 	}
+
 }
 
 /******************************************************************************/
@@ -666,80 +668,213 @@ void GameStatePlatformInit(void)
 void GameStatePlatformUpdate(void)
 {
 	int i, j;
-
-	// Left
-	if (AEInputCheckCurr(AEVK_A) || AEInputCheckCurr(AEVK_LEFT))
+	if (AEInputCheckTriggered(AEVK_Q))
 	{
-		pHero.velCurr.x = -MOVE_VELOCITY_HERO;
-		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+		if (gameIsPaused == false)
 		{
-			pHero.particleEffect(sParticles, P_TRAIL);
+			gameIsPaused = true;
+			printf("game paused\n, %d", gameIsPaused);
+		}
+		else
+		{
+			gameIsPaused = false;
+			printf("game play\n");
 		}
 	}
-	// Right
-	else if (AEInputCheckCurr(AEVK_D) || AEInputCheckCurr(AEVK_RIGHT))
+	if (gameIsPaused == false)
 	{
-		pHero.velCurr.x = MOVE_VELOCITY_HERO;
-		if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+		// Left
+		if (AEInputCheckCurr(AEVK_A) || AEInputCheckCurr(AEVK_LEFT))
 		{
-			pHero.particleEffect(sParticles, P_TRAIL);
+			pHero.velCurr.x = -MOVE_VELOCITY_HERO;
+			if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+			{
+				pHero.particleEffect(sParticles, P_TRAIL);
+			}
 		}
-	}
-	else
-		pHero.velCurr.x = 0;
+		// Right
+		else if (AEInputCheckCurr(AEVK_D) || AEInputCheckCurr(AEVK_RIGHT))
+		{
+			pHero.velCurr.x = MOVE_VELOCITY_HERO;
+			if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+			{
+				pHero.particleEffect(sParticles, P_TRAIL);
+			}
+		}
+		else
+			pHero.velCurr.x = 0;
 
-	// Jump
-	if ((AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_UP)) && pHero.gridCollisionFlag & COLLISION_BOTTOM)
-	{
+		// Jump
+		if ((AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_UP)) && pHero.gridCollisionFlag & COLLISION_BOTTOM)
+		{
 
-		pHero.velCurr.y = JUMP_VELOCITY;
+			pHero.velCurr.y = JUMP_VELOCITY;
 
-		pHero.gridCollisionFlag = 0;
-	}
+			pHero.gridCollisionFlag = 0;
+		}
 
-	//enemy firing debug
-	if (AEInputCheckTriggered(AEVK_K))
-	{
-		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		//enemy firing debug
+		if (AEInputCheckTriggered(AEVK_K))
+		{
+			for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+			{
+				// skip non-active object
+				if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
+					continue;
+
+				sEnemies[i].enemyFire(pHero, sProjectiles);
+			}
+		}
+
+		// Main Menu
+		if (AEInputCheckTriggered(AEVK_BACK))
+		{
+			gGameStateNext = GS_MAINMENU;
+		}
+
+		//firing
+		if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
+		{
+			pHero.playerFire(sProjectiles);
+			++sBoomNum;
+		}
+
+		//stats debug 
+		if (AEInputCheckTriggered(AEVK_P))
+		{
+			printf("damage: %d\nrange: %d\nspeed: %d\n vamp: %d\n regen: %d\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed, pHero.vampirism, pHero.regeneration);
+			//printf("%f\t%f\n", camX, camY);
+		}
+		//debug
+		if (AEInputCheckTriggered(AEVK_M))
+		{
+			enemyspawning(pHero, sEnemies);
+		}
+
+		//Next stage
+		if (AEInputCheckReleased(AEVK_N))
+		{
+			/*win = true;
+			if (win == true)
+			{
+				switch (gGameStateCurr)
+				{
+				case GS_LEVEL1:
+					gGameStateNext = GS_LEVEL2;
+					win = false;
+					break;
+				case GS_LEVEL2:
+					gGameStateNext = GS_LEVEL3;
+					win = false;
+					break;
+				case GS_LEVEL3:
+					gGameStateNext = GS_WIN;
+					win = false;
+					break;
+				default:
+					break;
+				}
+			}*/
+			if (endless == true)
+			{
+				endless = false;
+				printf("not endless\n");
+			}
+			else if (endless == false)
+			{
+				endless = true;
+				printf("endless\n");
+			}
+		}
+
+		//Enemy update
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		{
+			if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
+				continue;
+
+			//update
+			sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
+			sEnemies[i].EnemyStateMachine();
+			//bounding box
+			sEnemies[i].gameObjInstUpdatePos();
+			sEnemies[i].gameObjInstBoundingBox();
+
+			if (sEnemies[i].innerState == INNER_STATE::INNER_STATE_ON_ENTER)
+			{
+				sEnemies[i].enemyFire(pHero, sProjectiles);
+			}
+		}
+
+		//Yu Xi goal update
+		sGoal.gameObjInstBoundingBox();
+
+		//player update
+		pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
+		pHero.gameObjInstUpdatePos();
+		pHero.gameObjInstBoundingBox();
+
+		//Particle update
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		{
+			if (0 == (sParticles[i].flag & FLAG_ACTIVE))
+				continue;
+
+			sParticles[i].gameObjInstUpdatePos();
+			sParticles[i].counter -= g_dt;
+			sParticles[i].velCurr.y = GRAVITY * g_dt + sParticles[i].velCurr.y;
+			if (sParticles[i].counter <= 0)
+			{
+				sParticles[i].gameObjInstDestroy();
+			}
+		}
+
+		//Block update
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		{
+			if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
+				continue;
+
+			sBlocks[i].gameObjInstBoundingBox();
+		}
+
+		//Projectile Update
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		{
+			if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
+				continue;
+
+			sProjectiles[i].gameObjInstUpdatePos();
+			sProjectiles[i].gameObjInstBoundingBox();
+			if (sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
+			{
+				sProjectiles[i].ProjectileUpdate();
+			}
+			else
+				sProjectiles[i].boomerangUpdate(pHero);
+		}
+
+		//Enemy grid collision
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 		{
 			// skip non-active object
 			if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
 				continue;
 
-			sEnemies[i].enemyFire(pHero, sProjectiles);
+			sEnemies[i].gridCollisionFlag = CheckInstanceBinaryMapCollision(sEnemies[i].posCurr.x, sEnemies[i].posCurr.y, sEnemies[i].scale, sEnemies[i].scale);
+			sEnemies[i].enemyGridFlag();
 		}
-	}
 
-	// Main Menu
-	if (AEInputCheckTriggered(AEVK_BACK))
-	{
-		gGameStateNext = GS_MAINMENU;
-	}
+		//Player grid collision
+		pHero.gridCollisionFlag = CheckInstanceBinaryMapCollision(pHero.posCurr.x, pHero.posCurr.y, pHero.scale, pHero.scale);
+		pHero.playerGridFlag();
 
-	//firing
-	if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
-	{
-		pHero.playerFire(sProjectiles);
-		++sBoomNum;
-	}
+		//play invicibility
+		pHero.counter += g_dt;
+		pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
 
-	//stats debug 
-	if (AEInputCheckTriggered(AEVK_P))
-	{
-		printf("damage: %d\nrange: %d\nspeed: %d\n vamp: %d\n regen: %d\n", pHero.powerDamage, pHero.powerRange, pHero.powerSpeed, pHero.vampirism, pHero.regeneration);
-		//printf("%f\t%f\n", camX, camY);
-	}
-	//debug
-	if (AEInputCheckTriggered(AEVK_M))
-	{
-		enemyspawning(pHero, sEnemies);
-	}
-	
-	//Next stage
-	if (AEInputCheckReleased(AEVK_N))
-	{
-		/*win = true;
-		if (win == true)
+		//Check if player touches goal
+		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sGoal.boundingBox, sGoal.velCurr)) == true)
 		{
 			switch (gGameStateCurr)
 			{
@@ -752,341 +887,223 @@ void GameStatePlatformUpdate(void)
 				win = false;
 				break;
 			case GS_LEVEL3:
-				gGameStateNext = GS_WIN;
-				win = false;
+				if (endless == false)
+				{
+					gGameStateNext = GS_WIN;
+					win = false;
+				}
+				else
+				{
+					gGameStateNext = GS_LEVEL1;
+					win = false;
+				}
 				break;
 			default:
 				break;
 			}
-		}*/
-		if (endless == true)
-		{
-			endless = false;
-			printf("not endless\n");
-		}
-		else if (endless == false)
-		{
-			endless = true;
-			printf("endless\n");
-		}
-	}
-
-	//Enemy update
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
-			continue;
-
-		//update
-		sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
-		sEnemies[i].EnemyStateMachine();
-		//bounding box
-		sEnemies[i].gameObjInstUpdatePos();
-		sEnemies[i].gameObjInstBoundingBox();
-
-		if (sEnemies[i].innerState == INNER_STATE::INNER_STATE_ON_ENTER)
-		{
-			sEnemies[i].enemyFire(pHero, sProjectiles);
-		}
-	}
-
-	//Yu Xi goal update
-	sGoal.gameObjInstBoundingBox();
-
-	//player update
-	pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
-	pHero.gameObjInstUpdatePos();
-	pHero.gameObjInstBoundingBox();
-
-	//Particle update
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sParticles[i].flag & FLAG_ACTIVE))
-			continue;
-
-		sParticles[i].gameObjInstUpdatePos();
-		sParticles[i].counter -= g_dt;
-		sParticles[i].velCurr.y = GRAVITY * g_dt + sParticles[i].velCurr.y;
-		if (sParticles[i].counter <= 0)
-		{
-			sParticles[i].gameObjInstDestroy();
-		}
-	}
-
-	//Block update
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
-			continue;
-
-		sBlocks[i].gameObjInstBoundingBox();
-	}
-
-	//Projectile Update
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
-			continue;
-
-		sProjectiles[i].gameObjInstUpdatePos();
-		sProjectiles[i].gameObjInstBoundingBox();
-		if (sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
-		{
-			sProjectiles[i].ProjectileUpdate();
-		}
-		else
-			sProjectiles[i].boomerangUpdate(pHero);
-	}
-
-	//Enemy grid collision
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		// skip non-active object
-		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
-			continue;
-
-		sEnemies[i].gridCollisionFlag = CheckInstanceBinaryMapCollision(sEnemies[i].posCurr.x, sEnemies[i].posCurr.y, sEnemies[i].scale, sEnemies[i].scale);
-		sEnemies[i].enemyGridFlag();
-	}
-
-	//Player grid collision
-	pHero.gridCollisionFlag = CheckInstanceBinaryMapCollision(pHero.posCurr.x, pHero.posCurr.y, pHero.scale, pHero.scale);
-	pHero.playerGridFlag();
-
-	//play invicibility
-	pHero.counter += g_dt;
-	pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
-
-	//Check if player touches goal
-	if((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sGoal.boundingBox, sGoal.velCurr)) == true)
-	{
-		switch (gGameStateCurr)
-		{
-		case GS_LEVEL1:
-			gGameStateNext = GS_LEVEL2;
-			win = false;
-			break;
-		case GS_LEVEL2:
-			gGameStateNext = GS_LEVEL3;
-			win = false;
-			break;
-		case GS_LEVEL3:
-			if (endless == false)
-			{
-				gGameStateNext = GS_WIN;
-				win = false;
-			}
-			else
-			{
-				gGameStateNext = GS_LEVEL1;
-				win = false;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
-	//check if player touches an enemy
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
-			continue;
-
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true)
-		{
-
-			if (pHero.counter >= pHero.invincibleTimer)
-			{
-				onChange = true;
-				pHero.currentHealth -= sEnemies[i].damage;
-				pHero.counter = 0;
-			}
-		}
-		//pHero.invincibleTimer = 0.0f;
-	}
-
-	if (pHero.currentHealth > pHero.maxHealth)
-	{
-		pHero.currentHealth = pHero.maxHealth;
-	}
-
-	//checks if player touches coin
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
-			continue;
-
-		//checks if player touches power up
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true 
-			&& sBlocks[i].pObject->type != TYPE_OBJECT_COIN 
-			&& sBlocks[i].pObject->type != TYPE_OBJECT_LADDER)
-		{
-			if (sBlocks[i].pObject->type == TYPE_OBJECT_DAMAGE)
-			{
-				pHero.DamageUp();
-			}
-			else if (sBlocks[i].pObject->type == TYPE_OBJECT_RANGE)
-			{
-				pHero.RangeUp();
-			}
-			else if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
-			{
-				pHero.SpeedUp();
-			}
-			else if (sBlocks[i].pObject->type == TYPE_OBJECT_HPUP)
-			{
-				pHero.HpUp();
-			}
-			else if (sBlocks[i].pObject->type == TYPE_OBJECT_VAMP)
-			{
-				pHero.VampUp();
-			}
-			else if (sBlocks[i].pObject->type == TYPE_OBJECT_REGEN)
-			{
-				pHero.RegenUp();
-			}
-			sBlocks[i].gameObjInstDestroy();
 		}
 
-		//Ladder
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
-			&& sBlocks[i].pObject->type == TYPE_OBJECT_LADDER)
+		//check if player touches an enemy
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 		{
-			if (AEInputCheckCurr(AEVK_W))
-			{
-				pHero.velCurr.y = 5.0f;
-			}
-		}
+			if (0 == (sEnemies[i].flag & FLAG_ACTIVE))
+				continue;
 
-		//checks if boomerang hits coin
-		for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
-		{
-			if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true)
+			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sEnemies[i].boundingBox, sEnemies[i].velCurr)) == true)
 			{
-				if (sProjectiles[j].pObject->type == TYPE_OBJECT_BOOMERANG && sBlocks[i].pObject->type == TYPE_OBJECT_COIN)
+
+				if (pHero.counter >= pHero.invincibleTimer)
 				{
-					sBlocks[i].PowerUpCreate(sBlocks[i].posCurr);
+					onChange = true;
+					pHero.currentHealth -= sEnemies[i].damage;
+					pHero.counter = 0;
+				}
+			}
+			//pHero.invincibleTimer = 0.0f;
+		}
+
+		if (pHero.currentHealth > pHero.maxHealth)
+		{
+			pHero.currentHealth = pHero.maxHealth;
+		}
+
+		//checks if player touches coin
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+		{
+			if (0 == (sBlocks[i].flag & FLAG_ACTIVE))
+				continue;
+
+			//checks if player touches power up
+			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
+				&& sBlocks[i].pObject->type != TYPE_OBJECT_COIN
+				&& sBlocks[i].pObject->type != TYPE_OBJECT_LADDER)
+			{
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_DAMAGE)
+				{
+					pHero.DamageUp();
+				}
+				else if (sBlocks[i].pObject->type == TYPE_OBJECT_RANGE)
+				{
+					pHero.RangeUp();
+				}
+				else if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
+				{
+					pHero.SpeedUp();
+				}
+				else if (sBlocks[i].pObject->type == TYPE_OBJECT_HPUP)
+				{
+					pHero.HpUp();
+				}
+				else if (sBlocks[i].pObject->type == TYPE_OBJECT_VAMP)
+				{
+					pHero.VampUp();
+				}
+				else if (sBlocks[i].pObject->type == TYPE_OBJECT_REGEN)
+				{
+					pHero.RegenUp();
+				}
+				sBlocks[i].gameObjInstDestroy();
+			}
+
+			//Ladder
+			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
+				&& sBlocks[i].pObject->type == TYPE_OBJECT_LADDER)
+			{
+				if (AEInputCheckCurr(AEVK_W))
+				{
+					pHero.velCurr.y = 5.0f;
 				}
 			}
 
-		}
-	}
-
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
-			continue;
-
-		//checks if boomernang hits enemy
-		if (sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG)
-		{
+			//checks if boomerang hits coin
 			for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
 			{
-				if (0 == (sEnemies[j].flag & FLAG_ACTIVE))
-					continue;
+				if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true)
+				{
+					if (sProjectiles[j].pObject->type == TYPE_OBJECT_BOOMERANG && sBlocks[i].pObject->type == TYPE_OBJECT_COIN)
+					{
+						sBlocks[i].PowerUpCreate(sBlocks[i].posCurr);
+					}
+				}
 
-				if (CollisionIntersection_RectRect(sEnemies[j].boundingBox, sEnemies[j].velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr) == true)
-				{
-					if (sEnemies[j].hit1 == false && sProjectiles[i].boomerangReturning == false)
-					{
-						pHero.currentHealth += pHero.vampirism;
-						sEnemies[j].healthPoints -= pHero.powerDamage;
-						sEnemies[j].hit1 = true;
-						sEnemies[j].particleEffect(sParticles, P_HIT);
-						//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
-					}
-					if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
-					{
-						pHero.currentHealth += pHero.vampirism;
-						sEnemies[j].healthPoints -= pHero.powerDamage;
-						sEnemies[j].hit2 = true;
-						sEnemies[j].particleEffect(sParticles, P_HIT);
-						//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
-					}
-					if (sEnemies[j].healthPoints <= 0)
-					{
-						pHero.currentHealth += pHero.regeneration;
-						sEnemies[j].gameObjInstDestroy();
-						printf("enemy ded\n");
-					}
-				}
-				else if (sEnemies[j].hit1 == true)
-				{
-					sEnemies[j].hit1 = false;
-				}
-				else if (sEnemies[j].hit2 == true)
-				{
-					sEnemies[j].hit2 = false;
-				}
 			}
 		}
 
-		//### checks if enemy fire hits player
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
-			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 		{
-			sProjectiles[i].gameObjInstDestroy();
-			if (pHero.counter >= pHero.invincibleTimer)
+			if (0 == (sProjectiles[i].flag & FLAG_ACTIVE))
+				continue;
+
+			//checks if boomernang hits enemy
+			if (sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG)
 			{
-				onChange = true;
-				pHero.currentHealth -= 1;
-				pHero.counter = 0;
+				for (j = 0; j < GAME_OBJ_INST_NUM_MAX; ++j)
+				{
+					if (0 == (sEnemies[j].flag & FLAG_ACTIVE))
+						continue;
+
+					if (CollisionIntersection_RectRect(sEnemies[j].boundingBox, sEnemies[j].velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr) == true)
+					{
+						if (sEnemies[j].hit1 == false && sProjectiles[i].boomerangReturning == false)
+						{
+							pHero.currentHealth += pHero.vampirism;
+							sEnemies[j].healthPoints -= pHero.powerDamage;
+							sEnemies[j].hit1 = true;
+							sEnemies[j].particleEffect(sParticles, P_HIT);
+							//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+						}
+						if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
+						{
+							pHero.currentHealth += pHero.vampirism;
+							sEnemies[j].healthPoints -= pHero.powerDamage;
+							sEnemies[j].hit2 = true;
+							sEnemies[j].particleEffect(sParticles, P_HIT);
+							//printf("enemy hp: %d\n", sEnemies[j].healthPoints);
+						}
+						if (sEnemies[j].healthPoints <= 0)
+						{
+							pHero.currentHealth += pHero.regeneration;
+							sEnemies[j].gameObjInstDestroy();
+							printf("enemy ded\n");
+						}
+					}
+					else if (sEnemies[j].hit1 == true)
+					{
+						sEnemies[j].hit1 = false;
+					}
+					else if (sEnemies[j].hit2 == true)
+					{
+						sEnemies[j].hit2 = false;
+					}
+				}
+			}
+
+			//### checks if enemy fire hits player
+			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
+				&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
+			{
+				sProjectiles[i].gameObjInstDestroy();
+				if (pHero.counter >= pHero.invincibleTimer)
+				{
+					onChange = true;
+					pHero.currentHealth -= 1;
+					pHero.counter = 0;
+				}
+			}
+
+			//boomerang returning to player
+			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
+				&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG && sProjectiles[i].boomerangReturning == true)
+			{
+				--sBoomNum;
+				sProjectiles[i].gameObjInstDestroy();
 			}
 		}
 
-		//boomerang returning to player
-		if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sProjectiles[i].boundingBox, sProjectiles[i].velCurr)) == true
-			&& sProjectiles[i].pObject->type == TYPE_OBJECT_BOOMERANG && sProjectiles[i].boomerangReturning == true)
+		//Computing the transformation matrices of the game object instances
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
 		{
-			--sBoomNum;
-			sProjectiles[i].gameObjInstDestroy();
+			//only active objects
+			if (1 == (sEnemies[i].flag & FLAG_ACTIVE))
+				sEnemies[i].gameObjInstTransformMatrix();
+
+			if (1 == (sBlocks[i].flag & FLAG_ACTIVE))
+				sBlocks[i].gameObjInstTransformMatrix();
+
+			if (1 == (sParticles[i].flag & FLAG_ACTIVE))
+				sParticles[i].gameObjInstTransformMatrix();
+
+			if (1 == (sProjectiles[i].flag & FLAG_ACTIVE))
+				sProjectiles[i].gameObjInstTransformMatrix();
 		}
+		pHero.gameObjInstTransformMatrix();
+
+		//Yu Xi
+		sGoal.gameObjInstTransformMatrix();
+
+		//### death
+		if (pHero.currentHealth <= 0)
+		{
+			gGameStateNext = GS_GAMEOVER;	//lose
+		}
+
+		//camera settings
+		if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
+		{
+			// Camera fixed
+			camX = BINARY_MAP_WIDTH / 2 - 10.0f;
+			camY = BINARY_MAP_HEIGHT / 2 - 10.0f;
+		}
+		else
+		{
+			// Camera does not go out of bounds
+			if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
+				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+			if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
+				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+		}
+		AEGfxSetCamPosition(camX, camY);
 	}
-
-	//Computing the transformation matrices of the game object instances
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		//only active objects
-		if (1 == (sEnemies[i].flag & FLAG_ACTIVE))
-			sEnemies[i].gameObjInstTransformMatrix();
-
-		if (1 == (sBlocks[i].flag & FLAG_ACTIVE))
-			sBlocks[i].gameObjInstTransformMatrix();
-
-		if (1 == (sParticles[i].flag & FLAG_ACTIVE))
-			sParticles[i].gameObjInstTransformMatrix();
-
-		if (1 == (sProjectiles[i].flag & FLAG_ACTIVE))
-			sProjectiles[i].gameObjInstTransformMatrix();
-	}
-	pHero.gameObjInstTransformMatrix();
-
-	//Yu Xi
-	sGoal.gameObjInstTransformMatrix();
-
-	//### death
-	if (pHero.currentHealth <= 0)
-	{
-		gGameStateNext = GS_WIN;	//lose
-	}
-
-	//camera settings
-	if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
-	{
-		// Camera fixed
-		camX = BINARY_MAP_WIDTH / 2 - 10.0f;
-		camY = BINARY_MAP_HEIGHT / 2 - 10.0f;
-	}
-	else
-	{
-		// Camera does not go out of bounds
-		if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
-			camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
-		if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
-			camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
-	}
-	AEGfxSetCamPosition(camX, camY);
 }
 
 /******************************************************************************/
@@ -1103,71 +1120,74 @@ void GameStatePlatformDraw(void)
 
 	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
-	for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
-		for (j = 0; j < BINARY_MAP_WIDTH; ++j)
+	if (gameIsPaused == false)
+	{
+		for (i = 0; i < BINARY_MAP_HEIGHT; ++i)
+			for (j = 0; j < BINARY_MAP_WIDTH; ++j)
+			{
+				x = (float)j;
+				y = (float)i;
+
+				SnapToCell(&x);
+				SnapToCell(&y);
+
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+				AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+
+				AEMtx33Trans(&cellTranslation, x, y);
+				AEMtx33Concat(&cellFinalTransformation, &MapTransform, &cellTranslation);
+				AEGfxSetTransform(cellFinalTransformation.m);
+
+				if (BinaryCollisionArray[i][j] == TYPE_OBJECT_EMPTY)
+				{
+					AEGfxTextureSet(pBlackInstance.pObject->pTex, 0, 0);
+
+					AEGfxSetTransparency(1.0f);
+
+					AEGfxMeshDraw(pBlackInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+				}
+
+				if (BinaryCollisionArray[i][j] == TYPE_OBJECT_COLLISION)
+				{
+					AEGfxTextureSet(pWhiteInstance.pObject->pTex, 0, 0);
+
+					AEGfxSetTransparency(1.0f);
+
+					AEGfxMeshDraw(pWhiteInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+				}
+			}
+
+		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
-			x = (float)j;
-			y = (float)i;
+			//only active objects
+			if (1 == (sEnemies[i].flag & FLAG_ACTIVE) || 1 == (sEnemies[i].flag & FLAG_VISIBLE))
+				sEnemies[i].gameObjInstDrawObject(&MapTransform);
 
-			SnapToCell(&x);
-			SnapToCell(&y);
+			if (1 == (sBlocks[i].flag & FLAG_ACTIVE) || 1 == (sBlocks[i].flag & FLAG_VISIBLE))
+				sBlocks[i].gameObjInstDrawObject(&MapTransform);
 
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+			if (1 == (sParticles[i].flag & FLAG_ACTIVE) || 1 == (sParticles[i].flag & FLAG_VISIBLE))
+				sParticles[i].gameObjInstDrawObject(&MapTransform);
 
-			AEMtx33Trans(&cellTranslation, x, y);
-			AEMtx33Concat(&cellFinalTransformation, &MapTransform, &cellTranslation);
-			AEGfxSetTransform(cellFinalTransformation.m);
-
-			if (BinaryCollisionArray[i][j] == TYPE_OBJECT_EMPTY)
-			{
-				AEGfxTextureSet(pBlackInstance.pObject->pTex, 0, 0);
-
-				AEGfxSetTransparency(1.0f);
-
-				AEGfxMeshDraw(pBlackInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
-			}
-
-			if (BinaryCollisionArray[i][j] == TYPE_OBJECT_COLLISION)
-			{
-				AEGfxTextureSet(pWhiteInstance.pObject->pTex, 0, 0);
-
-				AEGfxSetTransparency(1.0f);
-
-				AEGfxMeshDraw(pWhiteInstance.pObject->pMesh, AE_GFX_MDM_TRIANGLES);
-			}
+			if (1 == (sProjectiles[i].flag & FLAG_ACTIVE) || 1 == (sProjectiles[i].flag & FLAG_VISIBLE))
+				sProjectiles[i].gameObjInstDrawObject(&MapTransform);
 		}
 
-	for (i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		//only active objects
-		if (1 == (sEnemies[i].flag & FLAG_ACTIVE) || 1 == (sEnemies[i].flag & FLAG_VISIBLE))
-			sEnemies[i].gameObjInstDrawObject(&MapTransform);
+		pHero.gameObjInstDrawObject(&MapTransform);
 
-		if (1 == (sBlocks[i].flag & FLAG_ACTIVE) || 1 == (sBlocks[i].flag & FLAG_VISIBLE))
-			sBlocks[i].gameObjInstDrawObject(&MapTransform);
+		//Yu Xi
+		sGoal.gameObjInstDrawObject(&MapTransform);
 
-		if (1 == (sParticles[i].flag & FLAG_ACTIVE) || 1 == (sParticles[i].flag & FLAG_VISIBLE))
-			sParticles[i].gameObjInstDrawObject(&MapTransform);
+		//draw health bar
+		pHero.healthDisplay(camX, camY);
 
-		if (1 == (sProjectiles[i].flag & FLAG_ACTIVE) || 1 == (sProjectiles[i].flag & FLAG_VISIBLE))
-			sProjectiles[i].gameObjInstDrawObject(&MapTransform);
-	}
-
-	pHero.gameObjInstDrawObject(&MapTransform);
-
-	//Yu Xi
-	sGoal.gameObjInstDrawObject(&MapTransform);
-
-	//draw health bar
-	pHero.healthDisplay(camX, camY);
-
-	//printing debug
-	if (onChange == true)
-	{
-		//printf("DEBUGGING!\n");
-		onChange = false;
+		//printing debug
+		if (onChange == true)
+		{
+			//printf("DEBUGGING!\n");
+			onChange = false;
+		}
 	}
 }
 
