@@ -36,6 +36,8 @@ extern double	g_appTime;
 #include "Win.h"
 #include "GameObjects.h"
 #include "Audio.h"
+#include "Credits.h"
+#include "Logo.h"
 
 
 #endif // CS1130_MAIN_H_

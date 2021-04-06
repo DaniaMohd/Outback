@@ -22,6 +22,7 @@ int curr = 0;
 AEGfxVertexList* vertex = 0, * vertexBG = 0;
 AEGfxTexture* texture = 0;
 
+
 /******************************************************************************/
 /*!
 	"Load" Main menu
@@ -141,6 +142,8 @@ void GameStateMainMenuUpdate()
 	{
 		gGameStateNext = GS_QUIT;
 	}
+
+
 }
 
 /******************************************************************************/
