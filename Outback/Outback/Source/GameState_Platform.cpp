@@ -65,6 +65,9 @@ int						totalSpawn;
 bool					gameIsPaused;
 AEGfxVertexList*		pauseMesh;
 AEGfxTexture*			pauseTex;
+char					pause[100], conti[100];
+extern					s8 fontID;
+
 
 /******************************************************************************/
 /*!
@@ -554,7 +557,11 @@ void GameStatePlatformLoad(void)
 	pauseMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pauseMesh, "Failed to create range Mesh!");
 	pauseTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
-	AE_ASSERT_MESG(pauseTex, "Failed to create damage texture!!");
+	AE_ASSERT_MESG(pauseTex, "Failed to create pause text!!");
+	memset(pause, 0, 100 * sizeof(char));
+	sprintf_s(pause, "PAUSED");
+	memset(conti, 0, 100 * sizeof(char));
+	sprintf_s(conti, "Press Q to continue, Press ESC to return to Menu");
 	//-------------------------------------------------------------------------
 
 }
@@ -689,6 +696,13 @@ void GameStatePlatformInit(void)
 void GameStatePlatformUpdate(void)
 {
 	int i, j;
+	if (gameIsPaused == true)
+	{
+		if (AEInputCheckTriggered(AEVK_ESCAPE))
+		{
+			gGameStateNext = GS_MAINMENU;
+		}
+	}
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
 		if (gameIsPaused == false)
@@ -1219,6 +1233,8 @@ void GameStatePlatformDraw(void)
 		// Set texture
 		AEGfxTextureSet(pauseTex, 1, 1);
 		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, conti, -0.6f, 0.25f, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 
