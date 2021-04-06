@@ -13,8 +13,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
  /******************************************************************************/
 
 
-#ifndef CS230_MAIN_H_
-#define CS230_MAIN_H_
+#ifndef OUTBACK_MAIN_H_
+#define OUTBACK_MAIN_H_
 
 //------------------------------------
 // Globals
@@ -38,8 +38,9 @@ extern double	g_appTime;
 #include "GameObjects.h"
 #include "Audio.h"
 #include "GameOverScreen.h"
+#include "Logo.h"
 
-#endif // CS1130_MAIN_H_
+#endif // OUTBACK_MAIN_H_
 
 
 
