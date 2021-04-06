@@ -13,8 +13,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
  */
  /******************************************************************************/
 
-#ifndef MUSIC_H_
-#define MUSIC_H_
+#ifndef AUDIO_H_
+#define AUDIO_H_
 
 extern bool			setMute;
 extern bool			setUnmute;
@@ -45,5 +45,5 @@ void Level3BGMUnload();
 void GameOverBGMUnload();
 
 
-#endif // !MUSIC_H_
+#endif // !AUDIO_H_
 

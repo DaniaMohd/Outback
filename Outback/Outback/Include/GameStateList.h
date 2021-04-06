@@ -21,11 +21,16 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 enum
 {
 	// list of all game states 
-	GS_LEVEL1 = 0, 
+	GS_LOGO = 0,	
+	GS_LEVEL1, 
 	GS_LEVEL2,
 	GS_LEVEL3,
 	GS_MAINMENU,
 	GS_WIN,
+	GS_INSTRUCTIONS,
+	GS_OPTIONS,
+	GS_CREDITS,
+
 	// special game state. Do not change
 	GS_RESTART,
 	GS_QUIT,
