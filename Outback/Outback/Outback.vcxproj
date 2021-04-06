@@ -43,11 +43,11 @@
     <ClInclude Include="Include\GameStateList.h" />
     <ClInclude Include="Include\GameStateMgr.h" />
     <ClInclude Include="Include\GameState_Platform.h" />
+    <ClInclude Include="Include\Logo.h" />
     <ClInclude Include="Include\main.h" />
     <ClInclude Include="Include\MainMenu.h" />
     <ClInclude Include="Include\Map.h" />
     <ClInclude Include="Include\Win.h" />
-    <ClInclude Include="Logo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Include\fmod.cs" />

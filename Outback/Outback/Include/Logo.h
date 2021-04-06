@@ -4,8 +4,8 @@
 \author 	Lim Sim Chee, Shannon
 \par    	email: lim.s@digipen.edu
 \date   	5th April 2021
-\brief      This file contains the declearations of the functions needed for
-			the credits screen
+\brief      This file contains the declarations for the splash screen,
+			showing the Digipen logo, FMOD logo and the group logo
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

@@ -93,9 +93,6 @@
     <ClInclude Include="Include\GameStateMgr.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Logo.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Include\main.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -106,6 +103,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\MainMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Logo.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
