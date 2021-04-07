@@ -84,12 +84,12 @@ void OBGameOverUpdate()
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 		gGameStateNext = GS_MAINMENU;
 
-	if (currGG > 0.22f)
+	if (selection > 2)
 	{
 		currGG = -0.39f;
 		selection = 0;
 	}
-	if (currGG < -0.40f)
+	if (selection < 0)
 	{
 		currGG = 0.21f;
 		selection = 2;

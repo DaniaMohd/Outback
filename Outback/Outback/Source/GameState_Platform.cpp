@@ -186,7 +186,7 @@ void GameStatePlatformLoad(void)
 	}
 
 	//4
-	//Creating the enemey1 object
+	//Creating the enemey1 object spider
 	{
 		pObj = sGameObjList + sGameObjNum++;
 		pObj->type = TYPE_OBJECT_ENEMY1;
@@ -209,6 +209,52 @@ void GameStatePlatformLoad(void)
 	}
 
 	//5
+	//Creating the enemey2 object bee
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_ENEMY2;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Enemy Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Bee.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create Enemy Texture!");
+	}
+
+	//6
+	//Creating the enemey3 object cactus
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_ENEMY3;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFF0000, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFF0000, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFF0000, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Enemy Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Enemy.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create Enemy Texture!");
+	}
+
+	//7
 	//Creating the Coin object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -231,7 +277,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Coin Texture!");
 	}
 
-	//6
+	//8
 	//Creating the Ladder object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -254,7 +300,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Ladder!");
 	}
 	
-	//7
+	//9
 	//Creating the Particle object
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -277,7 +323,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
 	}
 
-	//8
+	//10
 	//Creating the Bullets
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -299,7 +345,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 	}
 
-	//9
+	//11
 	//Creating the Boomerang
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -321,7 +367,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
 	}
 	
-	//10
+	//12
 	//Damage upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -344,7 +390,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//11
+	//13
 	//Range upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -367,7 +413,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 	}
 
-	//12
+	//14
 	//Speed upgrade
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -390,7 +436,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
 	}
 
-	//13
+	//15
 	//max health
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -413,7 +459,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//14
+	//16
 	//current health
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -436,7 +482,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//15
+	//17
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -459,7 +505,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//16
+	//18
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -482,7 +528,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//17
+	//19
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -829,16 +875,32 @@ void GameStatePlatformUpdate(void)
 				continue;
 
 			//update
-			sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
-			sEnemies[i].EnemyStateMachine();
+			//spiders
+			if (sEnemies[i].pObject->type == TYPE_OBJECT_ENEMY1)
+			{
+				sEnemies[i].EnemyStateMachine();
+				sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
+			}
+			//bees
+			if (sEnemies[i].pObject->type == TYPE_OBJECT_ENEMY2)
+			{
+				sEnemies[i].velCurr.x = cos(sEnemies[i].counter1);
+				sEnemies[i].velCurr.y = sin(sEnemies[i].counter1);
+				sEnemies[i].facePlayer(pHero);
+				sEnemies[i].counter += g_dt;
+				sEnemies[i].counter1 += g_dt;
+				sEnemies[i].enemyFire(pHero, sProjectiles);
+			}
+			//cacti
+			if (sEnemies[i].pObject->type == TYPE_OBJECT_ENEMY3)
+			{
+				sEnemies[i].facePlayer(pHero);
+				sEnemies[i].velCurr.y = GRAVITY * g_dt + sEnemies[i].velCurr.y;
+			}
+
 			//bounding box
 			sEnemies[i].gameObjInstUpdatePos();
 			sEnemies[i].gameObjInstBoundingBox();
-
-			if (sEnemies[i].innerState == INNER_STATE::INNER_STATE_ON_ENTER)
-			{
-				sEnemies[i].enemyFire(pHero, sProjectiles);
-			}
 		}
 
 		//Yu Xi goal update
@@ -1082,12 +1144,13 @@ void GameStatePlatformUpdate(void)
 				&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 			{
 				sProjectiles[i].gameObjInstDestroy();
-				if (pHero.counter >= pHero.invincibleTimer)
-				{
-					onChange = true;
-					pHero.currentHealth -= 1;
-					pHero.counter = 0;
-				}
+				pHero.currentHealth -= 1;
+				//if (pHero.counter >= pHero.invincibleTimer)
+				//{
+				//	onChange = true;
+				//	pHero.currentHealth -= 1;
+				//	pHero.counter = 0;
+				//}
 			}
 
 			//boomerang returning to player

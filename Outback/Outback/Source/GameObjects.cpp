@@ -56,10 +56,13 @@ void GameObjInst::gameObjInstUpdatePos()
 {
 	posCurr.x = velCurr.x * g_dt + posCurr.x;
 	posCurr.y = velCurr.y * g_dt + posCurr.y;
-	if (velCurr.x < 0)
-		dirFaceR = false;
-	else if (velCurr.x > 0)
-		dirFaceR = true;
+	if (pObject->type != TYPE_OBJECT_ENEMY2 && pObject->type != TYPE_OBJECT_ENEMY3)
+	{
+		if (velCurr.x < 0)
+			dirFaceR = false;
+		else if (velCurr.x > 0)
+			dirFaceR = true;
+	}
 
 	if (pObject->type == TYPE_OBJECT_BOOMERANG)
 	{
@@ -247,6 +250,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 	hit2 = false;
 	damage = 10;
 	detectionRadius = 10.0f;
+	counter1 = float(rand()) / float((RAND_MAX));
 }
 
 /******************************************************************************/
@@ -372,8 +376,10 @@ void Enemy::enemyGridFlag()
 void Enemy::enemyFire(Player character, Projectile* bullet)
 {
 	float mag = sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f));
-	if (mag <= detectionRadius)
+	//detect player and can shoot
+	if (mag <= detectionRadius && counter >= 2.0f)
 	{
+		counter = 0;
 		// Weird warning if there are no (double) cast
 		// normalize
 		float x = (float)(((double)character.posCurr.x - posCurr.x) / mag);
@@ -399,6 +405,18 @@ void Enemy::enemyFire(Player character, Projectile* bullet)
 				break;
 			}
 		}
+	}
+}
+
+void Enemy::facePlayer(Player character)
+{
+	if (posCurr.x > character.posCurr.x)
+	{
+		dirFaceR = false;
+	}
+	else
+	{
+		dirFaceR = true;
 	}
 }
 
@@ -682,8 +700,7 @@ void enemyspawning(Player player, Enemy* enemies)
 		y *= -1;
 	}
 
-	//int type;
-	//switch case for enemy type
+	int type = (rand() % 3) + 4;
 
 	AEVec2 pos;
 
@@ -718,8 +735,8 @@ void enemyspawning(Player player, Enemy* enemies)
 	{
 		if (enemies[i].flag == 0)
 		{
-			enemies[i].enemyCreate(TYPE_OBJECT_ENEMY1, &pos);
-			printf("Spawned\n");
+			enemies[i].enemyCreate(type, &pos);
+			//printf("Spawned %d\n", enemies[i].pObject->type);
 			break;
 		}
 	}

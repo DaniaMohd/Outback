@@ -3,7 +3,7 @@ const unsigned int	GAME_OBJ_NUM_MAX = 32;	//The total number of different object
 const unsigned int	GAME_OBJ_INST_NUM_MAX = 1024;	//The total number of different game object instances
 
 //Gameplay related variables and values
-const float			GRAVITY = -20.0f;
+const float			GRAVITY = -15.0f;
 const float			JUMP_VELOCITY = 12.5f;
 const float			MOVE_VELOCITY_HERO = 7.0f;
 const float			MOVE_VELOCITY_ENEMY = 7.5f;
@@ -28,19 +28,21 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_HERO,			//2
 	TYPE_OBJECT_GOAL,			//3
 	TYPE_OBJECT_ENEMY1,			//4
-	TYPE_OBJECT_COIN,			//5
-	TYPE_OBJECT_LADDER,			//6
-	TYPE_OBJECT_PARTICLES,		//7
-	TYPE_OBJECT_BULLET,			//8
-	TYPE_OBJECT_BOOMERANG,		//9
-	TYPE_OBJECT_DAMAGE,			//10
-	TYPE_OBJECT_RANGE,			//11
-	TYPE_OBJECT_SPEED,			//12
-	TYPE_OBJECT_MAXHP,			//13
-	TYPE_OBJECT_CURRHP,			//14
-	TYPE_OBJECT_HPUP,			//15
-	TYPE_OBJECT_VAMP,			//16
-	TYPE_OBJECT_REGEN			//17
+	TYPE_OBJECT_ENEMY2,			//5
+	TYPE_OBJECT_ENEMY3,			//6
+	TYPE_OBJECT_COIN,			//7
+	TYPE_OBJECT_LADDER,			//8
+	TYPE_OBJECT_PARTICLES,		//9
+	TYPE_OBJECT_BULLET,			//10
+	TYPE_OBJECT_BOOMERANG,		//11
+	TYPE_OBJECT_DAMAGE,			//12
+	TYPE_OBJECT_RANGE,			//13
+	TYPE_OBJECT_SPEED,			//14
+	TYPE_OBJECT_MAXHP,			//15
+	TYPE_OBJECT_CURRHP,			//16
+	TYPE_OBJECT_HPUP,			//17
+	TYPE_OBJECT_VAMP,			//18
+	TYPE_OBJECT_REGEN			//19
 };
 
 //### Particle Types
@@ -104,6 +106,8 @@ public:
 class Enemy : public GameObjInst
 {
 public:
+
+	float			counter1;
 	int				gridCollisionFlag;
 
 	enum			STATE state;
@@ -121,7 +125,7 @@ public:
 	void			EnemyStateMachine();		//State machine functions
 	void			enemyGridFlag();
 	void			enemyFire(Player character, Projectile* bullet);//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
-
+	void			facePlayer(Player character);
 	//### enemy charging function, input player
 };
 
