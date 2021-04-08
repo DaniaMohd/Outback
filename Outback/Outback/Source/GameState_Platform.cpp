@@ -1407,7 +1407,7 @@ void GameStatePlatformDraw(void)
 		//AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+		//AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 		AEGfxSetPosition(camX, camY);
 		AEGfxTextureSet(pauseTex, 0, 0);
 		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
