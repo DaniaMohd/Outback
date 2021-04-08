@@ -118,6 +118,14 @@ void GameStateMgrUpdate()
 		GameStateFree = OBGameOverFree;
 		GameStateUnload = OBGameOverUnload;
 		break;
+	case GS_CREDITS:
+		GameStateLoad = CreditsLoad;
+		GameStateInit = CreditsInit;
+		GameStateUpdate = CreditsUpdate;
+		GameStateDraw = CreditsDraw;
+		GameStateFree = CreditsFree;
+		GameStateUnload = CreditsUnload;
+		break;
 	default:
 		AE_FATAL_ERROR("invalid state!!");
 	}

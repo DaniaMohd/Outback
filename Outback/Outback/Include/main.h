@@ -39,6 +39,7 @@ extern double	g_appTime;
 #include "Audio.h"
 #include "GameOverScreen.h"
 #include "Logo.h"
+#include "Credits.h"
 
 #endif // OUTBACK_MAIN_H_
 
