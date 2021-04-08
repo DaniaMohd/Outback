@@ -25,6 +25,12 @@ extern int level;
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
 
+AEGfxVertexList* exitMesh;
+AEGfxTexture* exitTex;
+char					exit1[100], exit2[100];
+extern					s8 fontID;
+int						exitDia;
+
 /******************************************************************************/
 /*!
 	"Load" Main menu
@@ -68,8 +74,26 @@ void GameStateMainMenuLoad()
 
 	vertex = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertex, "Failed to create Enemy Mesh!");
-
 	MainMenuBGMLoad();
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-100.0f * 2, -100.0f, 0x00FF00FF, 0.0f, 0.0f,
+		100.0f * 2, -100.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-100.0f * 2, 100.0f, 0x0000FFFF, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		100.0f * 2, -100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f);
+
+	exitMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(exitMesh, "Failed to create range Mesh!");
+	exitTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+	AE_ASSERT_MESG(exitTex, "Failed to create pause text!!");
+	memset(exit1, 0, 100 * sizeof(char));
+	sprintf_s(exit1, "Please confirm to quit the program");
+	memset(exit2, 0, 100 * sizeof(char));
+	sprintf_s(exit2, "Press Y to quit, Press N to go Menu");
 }
 
 /******************************************************************************/
@@ -83,6 +107,7 @@ void GameStateMainMenuInit()
 	endless = false;
 	newGame = true;
 	level = 0;
+	exitDia = 0;
 }
 
 /******************************************************************************/
@@ -102,53 +127,65 @@ void GameStateMainMenuUpdate()
 	4. if down key
 		cursor -= 0.15f
 	*/
-
-	if (curr > 3)
-		curr = 0;
-
-	if (curr < 0)
-		curr = 3;
-
-	if (curMainMenu > 0.15f * 360)
-		curMainMenu = -0.3f * 270;
-
-	if (curMainMenu < -0.3f * 360)
-		curMainMenu = 0.15f * 360;
-
-	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
+	if (exitDia == 0)
 	{
-		curMainMenu += 0.15f * 300;
-		curr--;
-	}
+		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
+		{
+			curMainMenu += 0.15f * 300;
+			curr--;
+		}
 
-	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
+		if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
+		{
+			curMainMenu -= 0.15f * 300;
+			curr++;
+		}
+
+		if (AEInputCheckTriggered(AEVK_RETURN) && curr == 0)
+		{
+			gGameStateNext = GS_LEVEL1;
+		}
+
+		if (AEInputCheckTriggered(AEVK_RETURN) && curr == 1)
+		{
+			gGameStateNext = GS_LEVEL2;
+		}
+
+		if (AEInputCheckTriggered(AEVK_RETURN) && curr == 2)
+		{
+			gGameStateNext = GS_LEVEL3;
+		}
+
+		if (AEInputCheckTriggered(AEVK_RETURN) && curr == 3)
+		{
+			exitDia = 1;
+		}
+		if (curr > 3)
+			curr = 0;
+
+		if (curr < 0)
+			curr = 3;
+
+		if (curMainMenu > 0.15f * 360)
+			curMainMenu = -0.3f * 270;
+
+		if (curMainMenu < -0.3f * 360)
+			curMainMenu = 0.15f * 360;
+	}
+	if (exitDia == 1)
 	{
-		curMainMenu -= 0.15f * 300;
-		curr++;
+		if (AEInputCheckTriggered(AEVK_Y))
+		{
+			gGameStateNext = GS_QUIT;
+		}
+		if (AEInputCheckTriggered(AEVK_N ))
+		{
+			exitDia = 0;
+		}
 	}
+	
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 0)
-	{
-		gGameStateNext = GS_LEVEL1;
-	}
-
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 1)
-	{
-		gGameStateNext = GS_LEVEL2;
-	}
-
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 2)
-	{
-		gGameStateNext = GS_LEVEL3;
-	}
-
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 3
-		|| AEInputCheckTriggered(AEVK_ESCAPE))
-	{
-		gGameStateNext = GS_QUIT;
-	}
-
-	if (AEInputCheckTriggered(AEVK_N))
+	if (AEInputCheckTriggered(AEVK_A))
 	{
 		if (endless == true)
 		{
@@ -203,6 +240,19 @@ void GameStateMainMenuDraw()
 	//AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
 	
+	if (exitDia == 1)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Set position for object 2
+		AEGfxSetPosition(0.0f, 0.0f);	//rtriangle
+		// No tint
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// Set texture
+		AEGfxTextureSet(exitTex, 1, 1);
+		AEGfxMeshDraw(exitMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxPrint(fontID, exit1, -0.41f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, exit2, -0.43f, -0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+	}
 
 
 }
