@@ -23,6 +23,9 @@ char ggQuit[100], ggConfirm[100];
 int selectedA;
 AEGfxVertexList* ggExitMesh;
 AEGfxTexture* ggExitTex;
+AEGfxVertexList* selectionMesh;
+int selectX;
+int a = 0;		//int to prevent falling thru issue
 
 
 void OBGameOverLoad()
@@ -67,8 +70,22 @@ void OBGameOverInit()
 	memset(ggQuit, 0, 100 * sizeof(char));
 	sprintf_s(ggQuit, "Please confirm to quit the program");
 	memset(ggConfirm, 0, 100 * sizeof(char));
-	sprintf_s(ggConfirm, "Press Y to quit, Press N to go Menu");
+	sprintf_s(ggConfirm, "YES / NO");
 	selectedA = 0;
+
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-25.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		25.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		25.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		25.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	selectionMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(selectionMesh, "Failed to create Enemy Mesh!");
+	selectX = -17;
+
 }
 
 void OBGameOverUpdate()
@@ -100,8 +117,6 @@ void OBGameOverUpdate()
 		{
 			selectedA = 1;
 		}
-
-
 		if (selection > 2)
 		{
 			currGG = -0.39f;
@@ -115,29 +130,51 @@ void OBGameOverUpdate()
 	}
 	if (selectedA == 1)
 	{
-		if (AEInputCheckTriggered(AEVK_Y))
+		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
 		{
-			gGameStateNext = GS_QUIT;
+			if (a != 1)
+				a = 1;
+			selectX -= 62;
 		}
-		if (AEInputCheckTriggered(AEVK_N))
+		if (AEInputCheckTriggered(AEVK_D) || AEInputCheckTriggered(AEVK_RIGHT))
 		{
-			selectedA = 0;
+			if (a != 1)
+				a = 1;
+			selectX += 62;
+		}
+		if (selectX < -17)
+			selectX = 45;
+		if (selectX > 45)
+			selectX = -17;
+		if (AEInputCheckTriggered(AEVK_SPACE) && a==1)
+		{
+			if (selectX == -17)
+			{
+				gGameStateNext = GS_QUIT;
+			}
+			else
+			{
+				selectedA = 0;
+			}
 		}
 	}
 }
 
 void OBGameOverDraw()
 {
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetTransparency(1.0f);
-	AEGfxPrint(fontID, gameOverMsg, -0.5, 0.50f, 1.1f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, brestart, 0.2, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, mainMenu, -0.16f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, quit, -0.4f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, barrow, currGG, 0.07f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, bcomment, -0.45f, -0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+	if (selectedA == 0)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetTransparency(1.0f);
+		AEGfxPrint(fontID, gameOverMsg, -0.5, 0.50f, 1.1f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, brestart, 0.2, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, mainMenu, -0.16f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, quit, -0.4f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, barrow, currGG, 0.07f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, bcomment, -0.45f, -0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+	}
 	if (selectedA == 1)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -148,9 +185,19 @@ void OBGameOverDraw()
 		// Set texture
 		AEGfxTextureSet(ggExitTex, 1, 1);
 		AEGfxMeshDraw(ggExitMesh, AE_GFX_MDM_TRIANGLES);
-		AEGfxPrint(fontID, ggQuit, -0.41f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, ggConfirm, -0.43f, -0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+		
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxMeshDraw(selectionMesh, AE_GFX_MDM_TRIANGLES);
+		// Set position for the highlight
+		AEGfxSetPosition(selectX, -52);
+		AEGfxPrint(fontID, ggQuit, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, bcomment, -0.45f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, ggConfirm, -0.1f, -0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+		
 	}
+
 }
 
 void OBGameOverFree()

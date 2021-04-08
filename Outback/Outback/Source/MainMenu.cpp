@@ -25,9 +25,12 @@ extern int level;
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
 
-AEGfxVertexList* exitMesh;
-AEGfxTexture* exitTex;
-char					exit1[100], exit2[100];
+char MainQuit[100], MainConfirm[100], exitComment[100];
+AEGfxVertexList* MainExitMesh;
+AEGfxTexture* MainExitTex;
+AEGfxVertexList* selectionMainMesh;
+int selectMainX;
+int b = 0;
 extern					s8 fontID;
 int						exitDia;
 
@@ -86,14 +89,30 @@ void GameStateMainMenuLoad()
 		-100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f,
 		100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
-	exitMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(exitMesh, "Failed to create range Mesh!");
-	exitTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
-	AE_ASSERT_MESG(exitTex, "Failed to create pause text!!");
-	memset(exit1, 0, 100 * sizeof(char));
-	sprintf_s(exit1, "Please confirm to quit the program");
-	memset(exit2, 0, 100 * sizeof(char));
-	sprintf_s(exit2, "Press Y to quit, Press N to go Menu");
+	MainExitMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(MainExitMesh, "Failed to create range Mesh!");
+	MainExitTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+	AE_ASSERT_MESG(MainExitTex, "Failed to create pause text!!");
+	memset(MainQuit, 0, 100 * sizeof(char));
+	sprintf_s(MainQuit, "Please confirm to quit the program");
+	memset(MainConfirm, 0, 100 * sizeof(char));
+	sprintf_s(MainConfirm, "YES / NO");
+	memset(exitComment, 0, 100 * sizeof(char));
+	sprintf_s(exitComment, "Left/Right to control, SPACE to choose");
+
+	//select mesh
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-25.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		25.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		25.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		25.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	selectionMainMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(selectionMainMesh, "Failed to create Enemy Mesh!");
+	selectMainX = -17;
 }
 
 /******************************************************************************/
@@ -174,13 +193,32 @@ void GameStateMainMenuUpdate()
 	}
 	if (exitDia == 1)
 	{
-		if (AEInputCheckTriggered(AEVK_Y))
+		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
 		{
-			gGameStateNext = GS_QUIT;
+			if (b != 1)
+				b = 1;
+			selectMainX -= 62;
 		}
-		if (AEInputCheckTriggered(AEVK_N ))
+		if (AEInputCheckTriggered(AEVK_D) || AEInputCheckTriggered(AEVK_RIGHT))
 		{
-			exitDia = 0;
+			if (b != 1)
+				b = 1;
+			selectMainX += 62;
+		}
+		if (selectMainX < -17)
+			selectMainX = 45;
+		if (selectMainX > 45)
+			selectMainX = -17;
+		if (AEInputCheckTriggered(AEVK_SPACE) && b == 1)
+		{
+			if (selectMainX == -17)
+			{
+				gGameStateNext = GS_QUIT;
+			}
+			else
+			{
+				exitDia = 0;
+			}
 		}
 	}
 	
@@ -209,6 +247,7 @@ void GameStateMainMenuDraw()
 	memset(strBuffer, 0, 100 * sizeof(char));
 	sprintf_s(strBuffer, "OUTBACK");
 
+
 	//For BG image
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(0.5f, 0.5f);
@@ -220,11 +259,14 @@ void GameStateMainMenuDraw()
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
 
-	//For the highlight
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
-	// Set position for the highlight
-	AEGfxSetPosition(-230, curMainMenu);
+	if (exitDia == 0)
+	{
+		//For the highlight
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
+		// Set position for the highlight
+		AEGfxSetPosition(-230, curMainMenu);
+	}
 
 	//The title's position
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -232,7 +274,7 @@ void GameStateMainMenuDraw()
 	AEGfxPrint(fontID, "LEVEL 1", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL 2", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL 3", -0.7f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "EXIT", -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
 	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -248,10 +290,17 @@ void GameStateMainMenuDraw()
 		// No tint
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		// Set texture
-		AEGfxTextureSet(exitTex, 1, 1);
-		AEGfxMeshDraw(exitMesh, AE_GFX_MDM_TRIANGLES);
-		AEGfxPrint(fontID, exit1, -0.41f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, exit2, -0.43f, -0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxTextureSet(MainExitTex, 1, 1);
+		AEGfxMeshDraw(MainExitMesh, AE_GFX_MDM_TRIANGLES);
+
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxMeshDraw(selectionMainMesh, AE_GFX_MDM_TRIANGLES);
+		// Set position for the highlight
+		AEGfxSetPosition(selectMainX, -52);
+		AEGfxPrint(fontID, MainQuit, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, exitComment, -0.45f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, MainConfirm, -0.1f, -0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 

@@ -608,7 +608,7 @@ void GameStatePlatformLoad(void)
 	memset(pause, 0, 100 * sizeof(char));
 	sprintf_s(pause, "PAUSED");
 	memset(conti, 0, 100 * sizeof(char));
-	sprintf_s(conti, "Press Q to continue, Press ESCAPE to go Menu");
+	sprintf_s(conti, "Press ESC to continue, Press BACKSPACE to go Menu");
 	//-------------------------------------------------------------------------
 
 }
