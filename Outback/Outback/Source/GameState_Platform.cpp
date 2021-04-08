@@ -46,6 +46,8 @@ static AEMtx33			MapTransform;
 static Player			pHero;
 
 const int				PIXEL = 40;
+float width;
+float height;
 
 float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
@@ -585,7 +587,9 @@ void GameStatePlatformLoad(void)
 	else
 	{
 		// Each block is set
-		AEMtx33Scale(&scale, PIXEL, PIXEL);
+		width = AEGetWindowWidth() / 20;
+		height = AEGetWindowHeight() / 15;
+		AEMtx33Scale(&scale, width, height);
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
@@ -1206,28 +1210,28 @@ void GameStatePlatformUpdate(void)
 			// Camera does not go out of bounds
 			if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
 			{
-				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * PIXEL;
+				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * width;
 			}
 			if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
 			{
-				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * PIXEL;
+				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * height;
 			}
 
 			if (pHero.posCurr.x < 10.0f)
 			{
-				camX = (float)(10.0f - BINARY_MAP_WIDTH / 2) * PIXEL;
+				camX = (float)(10.0f - BINARY_MAP_WIDTH / 2) * width;
 			}
 			if (pHero.posCurr.x > BINARY_MAP_WIDTH - 10.0f)
 			{
-				camX = (float)((BINARY_MAP_WIDTH - 10.0f) - BINARY_MAP_WIDTH / 2) * PIXEL;
+				camX = (float)((BINARY_MAP_WIDTH - 10.0f) - BINARY_MAP_WIDTH / 2) * width;
 			}
 			if (pHero.posCurr.y < 7.5f)
 			{
-				camY = (float)(7.5f - BINARY_MAP_HEIGHT / 2) * PIXEL;
+				camY = (float)(7.5f - BINARY_MAP_HEIGHT / 2) * height;
 			}
 			if (pHero.posCurr.y > BINARY_MAP_HEIGHT - 7.5f)
 			{
-				camY = (float)((BINARY_MAP_HEIGHT - 7.5f) - BINARY_MAP_HEIGHT / 2) * PIXEL;
+				camY = (float)((BINARY_MAP_HEIGHT - 7.5f) - BINARY_MAP_HEIGHT / 2) * height;
 			}
 		}
 		AEGfxSetCamPosition(camX, camY);

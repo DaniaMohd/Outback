@@ -21,6 +21,7 @@ int curr = 0;
 bool endless;
 extern bool newGame;
 extern int level;
+bool fullscreen;
 
 AEGfxVertexList *vertex = 0, *vertexBG = 0;
 AEGfxTexture	*texture = 0;
@@ -83,6 +84,7 @@ void GameStateMainMenuInit()
 	endless = false;
 	newGame = true;
 	level = 0;
+	fullscreen = true;
 }
 
 /******************************************************************************/
@@ -150,6 +152,16 @@ void GameStateMainMenuUpdate()
 
 	if (AEInputCheckTriggered(AEVK_N))
 	{
+		if (fullscreen == true)
+		{
+			fullscreen = false;
+		}
+		else
+		{
+			fullscreen = true;
+		}
+
+		AEToogleFullScreen(fullscreen);
 		if (endless == true)
 		{
 			endless = false;
