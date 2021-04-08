@@ -129,7 +129,7 @@ void GameObjInst::gameObjInstDrawObject(AEMtx33* map)
 	Particle effects
 */
 /******************************************************************************/
-void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
+void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type, unsigned int specific)
 {
 	AEVec2 pos; //position to come out from
 	AEVec2 vel;
@@ -150,7 +150,7 @@ void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
 					vel = { AERandFloat() * 10 , AERandFloat() * 10 };
 				}
 				
-				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 0.25f, &pos, &vel, 0);
+				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES_HIT, 0.25f, &pos, &vel, 0);
 				particle[i].counter = 0.25;
 				break;
 			}
@@ -184,22 +184,35 @@ void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
 					vel = { -3 , -3 };
 				}
 
-				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 0.25f, &pos, &vel, 0);
+				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES_HIT, 0.5f, &pos, &vel, 0);
 				particle[i].counter = 0.25;
 				j++;
 			}
 		}
 	}
-	if (type == P_HEALTH)
+	if (type == P_HEAL && specific > P_HEAL)
 	{
 		pos = { posCurr.x, posCurr.y + 0.5f };
 		vel = { 0, 3 };
-		for (unsigned int i = 0, j = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			if (particle[i].flag == 0)
 			{
-				particle[i].gameObjInstCreate(TYPE_OBJECT_REGEN, 1.0f, &pos, &vel, 0);
+				particle[i].gameObjInstCreate(specific+17, 0.5f, &pos, &vel, 0);
 				particle[i].counter = 0.25;
+			}
+		}
+	}
+	if (type == P_UPGRADE && specific > P_UPGRADE)
+	{
+		pos = { posCurr.x, posCurr.y + 0.5f };
+		vel = { 0, 1 };
+		for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			if (particle[i].flag == 0)
+			{
+				particle[i].gameObjInstCreate(specific + 7, 0.75f, &pos, &vel, 0);
+				particle[i].counter = 0.5f;
 			}
 		}
 	}

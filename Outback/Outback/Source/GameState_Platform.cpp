@@ -161,7 +161,7 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Hero Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Hero.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\AussieCowboy.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Hero Texture!");
 	}
 
@@ -184,7 +184,7 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Goal Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DoubleJumpUp.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 	}
 
@@ -276,7 +276,7 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Coin Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Coin.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Chest.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create Coin Texture!");
 	}
 
@@ -304,29 +304,6 @@ void GameStatePlatformLoad(void)
 	}
 	
 	//9
-	//Creating the Particle object
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_PARTICLES;
-
-		AEGfxMeshStart();
-
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
-	}
-
-	//10
 	//Creating the Bullets
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -348,7 +325,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create bullets!");
 	}
 
-	//11
+	//10
 	//Creating the Boomerang
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -370,76 +347,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create boomerang!");
 	}
 	
-	//12
-	//Damage upgrade
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_DAMAGE;
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Speed Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\DamageUp.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
-	}
-
-	//13
-	//Range upgrade
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_RANGE;
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\RangeUp.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
-	}
-
-	//14
-	//Speed upgrade
-	{
-		pObj = sGameObjList + sGameObjNum++;
-		pObj->type = TYPE_OBJECT_SPEED;
-
-
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
-			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-		AEGfxTriAdd(
-			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
-			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
-
-		pObj->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\SpeedUp.png");
-		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
-	}
-
-	//15
+	//11
 	//max health
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -462,7 +370,7 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//16
+	//12
 	//current health
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -485,7 +393,76 @@ void GameStatePlatformLoad(void)
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//17
+	//13
+	//Damage upgrade
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_DAMAGE;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create Speed Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Damage.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
+	//14
+	//Range upgrade
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_RANGE;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Range.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
+	}
+
+	//15
+	//Speed upgrade
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_SPEED;
+
+
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Speed1.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create speed texture!!");
+	}
+
+	//16
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -504,11 +481,11 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\HealthUp.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Heart.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//18
+	//17
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -527,11 +504,11 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\vampire.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Vamp.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
 	}
 
-	//19
+	//18
 	//HP up
 	{
 		pObj = sGameObjList + sGameObjNum++;
@@ -550,8 +527,77 @@ void GameStatePlatformLoad(void)
 
 		pObj->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Mesh!");
-		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\RegenUp.png");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Regen.png");
 		AE_ASSERT_MESG(pObj->pTex, "Failed to create damage texture!!");
+	}
+
+	//19
+	//Creating the Particle object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_PARTICLES_HIT;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Particle.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
+	}
+
+	//20
+	//Creating the Particle object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_PARTICLES_REGEN;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\regen_1.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
+	}
+
+	//21
+	//Creating the Particle object
+	{
+		pObj = sGameObjList + sGameObjNum++;
+		pObj->type = TYPE_OBJECT_PARTICLES_HEAL;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			-0.5f, -0.5f, 0xFFFFFF00, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			0.5f, -0.5f, 0xFFFFFF00, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFF00, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFF00, 0.0f, 0.0f);
+
+		pObj->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(pObj->pMesh, "Failed to create object!!");
+		pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Health.png");
+		AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
 	}
 
 	// Loading the levels
@@ -930,7 +976,7 @@ void GameStatePlatformUpdate(void)
 		if (pHero.regenCounter >= 1 && pHero.regeneration > 0 && pHero.currentHealth < pHero.maxHealth)
 		{
 			pHero.currentHealth += pHero.regeneration;
-			pHero.particleEffect(sParticles, P_HEALTH);
+			pHero.particleEffect(sParticles, P_HEAL, P_REGEN);
 			pHero.regenCounter = 0;
 		}
 
@@ -1036,6 +1082,7 @@ void GameStatePlatformUpdate(void)
 				{
 					onChange = true;
 					pHero.currentHealth -= sEnemies[i].damage;
+					pHero.particleEffect(sParticles, P_HIT);
 					pHero.counter = 0;
 				}
 			}
@@ -1064,26 +1111,32 @@ void GameStatePlatformUpdate(void)
 			{
 				if (sBlocks[i].pObject->type == TYPE_OBJECT_DAMAGE)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_DAMAGE);
 					pHero.DamageUp();
 				}
-				else if (sBlocks[i].pObject->type == TYPE_OBJECT_RANGE)
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_RANGE)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_RANGE);
 					pHero.RangeUp();
 				}
-				else if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_SPEED)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_SPEED);
 					pHero.SpeedUp();
 				}
-				else if (sBlocks[i].pObject->type == TYPE_OBJECT_HPUP)
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_HPUP)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_HPUP);
 					pHero.HpUp();
 				}
-				else if (sBlocks[i].pObject->type == TYPE_OBJECT_VAMP)
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_VAMP)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_VAMP);
 					pHero.VampUp();
 				}
-				else if (sBlocks[i].pObject->type == TYPE_OBJECT_REGEN)
+				if (sBlocks[i].pObject->type == TYPE_OBJECT_REGEN)
 				{
+					pHero.particleEffect(sParticles, P_UPGRADE, P_U_REGEN);
 					pHero.RegenUp();
 				}
 				sBlocks[i].gameObjInstDestroy();
@@ -1145,6 +1198,7 @@ void GameStatePlatformUpdate(void)
 						if (sEnemies[j].healthPoints <= 0)
 						{
 							pHero.currentHealth += pHero.vampirism;
+							pHero.particleEffect(sParticles, P_HEAL, P_VAMP);
 							sEnemies[j].gameObjInstDestroy();
 							printf("enemy ded\n");
 						}
@@ -1166,6 +1220,7 @@ void GameStatePlatformUpdate(void)
 			{
 				sProjectiles[i].gameObjInstDestroy();
 				pHero.currentHealth -= level;
+				pHero.particleEffect(sParticles, P_HIT);
 				//if (pHero.counter >= pHero.invincibleTimer)
 				//{
 				//	onChange = true;

@@ -32,25 +32,36 @@ enum TYPE_OBJECT
 	TYPE_OBJECT_ENEMY3,			//6
 	TYPE_OBJECT_COIN,			//7
 	TYPE_OBJECT_LADDER,			//8
-	TYPE_OBJECT_PARTICLES,		//9
-	TYPE_OBJECT_BULLET,			//10
-	TYPE_OBJECT_BOOMERANG,		//11
-	TYPE_OBJECT_DAMAGE,			//12
-	TYPE_OBJECT_RANGE,			//13
-	TYPE_OBJECT_SPEED,			//14
-	TYPE_OBJECT_MAXHP,			//15
-	TYPE_OBJECT_CURRHP,			//16
-	TYPE_OBJECT_HPUP,			//17
-	TYPE_OBJECT_VAMP,			//18
-	TYPE_OBJECT_REGEN			//19
+	TYPE_OBJECT_BULLET,			//9
+	TYPE_OBJECT_BOOMERANG,		//10
+	TYPE_OBJECT_MAXHP,			//11
+	TYPE_OBJECT_CURRHP,			//12
+	TYPE_OBJECT_DAMAGE,			//13
+	TYPE_OBJECT_RANGE,			//14
+	TYPE_OBJECT_SPEED,			//15
+	TYPE_OBJECT_HPUP,			//16
+	TYPE_OBJECT_VAMP,			//17
+	TYPE_OBJECT_REGEN,			//18
+	TYPE_OBJECT_PARTICLES_HIT,	//19
+	TYPE_OBJECT_PARTICLES_REGEN,//20
+	TYPE_OBJECT_PARTICLES_HEAL	//21
 };
 
 //### Particle Types
 enum PARTICLE_TYPE
 {
-	P_TRAIL,			//0
-	P_HIT,				//1
-	P_HEALTH			
+	P_TRAIL,	//0
+	P_HIT,		//1
+	P_HEAL,		//2
+	P_REGEN,	//3
+	P_VAMP,		//4
+	P_UPGRADE,	//5
+	P_U_DAMAGE,	//6
+	P_U_RANGE,	//7
+	P_U_SPEED,	//8
+	P_U_HPUP,	//9
+	P_U_VAMP,	//10
+	P_U_REGEN	//11
 };
 
 enum class STATE
@@ -100,7 +111,7 @@ public:
 
 	void			PowerUpCreate(AEVec2 pos);	//creates power ups
 
-	void			particleEffect(GameObjInst* particle, unsigned int type);
+	void			particleEffect(GameObjInst* particle, unsigned int type, unsigned int specific = 0);
 	//### should add particle effects here
 };
 
