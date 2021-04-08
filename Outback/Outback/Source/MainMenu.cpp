@@ -192,7 +192,6 @@ void GameStateMainMenuDraw()
 	AEGfxMeshDraw(vertexBG, AE_GFX_MDM_TRIANGLES);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
 
 	//For the highlight

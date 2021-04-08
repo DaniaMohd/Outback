@@ -643,17 +643,17 @@ void GameStatePlatformLoad(void)
 	//-------------------------------------------------------------------------
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-150.0f * 2, -100.0f, 0x00FF00FF, 0.0f, 0.0f,
-		150.0f * 2, -100.0f, 0x00FFFF00, 0.0f, 0.0f,
-		-150.0f * 2, 100.0f, 0x0000FFFF, 0.0f, 0.0f);
+		-300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-300.0f, 200.0f, 0x0000FFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		150.0f * 2, -100.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		-150.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		150.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f);
+		300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-300.0f, 200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		300.0f, 200.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 	pauseMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pauseMesh, "Failed to create range Mesh!");
-	pauseTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+	pauseTex = AEGfxTextureLoad("..\\Resources\\Textures\\Pause.png");
 	AE_ASSERT_MESG(pauseTex, "Failed to create pause text!!");
 	memset(pause, 0, 100 * sizeof(char));
 	sprintf_s(pause, "PAUSED");
@@ -978,6 +978,10 @@ void GameStatePlatformUpdate(void)
 			pHero.currentHealth += pHero.regeneration;
 			pHero.particleEffect(sParticles, P_HEAL, P_REGEN);
 			pHero.regenCounter = 0;
+		}
+		if (0 != GetCellValue((int)pHero.posCurr.x, (int)pHero.posCurr.y))
+		{
+			pHero.posCurr.y += 1;
 		}
 
 		//Particle update
@@ -1389,16 +1393,30 @@ void GameStatePlatformDraw(void)
 
 	if (gameIsPaused == true)
 	{
+		//AEMtx33 scale;
+		//AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		//AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+		//AEMtx33Scale(&scale, 600.0f, 400.0f);
+		//AEGfxSetTransform(scale.m);
+		//// Set position for object 2
+		//AEGfxSetPosition(camX, camY);	//rtriangle
+		//// No tint
+		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		//// Set texture
+		//AEGfxTextureSet(pauseTex, 1, 1);
+		//AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
+
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		// Set position for object 2
-		AEGfxSetPosition(camX, camY);	//rtriangle
-		// No tint
+		AEGfxSetPosition(camX, camY);
+		AEGfxTextureSet(pauseTex, 0, 0);
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// Set texture
-		AEGfxTextureSet(pauseTex, 1, 1);
 		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
-		AEGfxPrint(fontID, pause, -0.1f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, conti, -0.65f, -0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetTransparency(1.0f);
+		AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, conti, -0.65f, 0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 
