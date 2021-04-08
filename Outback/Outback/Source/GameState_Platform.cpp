@@ -593,13 +593,13 @@ void GameStatePlatformLoad(void)
 	//-------------------------------------------------------------------------
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-150.0f * 2, -200.0f, 0x00FF00FF, 0.0f, 0.0f,
-		150.0f * 2, -200.0f, 0x00FFFF00, 0.0f, 0.0f,
-		-150.0f * 2, 200.0f, 0x0000FFFF, 0.0f, 0.0f);
+		-150.0f * 2, -100.0f, 0x00FF00FF, 0.0f, 0.0f,
+		150.0f * 2, -100.0f, 0x00FFFF00, 0.0f, 0.0f,
+		-150.0f * 2, 100.0f, 0x0000FFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		150.0f * 2, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		-150.0f * 2, 200.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		150.0f * 2, 200.0f, 0x00FFFFFF, 0.0f, 0.0f);
+		150.0f * 2, -100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-150.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		150.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 	pauseMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pauseMesh, "Failed to create range Mesh!");
@@ -608,7 +608,7 @@ void GameStatePlatformLoad(void)
 	memset(pause, 0, 100 * sizeof(char));
 	sprintf_s(pause, "PAUSED");
 	memset(conti, 0, 100 * sizeof(char));
-	sprintf_s(conti, "Press Q to continue, Press ESC to return to Menu");
+	sprintf_s(conti, "Press Q to continue, Press BACKSPACE to go Menu");
 	//-------------------------------------------------------------------------
 
 }
@@ -743,13 +743,11 @@ void GameStatePlatformInit(void)
 void GameStatePlatformUpdate(void)
 {
 	int i, j;
-	
-	if (gameIsPaused == true)
+
+	if (AEInputCheckTriggered(AEVK_BACK))
 	{
-		if (AEInputCheckTriggered(AEVK_ESCAPE))
-		{
-			gGameStateNext = GS_MAINMENU;
-		}
+		gGameStateNext = GS_MAINMENU;
+	
 	}
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
@@ -1327,8 +1325,8 @@ void GameStatePlatformDraw(void)
 		// Set texture
 		AEGfxTextureSet(pauseTex, 1, 1);
 		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
-		AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, conti, -0.6f, 0.25f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, pause, -0.1f, 0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, conti, -0.65f, -0.1f, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 

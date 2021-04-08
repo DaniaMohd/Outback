@@ -44,24 +44,24 @@ void OBGameOverInit()
 	sprintf_s(barrow, "^^^");
 
 	memset(bcomment, 0, 100 * sizeof(char));
-	sprintf_s(bcomment, "Left/Right to control, Enter to choose");
+	sprintf_s(bcomment, "Left/Right to control, SPACE to choose");
 }
 
 void OBGameOverUpdate()
 {
-	if (AEInputCheckTriggered(AEVK_RIGHT))
+	if (AEInputCheckTriggered(AEVK_RIGHT) || AEInputCheckTriggered(AEVK_D))
 	{
 		currGG += 0.30f;
 		selection += 1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_LEFT))
+	if (AEInputCheckTriggered(AEVK_LEFT) || AEInputCheckTriggered(AEVK_A))
 	{
 		currGG -= 0.30f;
 		selection -= 1;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 2)
+	if (AEInputCheckTriggered(AEVK_SPACE) && selection == 2)
 	{
 		gGameStateNext = GS_LEVEL1;
 	}
@@ -75,10 +75,10 @@ void OBGameOverUpdate()
 	//if (AEInputCheckTriggered(AEVK_RETURN) && currGG == -0.15f)
 		//gGameStateNext = OB_CREDITS;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 1)
+	if (AEInputCheckTriggered(AEVK_SPACE) && selection == 1)
 		gGameStateNext = GS_MAINMENU;
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && selection == 0)
+	if (AEInputCheckTriggered(AEVK_SPACE) && selection == 0)
 		gGameStateNext = GS_QUIT;
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
@@ -106,12 +106,12 @@ void OBGameOverDraw()
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetTransparency(1.0f);
-	AEGfxPrint(fontID, gameOverMsg, -0.7, 0.50f, 1.1f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, gameOverMsg, -0.5, 0.50f, 1.1f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, brestart, 0.2, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, mainMenu, -0.16f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, quit, -0.4f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, barrow, currGG, 0.07f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, bcomment, -0.40f, -0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, bcomment, -0.45f, -0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
 	
 }
 
