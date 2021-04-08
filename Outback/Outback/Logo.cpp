@@ -130,7 +130,7 @@ void logoDraw()
 	{
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetPosition(-200.0f, 0.0f);
+		AEGfxSetPosition(-185.0f, 0.0f);
 		AEGfxTextureSet(fmodTex, 0.0f, 0.0f);
 		AEGfxSetTintColor(1.f, 1.0f, 1.0f, 0.5f);
 		AEGfxSetTransparency(1.0f);
