@@ -15,19 +15,23 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 #include "main.h"
 
-extern s8 fontID;
-
 static AEGfxTexture		* credsTex, * headTex, * tmTex, * profTex, * endTex, * presTex, * execTex, * backTex;
 static AEGfxVertexList	* credsMesh, * headMesh, * tmMesh, * profMesh, * endMesh, * presMesh, * execMesh, * backMesh;
+//2
 
-char strBuffer[100];
 
+/******************************************************************************/
+/*!
+	"Load" Credits Screen
+*/
+/******************************************************************************/
 void CreditsLoad()
 {
-	// Create credits header
+	
 	AEGfxSetCamPosition(0, 0);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
+	// Create credits header
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		-50.0f, -50.0f, 0xFFFFFFFF, 0.0f, 1.0f,
@@ -144,15 +148,15 @@ void CreditsLoad()
 	// Create end of credits
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-95.0f, -95.0f, 0xFFFFFFFF, 0.0f, 1.0f,
-		450.0f, -95.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-		-95.0f, 95.0f, 0xFFFFFFFF, 0.0f, 0.0f
+		-125.0f, -125.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		400.0f, -125.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-125.0f, 125.0f, 0xFFFFFFFF, 0.0f, 0.0f
 	);
 
 	AEGfxTriAdd(
-		450.0f, -95.0f, 0xFFFFFFFF, 1.0f, 1.0f,
-		450.0f, 95.0f, 0xFFFFFFFF, 1.0f, 0.0f,
-		-95.0f, 95.0f, 0xFFFFFFFF, 0.0f, 0.0f
+		400.0f, -125.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+		400.0f, 125.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-125.0f, 125.0f, 0xFFFFFFFF, 0.0f, 0.0f
 	);
 
 	endMesh = AEGfxMeshEnd();
@@ -178,13 +182,25 @@ void CreditsLoad()
 	AE_ASSERT_MESG(backMesh, "Failed to create return mesh!");
 	backTex = AEGfxTextureLoad("..\\Resources\\Logo\\back0.png");
 	AE_ASSERT_MESG(backTex, "Failed to create return texture!");
-}
 
+}
+//59
+
+/******************************************************************************/
+/*!
+	"Initialize" Credits Screen
+*/
+/******************************************************************************/
 void CreditsInit()
 {
 
 }
 
+/******************************************************************************/
+/*!
+	"Update" Credits Screen
+*/
+/******************************************************************************/
 void CreditsUpdate()
 {
 	if (AEInputCheckTriggered(AEVK_BACK))
@@ -192,13 +208,19 @@ void CreditsUpdate()
 		gGameStateNext = GS_MAINMENU;
 	}
 }
+//3
 
+/******************************************************************************/
+/*!
+	"Draw" Credits Screen
+*/
+/******************************************************************************/
 void CreditsDraw()
 {
 	// Drawing credits header
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-185.0f, 255.0f);
+	AEGfxSetPosition(-195.0f, 255.0f);
 	AEGfxTextureSet(credsTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -216,7 +238,7 @@ void CreditsDraw()
 	// Drawing team members
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-285.0f, 35.0f);
+	AEGfxSetPosition(-265.0f, 35.0f);
 	AEGfxTextureSet(tmTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -225,7 +247,7 @@ void CreditsDraw()
 	// Drawing Professors 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-285.0f, -125.0f);
+	AEGfxSetPosition(-265.0f, -125.0f);
 	AEGfxTextureSet(profTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -252,7 +274,7 @@ void CreditsDraw()
 	// Drawing the end of credits
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-185.0f, -230.0f);
+	AEGfxSetPosition(-135.0f, -230.0f);
 	AEGfxTextureSet(endTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -261,21 +283,33 @@ void CreditsDraw()
 	// Lead players back to main menu
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-185.0f, -310.0f);
+	AEGfxSetPosition(-175.0f, -310.0f);
 	AEGfxTextureSet(backTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
 	AEGfxMeshDraw(backMesh, AE_GFX_MDM_TRIANGLES);
 
 }
+//57
 
+/******************************************************************************/
+/*!
+	"Free" Credits Screen
+*/
+/******************************************************************************/
 void CreditsFree()
 {
 
 }
 
+/******************************************************************************/
+/*!
+	"Unload" Credits Screen
+*/
+/******************************************************************************/
 void CreditsUnload()
 {
+	// Free Mesh
 	AEGfxMeshFree(credsMesh);
 	AEGfxMeshFree(headMesh);
 	AEGfxMeshFree(tmMesh);
@@ -285,6 +319,7 @@ void CreditsUnload()
 	AEGfxMeshFree(endMesh);
 	AEGfxMeshFree(backMesh);
 
+	// Unload Texture
 	AEGfxTextureUnload(credsTex);
 	AEGfxTextureUnload(headTex);
 	AEGfxTextureUnload(tmTex);
@@ -294,3 +329,4 @@ void CreditsUnload()
 	AEGfxTextureUnload(endTex);
 	AEGfxTextureUnload(backTex);
 }
+//17

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \file		Credits.h
-\author 	Lim Sim Chee, Shannon
+\author 	Lim Sim Chee, Shannon	9 lines x 100% code contribution
 \par    	email: lim.s@digipen.edu
 \date   	3rd April 2021
 \brief      This file contains the declearations of the functions needed for 

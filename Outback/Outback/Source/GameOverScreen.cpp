@@ -25,6 +25,8 @@ char gameOverMsg[100], brestart[100], mainMenu[100], quit[100], barrow[100], bco
 void OBGameOverLoad()
 {
 	AEGfxSetBackgroundColor(0.10f, 0.00f, 0.08f);
+	
+	GameOverBGMLoad();
 }
 
 void OBGameOverInit()
@@ -131,6 +133,6 @@ void OBGameOverFree()
 
 void OBGameOverUnload()
 {
-
+	GameOverBGMUnload();
 }
 
