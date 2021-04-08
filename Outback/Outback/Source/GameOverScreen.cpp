@@ -16,6 +16,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Main.h"
 
 extern s8 fontID;
+extern int level;
 f32 currGG = -0.39f;
 int selection = 0;
 char gameOverMsg[100], brestart[100], mainMenu[100], quit[100], barrow[100], bcomment[100];
@@ -64,6 +65,7 @@ void OBGameOverUpdate()
 	if (AEInputCheckTriggered(AEVK_SPACE) && selection == 2)
 	{
 		gGameStateNext = GS_LEVEL1;
+		level = 0;
 	}
 
 	//if (AEInputCheckTriggered(AEVK_RETURN) && currPause == 0.15f)

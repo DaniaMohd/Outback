@@ -45,9 +45,8 @@ static AEMtx33			MapTransform;
 // Hero instance
 static Player			pHero;
 
-const int				PIXEL = 40;
-float width;
-float height;
+float pixelWidth;
+float pixelHeight;
 
 float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
@@ -70,7 +69,8 @@ AEGfxVertexList*		pauseMesh;
 AEGfxTexture*			pauseTex;
 char					pause[100], conti[100];
 extern					s8 fontID;
-
+float EnemySpawnTime;
+float enemySpawnRate = 5;
 
 /******************************************************************************/
 /*!
@@ -587,9 +587,9 @@ void GameStatePlatformLoad(void)
 	else
 	{
 		// Each block is set
-		width = AEGetWindowWidth() / 20;
-		height = AEGetWindowHeight() / 15;
-		AEMtx33Scale(&scale, width, height);
+		pixelWidth = AEGetWindowWidth() / 20;
+		pixelHeight = AEGetWindowHeight() / 15;
+		AEMtx33Scale(&scale, pixelWidth, pixelHeight);
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
@@ -612,7 +612,7 @@ void GameStatePlatformLoad(void)
 	memset(pause, 0, 100 * sizeof(char));
 	sprintf_s(pause, "PAUSED");
 	memset(conti, 0, 100 * sizeof(char));
-	sprintf_s(conti, "Press Q to continue, Press BACKSPACE to go Menu");
+	sprintf_s(conti, "Press ESC to continue, Press BACKSPACE to go Menu");
 	//-------------------------------------------------------------------------
 
 }
@@ -732,7 +732,7 @@ void GameStatePlatformInit(void)
 	}
 
 	//### create multiple spawns
-	for (int a = 0; a < 10; a++)
+	for (int a = 0; a < 5; a++)
 	{
 		enemyspawning(pHero, sEnemies);
 	}
@@ -748,12 +748,17 @@ void GameStatePlatformUpdate(void)
 {
 	int i, j;
 
-	if (AEInputCheckTriggered(AEVK_BACK))
+	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true)
 	{
 		gGameStateNext = GS_MAINMENU;
-	
 	}
-	if (AEInputCheckTriggered(AEVK_Q))
+
+	if (AESysGetWindowHandle() != GetActiveWindow())
+	{
+		gameIsPaused = true;
+	}
+
+	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		if (gameIsPaused == false)
 		{
@@ -772,19 +777,19 @@ void GameStatePlatformUpdate(void)
 		if (AEInputCheckCurr(AEVK_A) || AEInputCheckCurr(AEVK_LEFT))
 		{
 			pHero.velCurr.x = -MOVE_VELOCITY_HERO;
-			if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
-			{
-				pHero.particleEffect(sParticles, P_TRAIL);
-			}
+			//if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+			//{
+			//	pHero.particleEffect(sParticles, P_TRAIL);
+			//}
 		}
 		// Right
 		else if (AEInputCheckCurr(AEVK_D) || AEInputCheckCurr(AEVK_RIGHT))
 		{
 			pHero.velCurr.x = MOVE_VELOCITY_HERO;
-			if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
-			{
-				pHero.particleEffect(sParticles, P_TRAIL);
-			}
+			//if (pHero.gridCollisionFlag == COLLISION_BOTTOM)
+			//{
+			//	pHero.particleEffect(sParticles, P_TRAIL);
+			//}
 		}
 		else
 			pHero.velCurr.x = 0;
@@ -812,10 +817,10 @@ void GameStatePlatformUpdate(void)
 		}
 
 		// Main Menu
-		if (AEInputCheckTriggered(AEVK_BACK))
-		{
-			gGameStateNext = GS_MAINMENU;
-		}
+		//if (AEInputCheckTriggered(AEVK_BACK))
+		//{
+		//	gGameStateNext = GS_MAINMENU;
+		//}
 
 		//firing
 		if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
@@ -907,6 +912,13 @@ void GameStatePlatformUpdate(void)
 			sEnemies[i].gameObjInstBoundingBox();
 		}
 
+		EnemySpawnTime += g_dt;
+		if (EnemySpawnTime > enemySpawnRate)
+		{
+			EnemySpawnTime = 0;
+			enemyspawning(pHero, sEnemies);
+		}
+
 		//Yu Xi goal update
 		sGoal.gameObjInstBoundingBox();
 
@@ -915,9 +927,10 @@ void GameStatePlatformUpdate(void)
 		pHero.gameObjInstUpdatePos();
 		pHero.gameObjInstBoundingBox();
 		pHero.regenCounter += g_dt;
-		if (pHero.regenCounter >= 1)
+		if (pHero.regenCounter >= 1 && pHero.regeneration > 0 && pHero.currentHealth < pHero.maxHealth)
 		{
 			pHero.currentHealth += pHero.regeneration;
+			pHero.particleEffect(sParticles, P_HEALTH);
 			pHero.regenCounter = 0;
 		}
 
@@ -929,7 +942,7 @@ void GameStatePlatformUpdate(void)
 
 			sParticles[i].gameObjInstUpdatePos();
 			sParticles[i].counter -= g_dt;
-			sParticles[i].velCurr.y = GRAVITY * g_dt + sParticles[i].velCurr.y;
+			//sParticles[i].velCurr.y = GRAVITY * g_dt + sParticles[i].velCurr.y;
 			if (sParticles[i].counter <= 0)
 			{
 				sParticles[i].gameObjInstDestroy();
@@ -1210,28 +1223,28 @@ void GameStatePlatformUpdate(void)
 			// Camera does not go out of bounds
 			if (pHero.posCurr.x >= 10.0f && pHero.posCurr.x <= BINARY_MAP_WIDTH - 10.0f)
 			{
-				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * width;
+				camX = (float)(pHero.posCurr.x - BINARY_MAP_WIDTH / 2) * pixelWidth;
 			}
 			if (pHero.posCurr.y >= 7.5f && pHero.posCurr.y <= BINARY_MAP_HEIGHT - 7.5f)
 			{
-				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * height;
+				camY = (float)(pHero.posCurr.y - BINARY_MAP_HEIGHT / 2) * pixelHeight;
 			}
 
 			if (pHero.posCurr.x < 10.0f)
 			{
-				camX = (float)(10.0f - BINARY_MAP_WIDTH / 2) * width;
+				camX = (float)(10.0f - BINARY_MAP_WIDTH / 2) * pixelWidth;
 			}
 			if (pHero.posCurr.x > BINARY_MAP_WIDTH - 10.0f)
 			{
-				camX = (float)((BINARY_MAP_WIDTH - 10.0f) - BINARY_MAP_WIDTH / 2) * width;
+				camX = (float)((BINARY_MAP_WIDTH - 10.0f) - BINARY_MAP_WIDTH / 2) * pixelWidth;
 			}
 			if (pHero.posCurr.y < 7.5f)
 			{
-				camY = (float)(7.5f - BINARY_MAP_HEIGHT / 2) * height;
+				camY = (float)(7.5f - BINARY_MAP_HEIGHT / 2) * pixelHeight;
 			}
 			if (pHero.posCurr.y > BINARY_MAP_HEIGHT - 7.5f)
 			{
-				camY = (float)((BINARY_MAP_HEIGHT - 7.5f) - BINARY_MAP_HEIGHT / 2) * height;
+				camY = (float)((BINARY_MAP_HEIGHT - 7.5f) - BINARY_MAP_HEIGHT / 2) * pixelHeight;
 			}
 		}
 		AEGfxSetCamPosition(camX, camY);
@@ -1323,7 +1336,7 @@ void GameStatePlatformDraw(void)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 2
-		AEGfxSetPosition(0.0f, 0.0f);	//rtriangle
+		AEGfxSetPosition(camX, camY);	//rtriangle
 		// No tint
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		// Set texture

@@ -4,9 +4,6 @@
     <ClCompile Include="Audio.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -43,9 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Audio.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\Collision.h">

@@ -169,24 +169,37 @@ void GameObjInst::particleEffect(GameObjInst* particle, unsigned int type)
 				}
 				else if (j == 0)
 				{
-					vel = { 5 , 5 };
+					vel = { 3 , 3 };
 				}
 				else if (j == 1)
 				{
-					vel = { -5 , 5 };
+					vel = { -3 , 3 };
 				}
 				else if (j == 2)
 				{
-					vel = { 5 , -5 };
+					vel = { 3 , -3 };
 				}
 				else if (j == 3)
 				{
-					vel = { -5 , -5 };
+					vel = { -3 , -3 };
 				}
 
 				particle[i].gameObjInstCreate(TYPE_OBJECT_PARTICLES, 0.25f, &pos, &vel, 0);
 				particle[i].counter = 0.25;
 				j++;
+			}
+		}
+	}
+	if (type == P_HEALTH)
+	{
+		pos = { posCurr.x, posCurr.y + 0.5f };
+		vel = { 0, 3 };
+		for (unsigned int i = 0, j = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+			if (particle[i].flag == 0)
+			{
+				particle[i].gameObjInstCreate(TYPE_OBJECT_REGEN, 1.0f, &pos, &vel, 0);
+				particle[i].counter = 0.25;
 			}
 		}
 	}
@@ -249,7 +262,7 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 	healthPoints = 50 * level;
 	hit1 = false;
 	hit2 = false;
-	damage = 10 * level;
+	damage = 5 + 5 * level;
 	detectionRadius = 10.0f;
 	counter1 = float(rand()) / float((RAND_MAX));
 }
@@ -569,7 +582,7 @@ void Player::resetPower()
 	powerDamage = 10;
 	powerSpeed = 1;
 	vampirism = 0;
-	regeneration = 1;
+	regeneration = 0;
 }
 
 void Player::RangeUp()

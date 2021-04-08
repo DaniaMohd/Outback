@@ -49,7 +49,8 @@ enum TYPE_OBJECT
 enum PARTICLE_TYPE
 {
 	P_TRAIL,			//0
-	P_HIT				//1
+	P_HIT,				//1
+	P_HEALTH			
 };
 
 enum class STATE

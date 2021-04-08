@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="Source\Collision.cpp" />
@@ -26,7 +25,6 @@
     <ClCompile Include="Source\Win.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Credits.h" />
     <ClInclude Include="Include\Audio.h" />
     <ClInclude Include="Include\Collision.h" />
