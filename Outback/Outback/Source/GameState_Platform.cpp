@@ -742,12 +742,10 @@ void GameStatePlatformUpdate(void)
 {
 	int i, j;
 
-	if (gameIsPaused == true)
+	if (AEInputCheckTriggered(AEVK_BACK))
 	{
-		if (AEInputCheckTriggered(AEVK_ESCAPE))
-		{
-			gGameStateNext = GS_MAINMENU;
-		}
+		gGameStateNext = GS_MAINMENU;
+	
 	}
 	if (AEInputCheckTriggered(AEVK_Q))
 	{
