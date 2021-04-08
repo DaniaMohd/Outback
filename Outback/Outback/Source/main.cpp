@@ -33,6 +33,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	UNREFERENCED_PARAMETER(command_line);
 	// Initialize the system
 	AESysInit (instanceH, show, 800, 600, 1, 60, false, NULL);
+	AESysSetWindowTitle("Outback");
 	fontTitle = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 28 * 3);
 	fontID = AEGfxCreateFont("../Resources/Fonts/Arial Italic.ttf", 22);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.5f);
@@ -70,7 +71,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 			AESysFrameEnd();
 
 			// check if forcing the application to quit
-			if ((AESysDoesWindowExist() == false) || AEInputCheckTriggered(AEVK_ESCAPE))
+			if ((AESysDoesWindowExist() == false))
 				gGameStateNext = GS_QUIT;
 
 			g_dt = (f32)AEFrameRateControllerGetFrameTime();

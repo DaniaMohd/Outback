@@ -139,6 +139,7 @@ public:
 	//HEALTH
 	int 			maxHealth;
 	int				currentHealth;
+	float			regenCounter;
 
 	//How long player is invicible after touching enemy
 	float			invincibleTimer;

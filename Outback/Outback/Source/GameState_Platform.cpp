@@ -51,7 +51,8 @@ float                   camX = 0.0f; //camera on x-axis
 float                   camY = 0.0f; //camera on y-axis
 
 static bool             onChange = true; //when touching an enemy or coin
-//YuXi
+
+int						level;
 bool					win;
 static GameObjInst		sGoal;
 int						sGoalNum;
@@ -623,6 +624,7 @@ void GameStatePlatformInit(void)
 	currSpawn = 0;
 	totalSpawn = 0;
 	totalGoals = 0;
+	++level;
 	for (int y = 0; y < BINARY_MAP_HEIGHT; ++y)
 	{
 		for (int x = 0; x < BINARY_MAP_WIDTH; ++x)
@@ -741,7 +743,7 @@ void GameStatePlatformInit(void)
 void GameStatePlatformUpdate(void)
 {
 	int i, j;
-
+	
 	if (gameIsPaused == true)
 	{
 		if (AEInputCheckTriggered(AEVK_ESCAPE))
@@ -910,6 +912,12 @@ void GameStatePlatformUpdate(void)
 		pHero.velCurr.y = GRAVITY * g_dt + pHero.velCurr.y;
 		pHero.gameObjInstUpdatePos();
 		pHero.gameObjInstBoundingBox();
+		pHero.regenCounter += g_dt;
+		if (pHero.regenCounter >= 1)
+		{
+			pHero.currentHealth += pHero.regeneration;
+			pHero.regenCounter = 0;
+		}
 
 		//Particle update
 		for (i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
@@ -1107,7 +1115,6 @@ void GameStatePlatformUpdate(void)
 					{
 						if (sEnemies[j].hit1 == false && sProjectiles[i].boomerangReturning == false)
 						{
-							pHero.currentHealth += pHero.vampirism;
 							sEnemies[j].healthPoints -= pHero.powerDamage;
 							sEnemies[j].hit1 = true;
 							sEnemies[j].particleEffect(sParticles, P_HIT);
@@ -1115,7 +1122,6 @@ void GameStatePlatformUpdate(void)
 						}
 						if (sEnemies[j].hit2 == false && sProjectiles[i].boomerangReturning == true)
 						{
-							pHero.currentHealth += pHero.vampirism;
 							sEnemies[j].healthPoints -= pHero.powerDamage;
 							sEnemies[j].hit2 = true;
 							sEnemies[j].particleEffect(sParticles, P_HIT);
@@ -1123,7 +1129,7 @@ void GameStatePlatformUpdate(void)
 						}
 						if (sEnemies[j].healthPoints <= 0)
 						{
-							pHero.currentHealth += pHero.regeneration;
+							pHero.currentHealth += pHero.vampirism;
 							sEnemies[j].gameObjInstDestroy();
 							printf("enemy ded\n");
 						}
@@ -1144,7 +1150,7 @@ void GameStatePlatformUpdate(void)
 				&& sProjectiles[i].pObject->type == TYPE_OBJECT_BULLET)
 			{
 				sProjectiles[i].gameObjInstDestroy();
-				pHero.currentHealth -= 1;
+				pHero.currentHealth -= level;
 				//if (pHero.counter >= pHero.invincibleTimer)
 				//{
 				//	onChange = true;

@@ -1,6 +1,7 @@
 #include "main.h"
 
 extern s8 fontID;
+extern int level;
 
 //GameObjInst functions
 /******************************************************************************/
@@ -245,10 +246,10 @@ void Enemy::enemyCreate(unsigned int enemyType, AEVec2* pPos)
 
 	state = STATE::STATE_GOING_LEFT;
 	innerState = INNER_STATE::INNER_STATE_ON_ENTER;
-	healthPoints = 50;
+	healthPoints = 50 * level;
 	hit1 = false;
 	hit2 = false;
-	damage = 10;
+	damage = 10 * level;
 	detectionRadius = 10.0f;
 	counter1 = float(rand()) / float((RAND_MAX));
 }
@@ -559,6 +560,7 @@ void Player::healthDisplay(float camX, float camY)
 
 void Player::resetPower()
 {
+	regenCounter = 0;
 	maxHealth = currentHealth = 100;
 	baseRange = 20;
 	baseDamage = 10;
@@ -567,7 +569,7 @@ void Player::resetPower()
 	powerDamage = 10;
 	powerSpeed = 1;
 	vampirism = 0;
-	regeneration = 0;
+	regeneration = 1;
 }
 
 void Player::RangeUp()
@@ -594,12 +596,12 @@ void Player::HpUp()
 
 void Player::VampUp()
 {
-	vampirism += 1;
+	vampirism += 5;
 }
 
 void Player::RegenUp()
 {
-	regeneration += 5;
+	regeneration += 1;
 }
 //### need a counter for what upgrades player got?
 
