@@ -26,7 +26,7 @@ unsigned long			sGameObjNum;
 
 // list of enemies
 static Enemy*			sEnemies;
-
+static int				enemyCount;
 // list of coins
 static GameObjInst*		sBlocks;
 
@@ -674,6 +674,7 @@ void GameStatePlatformInit(void)
 	currSpawn = 0;
 	totalSpawn = 0;
 	totalGoals = 0;
+	enemyCount = 0;
 	++level;
 	for (int y = 0; y < BINARY_MAP_HEIGHT; ++y)
 	{
@@ -689,7 +690,7 @@ void GameStatePlatformInit(void)
 	int x, y;
 
 	int blkCount = 0;
-	int enemyCount = 0;
+	
 	sBoomNum = 0;
 	win = false;
 	
@@ -737,14 +738,30 @@ void GameStatePlatformInit(void)
 				++currSpawn;
 			}
 
-			//else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
-			//{
-			//	sEnemies[enemyCount].enemyCreate(TYPE_OBJECT_ENEMY1, &Pos);
+			else if (MapData[y][x] == TYPE_OBJECT_ENEMY1)
+			{
+				sEnemies[enemyCount].enemyCreate(TYPE_OBJECT_ENEMY1, &Pos);
 
-			//	SnapToCell(&sEnemies[enemyCount].posCurr.x);
-			//	SnapToCell(&sEnemies[enemyCount].posCurr.y);
-			//	enemyCount++;
-			//}
+				SnapToCell(&sEnemies[enemyCount].posCurr.x);
+				SnapToCell(&sEnemies[enemyCount].posCurr.y);
+				enemyCount++;
+			}
+			else if (MapData[y][x] == TYPE_OBJECT_ENEMY2)
+			{
+				sEnemies[enemyCount].enemyCreate(TYPE_OBJECT_ENEMY2, &Pos);
+
+				SnapToCell(&sEnemies[enemyCount].posCurr.x);
+				SnapToCell(&sEnemies[enemyCount].posCurr.y);
+				enemyCount++;
+			}
+			else if (MapData[y][x] == TYPE_OBJECT_ENEMY3)
+			{
+				sEnemies[enemyCount].enemyCreate(TYPE_OBJECT_ENEMY3, &Pos);
+
+				SnapToCell(&sEnemies[enemyCount].posCurr.x);
+				SnapToCell(&sEnemies[enemyCount].posCurr.y);
+				enemyCount++;
+			}
 
 			else if (MapData[y][x] == TYPE_OBJECT_COIN)
 			{
@@ -1165,6 +1182,10 @@ void GameStatePlatformUpdate(void)
 					{
 						sBlocks[i].PowerUpCreate(sBlocks[i].posCurr);
 					}
+				}
+				if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sGoal.boundingBox, sGoal.velCurr)) == true)
+				{
+					//### timer
 				}
 
 			}
