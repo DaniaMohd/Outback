@@ -643,13 +643,13 @@ void GameStatePlatformLoad(void)
 	//-------------------------------------------------------------------------
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
+		-300.0f, -200.0f, 0x00FFFFFF, 0.0f, 1.0f,
+		300.0f, -200.0f, 0x00FFFFFF, 1.0f, 1.0f,
 		-300.0f, 200.0f, 0x0000FFFF, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		300.0f, -200.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		-300.0f, 200.0f, 0x00FFFFFF, 0.0f, 0.0f,
-		300.0f, 200.0f, 0x00FFFFFF, 0.0f, 0.0f);
+		300.0f, -200.0f, 0x00FFFFFF, 1.0f, 1.0f,
+		300.0f, 200.0f, 0x00FFFFFF, 1.0f, 0.0f,
+		-300.0f, 200.0f, 0x00FFFFFF, 0.0f, 0.0f);
 
 	pauseMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(pauseMesh, "Failed to create range Mesh!");
@@ -1407,9 +1407,10 @@ void GameStatePlatformDraw(void)
 		//AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 		AEGfxSetPosition(camX, camY);
 		AEGfxTextureSet(pauseTex, 0, 0);
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
