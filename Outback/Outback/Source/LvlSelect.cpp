@@ -17,7 +17,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 extern s8 fontID;
 extern s8 fontTitle;
-f32 currLevel = 0.15f * 360;
+f32 currLevel = 0.30f * 360;
 int lvlSelect = 0;
 extern bool endless;
 extern bool newGame;
@@ -86,21 +86,21 @@ void LvlSelectUpdate()
 	if (lvlSelect < 0)
 		lvlSelect = 2;
 
-	if (currLevel > 0.15f * 360)
-		currLevel = -0.3f * 270;
+	if (currLevel > 0.30f * 360)
+		currLevel = -0.45f * 270;
 
-	if (currLevel < -0.3f * 360)
-		currLevel = 0.15f * 360;
+	if (currLevel < -0.30f * 360)
+		currLevel = 0.45 * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 	{
-		currLevel += 0.15f * 300;
+		currLevel += 0.30f * 300;
 		lvlSelect--;
 	}
 
 	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
 	{
-		currLevel -= 0.15f * 300;
+		currLevel -= 0.30f * 300;
 		lvlSelect++;
 	}
 
@@ -156,7 +156,7 @@ void LvlSelectDraw()
 	// Drawing Level header
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetPosition(-195.0f, 255.0f);
+	AEGfxSetPosition(-175.0f, 235.0f);
 	AEGfxTextureSet(lvlTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.0f);
@@ -165,23 +165,24 @@ void LvlSelectDraw()
 	switch (lvlSelect)
 	{
 	case 0:
-		AEGfxPrint(fontID, strBuffer, -0.45f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, strBuffer, -0.45f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case 1:
 		AEGfxPrint(fontID, strBuffer, -0.45f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	case 2:
-		AEGfxPrint(fontID, strBuffer, -0.45f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, strBuffer, -0.45f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 		break;
 	}
 
 
-	AEGfxPrint(fontID, "TUTORIAL", -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "TUTORIAL", -0.15f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "NORMAL MODE", -0.15f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "ENDLESS MODE", -0.15f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Press BACKSPACE for Main Menu", -0.9f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Press ENTER to select level", 0.3f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-
+	AEGfxPrint(fontID, "ENDLESS MODE", -0.15f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "Press BACKSPACE", -0.9f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "for Main Menu", -0.9f, -0.95f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "Press ENTER to", 0.3f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "select level", 0.3f, -0.95f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 
