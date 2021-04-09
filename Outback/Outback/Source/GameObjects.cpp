@@ -629,7 +629,6 @@ void Player::RegenUp()
 {
 	regeneration += 1;
 }
-//### need a counter for what upgrades player got?
 
 
 
@@ -764,8 +763,63 @@ void enemyspawning(Player player, Enemy* enemies)
 		if (enemies[i].flag == 0)
 		{
 			enemies[i].enemyCreate(type, &pos);
-			//printf("Spawned %d\n", enemies[i].pObject->type);
 			break;
 		}
 	}
+}
+
+void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state)
+{
+	//Position of health base based off the camera position
+	float X = camX + 350.0f;
+	float Y = camY - 275.0f;
+	float boxWidth = 50.0f;
+	float boxHeight = 50.0f;
+
+	char line_1[50];
+	char line_2[50];
+	memset(line_1, 0, 50 * sizeof(char));
+	memset(line_2, 0, 50 * sizeof(char));
+
+	int tmp_time = (int)roundf(time);
+
+	if (time == start)
+	{
+		sprintf_s(line_1, "Find and");
+		sprintf_s(line_2, "start the car");
+	}
+	else if (time < start && time > 0)
+	{
+		sprintf_s(line_1, "SURVIVE!");
+		sprintf_s(line_2, "%4ds Left", tmp_time);
+	}
+	else if (time <= 0)
+	{
+		sprintf_s(line_1, "Return");
+		sprintf_s(line_2, "to the car");
+	}
+
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
+	AEGfxSetTransparency(1.0f);
+
+	AEMtx33 scale1, trans, result;
+
+	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
+	{
+		if (sGameObjList[i].type == TYPE_OBJECT_MAXHP)
+		{
+			AEMtx33Scale(&scale1, boxWidth, boxHeight);
+			AEMtx33Trans(&trans, X, Y);
+			AEMtx33Concat(&result, &trans, &scale1);
+			AEGfxSetTransform(result.m);
+			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
+			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
+		}
+	}
+	AEGfxPrint(fontID, "OBJECTIVE:", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, line_1, 0.0f, 0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, line_2, 0.0f, 0.4f, 1.0f, 1.0f, 1.0f, 1.0f);
 }

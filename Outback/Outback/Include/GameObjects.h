@@ -112,7 +112,6 @@ public:
 	void			PowerUpCreate(AEVec2 pos);	//creates power ups
 
 	void			particleEffect(GameObjInst* particle, unsigned int type, unsigned int specific = 0);
-	//### should add particle effects here
 };
 
 class Enemy : public GameObjInst
@@ -138,7 +137,6 @@ public:
 	void			enemyGridFlag();
 	void			enemyFire(Player character, Projectile* bullet);//Enemy shoot player with bullet(enemy class object calls function, input target and where to store bullet instance)
 	void			facePlayer(Player character);
-	//### enemy charging function, input player
 };
 
 class Player : public GameObjInst
@@ -180,8 +178,6 @@ public:
 	void			HpUp();
 	void			VampUp();
 	void			RegenUp();
-
-	//### probably additional functions to aid in upgrade pickups
 };
 
 class Projectile : public GameObjInst
@@ -199,10 +195,8 @@ public:
 	void		ProjectileUpdate();
 };
 
-//### function of input type player and enemy pointer to spawn enemies around the player
 void enemyspawning(Player player, Enemy* enemies);
+void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state);
 
 extern GameObj*				sGameObjList;
 extern unsigned long		sGameObjNum;
-
-//### extern to carry over player data, probs

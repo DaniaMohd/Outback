@@ -21,7 +21,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 enum
 {
 	// list of all game states 
-	GS_LOGO = 0,	
+	GS_LOGO = 0,
+	GS_TUTORIAL,
 	GS_LEVEL1, 
 	GS_LEVEL2,
 	GS_LEVEL3,

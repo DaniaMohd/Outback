@@ -78,6 +78,14 @@ void GameStateMgrUpdate()
 		GameStateFree = GameStateMainMenuFree;
 		GameStateUnload = GameStateMainMenuUnload;
 		break;
+	case GS_TUTORIAL:
+		GameStateLoad = GameStatePlatformLoad;
+		GameStateInit = GameStatePlatformInit;
+		GameStateUpdate = GameStatePlatformUpdate;
+		GameStateDraw = GameStatePlatformDraw;
+		GameStateFree = GameStatePlatformFree;
+		GameStateUnload = GameStatePlatformUnload;
+		break;
 	case GS_LEVEL1:
 		GameStateLoad	= GameStatePlatformLoad;
 		GameStateInit	= GameStatePlatformInit;
