@@ -19,15 +19,16 @@
     <ClCompile Include="Source\GameStateMgr.cpp" />
     <ClCompile Include="Source\GameState_Platform.cpp" />
     <ClCompile Include="Source\Logo.cpp" />
+    <ClCompile Include="Source\LvlSelect.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\Win.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Credits.h" />
     <ClInclude Include="Include\Audio.h" />
     <ClInclude Include="Include\Collision.h" />
+    <ClInclude Include="Include\Credits.h" />
     <ClInclude Include="Include\fmod.h" />
     <ClInclude Include="Include\fmod.hpp" />
     <ClInclude Include="Include\fmod_codec.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="Include\GameStateMgr.h" />
     <ClInclude Include="Include\GameState_Platform.h" />
     <ClInclude Include="Include\Logo.h" />
+    <ClInclude Include="Include\LvlSelect.h" />
     <ClInclude Include="Include\main.h" />
     <ClInclude Include="Include\MainMenu.h" />
     <ClInclude Include="Include\Map.h" />

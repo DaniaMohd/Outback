@@ -30,7 +30,7 @@ enum
 	GS_INSTRUCTIONS,
 	GS_OPTIONS,
 	GS_CREDITS,
-
+	GS_LVLSELECT,
 	// special game state. Do not change
 	GS_RESTART,
 	GS_QUIT,

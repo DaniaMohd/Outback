@@ -37,15 +37,15 @@
     <ClCompile Include="Source\Logo.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LvlSelect.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Audio.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\Collision.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Credits.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\fmod.h">
@@ -100,6 +100,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\Logo.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Credits.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LvlSelect.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

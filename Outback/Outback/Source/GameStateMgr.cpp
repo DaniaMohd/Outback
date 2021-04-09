@@ -126,6 +126,14 @@ void GameStateMgrUpdate()
 		GameStateFree = CreditsFree;
 		GameStateUnload = CreditsUnload;
 		break;
+	case GS_LVLSELECT:
+		GameStateLoad = LvlSelectLoad;
+		GameStateInit = LvlSelectInit;
+		GameStateUpdate = LvlSelectUpdate;
+		GameStateDraw = LvlSelectDraw;
+		GameStateFree = LvlSelectFree;
+		GameStateUnload = LvlSelectUnload;
+		break;
 	default:
 		AE_FATAL_ERROR("invalid state!!");
 	}

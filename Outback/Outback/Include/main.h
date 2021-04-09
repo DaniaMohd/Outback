@@ -40,6 +40,7 @@ extern double	g_appTime;
 #include "GameOverScreen.h"
 #include "Logo.h"
 #include "Credits.h"
+#include "LvlSelect.h"
 
 #endif // OUTBACK_MAIN_H_
 

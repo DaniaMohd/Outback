@@ -1,0 +1,186 @@
+/******************************************************************************/
+/*!
+\file		LvlSelect.cpp
+\author 	Lim Sim Chee, Shannon
+\par    	email: lim.s@digipen.edu
+\date   	8th April 2021
+\brief      This file contains the definitions of the functions needed for
+			the level selection screen
+
+Copyright (C) 2021 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the
+prior written consent of DigiPen Institute of Technology is prohibited.
+ */
+ /******************************************************************************/
+
+#include "main.h"
+
+extern s8 fontID;
+extern s8 fontTitle;
+f32 currLevel = 0.15f * 360;
+int lvlSelect = 0;
+extern bool endless;
+extern bool newGame;
+extern int level;
+extern bool fullscreen;
+
+AEGfxVertexList	* lvlMesh, * hlMesh;
+AEGfxTexture	* lvlTex;
+
+void LvlSelectLoad()
+{
+
+	AEGfxSetCamPosition(0, 0);
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+
+	// Create credits header
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-90.0f, -90.0f, 0xFFFFFFFF, 0.0f, 1.0f,
+		450.0f, -90.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+		-90.0f, 90.0f, 0xFFFFFFFF, 0.0f, 0.0f
+	);
+
+	AEGfxTriAdd(
+		450.0f, -90.0f, 0xFFFFFFFF, 1.0f, 1.0f,
+		450.0f, 90.0f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-90.0f, 90.0f, 0xFFFFFFFF, 0.0f, 0.0f
+	);
+
+	lvlMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(lvlMesh, "Failed to create level mesh!");
+	lvlTex = AEGfxTextureLoad("..\\Resources\\Logo\\LvlSelect0.png");
+	AE_ASSERT_MESG(lvlTex, "Failed to create level texture!");
+
+	MainMenuBGMLoad();
+}
+
+void LvlSelectInit()
+{
+	AudioEngineInit();
+	endless = false;
+	newGame = true;
+	level = 0;
+	fullscreen = true;
+}
+
+void LvlSelectUpdate()
+{
+	if (lvlSelect > 2)
+		lvlSelect = 0;
+
+	if (lvlSelect < 0)
+		lvlSelect = 2;
+
+	if (currLevel > 0.15f * 360)
+		currLevel = -0.3f * 270;
+
+	if (currLevel < -0.3f * 360)
+		currLevel = 0.15f * 360;
+
+	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
+	{
+		currLevel += 0.15f * 300;
+		lvlSelect--;
+	}
+
+	if (AEInputCheckTriggered(AEVK_DOWN) || AEInputCheckTriggered(AEVK_S))
+	{
+		currLevel -= 0.15f * 300;
+		lvlSelect++;
+	}
+
+	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 0)
+	{
+		gGameStateNext = GS_LEVEL1;
+	}
+
+	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 1)
+	{
+		gGameStateNext = GS_LEVEL2;
+	}
+
+	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 2)
+	{
+		gGameStateNext = GS_LEVEL3;
+	}
+
+	if (AEInputCheckTriggered(AEVK_BACK))
+	{
+		gGameStateNext = GS_MAINMENU;
+	}
+
+	//if (AEInputCheckTriggered(AEVK_N))
+	//{
+	//	if (fullscreen == true)
+	//	{
+	//		fullscreen = false;
+	//	}
+	//	else
+	//	{
+	//		fullscreen = true;
+	//	}
+
+	//	AEToogleFullScreen(fullscreen);
+	//	if (endless == true)
+	//	{
+	//		endless = false;
+	//	}
+	//	else if (endless == false)
+	//	{
+	//		endless = true;
+	//	}
+	//}
+}
+
+void LvlSelectDraw()
+{
+	char strBuffer[100];
+	memset(strBuffer, 0, 100 * sizeof(char));
+	sprintf_s(strBuffer, "-->");
+
+	// Drawing Level header
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetPosition(-195.0f, 255.0f);
+	AEGfxTextureSet(lvlTex, 0.0f, 0.0f);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetTransparency(1.0f);
+	AEGfxMeshDraw(lvlMesh, AE_GFX_MDM_TRIANGLES);
+
+	switch (lvlSelect)
+	{
+	case 0:
+		AEGfxPrint(fontID, strBuffer, -0.45f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		break;
+	case 1:
+		AEGfxPrint(fontID, strBuffer, -0.45f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
+		break;
+	case 2:
+		AEGfxPrint(fontID, strBuffer, -0.45f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		break;
+	}
+
+
+	AEGfxPrint(fontID, "TUTORIAL", -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "NORMAL MODE", -0.15f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "ENDLESS MODE", -0.15f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "Press BACKSPACE for Main Menu", -0.9f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "Press ENTER to select level", 0.3f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+}
+
+
+void LvlSelectFree()
+{
+	AEGfxMeshFree(lvlMesh);
+	AEGfxMeshFree(hlMesh);
+
+	AEGfxTextureUnload(lvlTex);
+}
+
+void LvlSelectUnload()
+{
+
+	MainMenuBGMUnload();
+}
