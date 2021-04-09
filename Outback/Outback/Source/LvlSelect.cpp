@@ -24,8 +24,8 @@ extern bool newGame;
 extern int level;
 extern bool fullscreen;
 
-AEGfxVertexList	* lvlMesh, * hlMesh;
-AEGfxTexture	* lvlTex;
+AEGfxVertexList	* lvlMesh = 0 , * hlMesh = 0;
+AEGfxTexture	* lvlTex = 0;
 
 void LvlSelectLoad()
 {
@@ -51,6 +51,20 @@ void LvlSelectLoad()
 	AE_ASSERT_MESG(lvlMesh, "Failed to create level mesh!");
 	lvlTex = AEGfxTextureLoad("..\\Resources\\Logo\\LvlSelect0.png");
 	AE_ASSERT_MESG(lvlTex, "Failed to create level texture!");
+
+	//Highlight
+	AEGfxMeshStart();
+	AEGfxTriAdd(
+		-50.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		50.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+	AEGfxTriAdd(
+		50.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		50.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+
+	hlMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(hlMesh, "Failed to create Enemy Mesh!");
 
 	MainMenuBGMLoad();
 }

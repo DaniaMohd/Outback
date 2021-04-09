@@ -129,22 +129,22 @@ void GameStateMainMenuUpdate()
 		curr++;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 0)
+	if (AEInputCheckReleased(AEVK_RETURN) && curr == 0)
 	{
 		gGameStateNext = GS_LVLSELECT;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 1)
+	if (AEInputCheckReleased(AEVK_RETURN) && curr == 1)
 	{
 		gGameStateNext = GS_LEVEL2;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 2)
+	if (AEInputCheckReleased(AEVK_RETURN) && curr == 2)
 	{
 		gGameStateNext = GS_CREDITS;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN) && curr == 3
+	if (AEInputCheckReleased(AEVK_RETURN) && curr == 3
 		|| AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		gGameStateNext = GS_QUIT;
