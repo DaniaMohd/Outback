@@ -1186,6 +1186,7 @@ void GameStatePlatformUpdate(void)
 				if ((CollisionIntersection_RectRect(sProjectiles[j].boundingBox, sProjectiles[j].velCurr, sGoal.boundingBox, sGoal.velCurr)) == true)
 				{
 					//### timer
+					printf("timer");
 				}
 
 			}
