@@ -1041,11 +1041,6 @@ void GameStatePlatformUpdate(void)
 				pHero.counter += g_dt;
 				pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
 
-				//Player Health does not overshoot max health
-				if (pHero.currentHealth > pHero.maxHealth)
-				{
-					pHero.currentHealth = pHero.maxHealth;
-				}
 				//death
 				if (pHero.currentHealth <= 0)
 				{
@@ -1369,6 +1364,11 @@ void GameStatePlatformUpdate(void)
 			}
 		}
 		AEGfxSetCamPosition(camX, camY);
+	}
+	//Player Health does not overshoot max health
+	if (pHero.currentHealth > pHero.maxHealth)
+	{
+		pHero.currentHealth = pHero.maxHealth;
 	}
 }
 

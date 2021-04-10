@@ -159,12 +159,6 @@ void GameStateMainMenuUpdate()
 		if (curr < 0)
 			curr = 3;
 
-		if (curMainMenu > 0.15f * 360)
-			curMainMenu = -0.3f * 270;
-
-		if (curMainMenu < -0.3f * 360)
-			curMainMenu = 0.15f * 360;
-
 		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 		{
 			curMainMenu += 0.15f * 300;
@@ -218,6 +212,11 @@ void GameStateMainMenuUpdate()
 				endless = true;
 			}
 		}
+		if (curMainMenu > 0.15f * 360)
+			curMainMenu = -0.3f * 270;
+
+		if (curMainMenu < -0.3f * 360)
+			curMainMenu = 0.15f * 360;
 	}
 	if (exitDia == 1)
 	{
