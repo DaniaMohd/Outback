@@ -186,7 +186,7 @@ void GameStatePlatformLoad(void)
 
 			pObj->pMesh = AEGfxMeshEnd();
 			AE_ASSERT_MESG(pObj->pMesh, "Failed to create range Goal Mesh!");
-			pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Placeholder.png");
+			pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Car.png");
 			AE_ASSERT_MESG(pObj->pTex, "Failed to create range texture!!");
 		}
 

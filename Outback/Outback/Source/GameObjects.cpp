@@ -537,7 +537,7 @@ void Player::healthDisplay(float camX, float camY)
 {
 	//Position of health base based off the camera position
 	float X = camX;
-	float Y = camY - 275.0f;
+	float Y = camY + 275.0f;
 	float barHeight = 25.0f;
 	float barWidth = 400.0f;
 
@@ -581,7 +581,7 @@ void Player::healthDisplay(float camX, float camY)
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 	}
-	AEGfxPrint(fontID, strBuffer, -0.1f, -275.0f / (AEGetWindowHeight() / 2) - 0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, strBuffer, -0.1f, 275.0f / (AEGetWindowHeight() / 2) - 0.025f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Player::resetPower()
@@ -771,10 +771,10 @@ void enemyspawning(Player player, Enemy* enemies)
 void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state)
 {
 	//Position of health base based off the camera position
-	float X = camX + 350.0f;
-	float Y = camY - 275.0f;
-	float boxWidth = 50.0f;
-	float boxHeight = 50.0f;
+	float X = camX + 325.0f;
+	float Y = camY + 240.0f;
+	float boxWidth = 120.0f;
+	float boxHeight = 100.0f;
 
 	char line_1[50];
 	char line_2[50];
@@ -819,7 +819,7 @@ void objectiveDisplay(float camX, float camY, float time, float start, unsigned 
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 	}
-	AEGfxPrint(fontID, "OBJECTIVE:", 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, line_1, 0.0f, 0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, line_2, 0.0f, 0.4f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "OBJECTIVE:", 0.675f, 0.9f, 0.8f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, line_1, 0.675f, 0.8f, 0.8f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, line_2, 0.675f, 0.7f, 0.8f, 1.0f, 1.0f, 1.0f);
 }
