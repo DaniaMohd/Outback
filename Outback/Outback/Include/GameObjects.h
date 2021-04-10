@@ -162,7 +162,7 @@ public:
 	int	powerRange;
 	int	powerDamage;
 	int	powerSpeed;
-
+	int hpInc;
 	int vampirism;
 	int regeneration;
 

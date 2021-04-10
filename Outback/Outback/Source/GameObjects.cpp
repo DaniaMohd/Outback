@@ -594,6 +594,7 @@ void Player::resetPower()
 	powerRange = 1;
 	powerDamage = 10;
 	powerSpeed = 1;
+	hpInc = 0;
 	vampirism = 0;
 	regeneration = 0;
 }
@@ -615,6 +616,7 @@ void Player::SpeedUp()
 
 void Player::HpUp()
 {
+	++hpInc;
 	int amt = 10;
 	currentHealth += amt;
 	maxHealth += amt;
