@@ -33,7 +33,7 @@ void LvlSelectLoad()
 	AEGfxSetCamPosition(0, 0);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-	// Create credits header
+	// Create level selection header
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		-90.0f, -90.0f, 0xFFFFFFFF, 0.0f, 1.0f,

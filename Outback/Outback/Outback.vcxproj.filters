@@ -40,6 +40,9 @@
     <ClCompile Include="Source\LvlSelect.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Options.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Audio.h">
@@ -106,6 +109,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Include\LvlSelect.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Options.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1041,11 +1041,6 @@ void GameStatePlatformUpdate(void)
 				pHero.counter += g_dt;
 				pHero.counter = (pHero.counter >= pHero.invincibleTimer) ? pHero.invincibleTimer : pHero.counter;
 
-				//Player Health does not overshoot max health
-				if (pHero.currentHealth > pHero.maxHealth)
-				{
-					pHero.currentHealth = pHero.maxHealth;
-				}
 				//death
 				if (pHero.currentHealth <= 0)
 				{
@@ -1370,6 +1365,11 @@ void GameStatePlatformUpdate(void)
 		}
 		AEGfxSetCamPosition(camX, camY);
 	}
+	//Player Health does not overshoot max health
+	if (pHero.currentHealth > pHero.maxHealth)
+	{
+		pHero.currentHealth = pHero.maxHealth;
+	}
 }
 
 /******************************************************************************/
@@ -1464,6 +1464,19 @@ void GameStatePlatformDraw(void)
 		AEGfxSetTransparency(1.0f);
 		AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, conti, -0.65f, 0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+		char txt[100];
+		sprintf_s(txt, "X %d", pHero.powerDamage / 10 - 1);
+		AEGfxPrint(fontID, txt, -0.4f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		sprintf_s(txt, "X %d", pHero.powerRange - 1);
+		AEGfxPrint(fontID, txt, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		sprintf_s(txt, "X %d", pHero.powerSpeed - 1);
+		AEGfxPrint(fontID, txt, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		sprintf_s(txt, "X %d", pHero.hpInc);
+		AEGfxPrint(fontID, txt, -0.4f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		sprintf_s(txt, "X %d", pHero.vampirism);
+		AEGfxPrint(fontID, txt, 0.1f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		sprintf_s(txt, "X %d", pHero.regeneration);
+		AEGfxPrint(fontID, txt, 0.6f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 
