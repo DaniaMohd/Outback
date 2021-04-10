@@ -845,19 +845,23 @@ void GameStatePlatformUpdate(void)
 	if (AESysGetWindowHandle() != GetActiveWindow())
 	{
 		gameIsPaused = true;
+		ToggleAudioPause();
 	}
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
+
 		if (gameIsPaused == false)
 		{
 			gameIsPaused = true;
-			printf("game paused\n, %d", gameIsPaused);
+			printf("game paused\n, %d", gameIsPaused);		
+			ToggleAudioPause();
 		}
 		else
 		{
 			gameIsPaused = false;
 			printf("game play\n");
+			ToggleAudioPause();
 		}
 	}
 	if (gameIsPaused == false)

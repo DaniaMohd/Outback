@@ -44,6 +44,11 @@ void Level2BGMUnload();
 void Level3BGMUnload();
 void GameOverBGMUnload();
 
+void ToggleAudioMute();
+void ToggleAudioPause();
+
+void DecreaseVol();
+void IncreaseVol();
 
 #endif // !AUDIO_H_
 
