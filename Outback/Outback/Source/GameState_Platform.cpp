@@ -35,7 +35,7 @@ static GameObjInst*		sParticles;
 
 // list of enemies
 static Projectile*		sProjectiles;
-static unsigned int		sBoomNum;
+unsigned int		sBoomNum;
 
 // Binary map data
 static GameObjInst		pBlackInstance;
@@ -71,6 +71,7 @@ float enemySpawnRate = 5;
 float goalTimer;
 float startingTime;
 bool timerStart;
+int maxEnemies = 100;
 
 /******************************************************************************/
 /*!
@@ -653,7 +654,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported2.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -821,6 +822,7 @@ void GameStatePlatformInit(void)
 		for (int a = 0; a < 5; a++)
 		{
 			enemyspawning(pHero, sEnemies);
+			enemyCount++;
 		}
 	}
 
@@ -898,37 +900,39 @@ void GameStatePlatformUpdate(void)
 		//### Next stage DEBUG
 		if (AEInputCheckReleased(AEVK_N))
 		{
-			/*win = true;
-			if (win == true)
-			{
-				switch (gGameStateCurr)
-				{
-				case GS_LEVEL1:
-					gGameStateNext = GS_LEVEL2;
-					win = false;
-					break;
-				case GS_LEVEL2:
-					gGameStateNext = GS_LEVEL3;
-					win = false;
-					break;
-				case GS_LEVEL3:
-					gGameStateNext = GS_WIN;
-					win = false;
-					break;
-				default:
-					break;
-				}
-			}*/
-			if (endless == true)
-			{
-				endless = false;
-				printf("not endless\n");
-			}
-			else if (endless == false)
-			{
-				endless = true;
-				printf("endless\n");
-			}
+			//win = true;
+			//if (win == true)
+			//{
+			//	switch (gGameStateCurr)
+			//	{
+			//	case GS_LEVEL1:
+			//		gGameStateNext = GS_LEVEL2;
+			//		win = false;
+			//		break;
+			//	case GS_LEVEL2:
+			//		gGameStateNext = GS_LEVEL3;
+			//		win = false;
+			//		break;
+			//	case GS_LEVEL3:
+			//		gGameStateNext = GS_WIN;
+			//		win = false;
+			//		break;
+			//	default:
+			//		break;
+			//	}
+			//}
+			//if (endless == true)
+			//{
+			//	endless = false;
+			//	printf("not endless\n");
+			//}
+			//else if (endless == false)
+			//{
+			//	endless = true;
+			//	printf("endless\n");
+			//}
+			gGameStateNext = GS_LEVEL3;
+			//PrintRetrievedInformation();
 		}
 
 		//BOUNDING BOXES & UPDATES
@@ -996,13 +1000,14 @@ void GameStatePlatformUpdate(void)
 				}
 
 				//Enemy spawning
-				if (gGameStateCurr == GS_TUTORIAL && goalTimer < startingTime)
+				if (gGameStateCurr == GS_TUTORIAL && goalTimer < startingTime && enemyCount <= maxEnemies)
 				{
 					EnemySpawnTime += g_dt;
 					if (EnemySpawnTime > enemySpawnRate)
 					{
 						EnemySpawnTime = 0;
 						enemyspawning(pHero, sEnemies);
+						enemyCount++;
 					}
 				}
 				else if(gGameStateCurr != GS_TUTORIAL)
@@ -1012,6 +1017,7 @@ void GameStatePlatformUpdate(void)
 					{
 						EnemySpawnTime = 0;
 						enemyspawning(pHero, sEnemies);
+						enemyCount++;
 					}
 				}
 			}
@@ -1171,6 +1177,12 @@ void GameStatePlatformUpdate(void)
 				}
 				//Respawn enemy when spawned at the map edges
 				if (sEnemies[i].posCurr.x <= 0 || sEnemies[i].posCurr.x >= BINARY_MAP_WIDTH || sEnemies[i].posCurr.y <= 0 || sEnemies[i].posCurr.y >= BINARY_MAP_HEIGHT)
+				{
+					sEnemies[i].gameObjInstDestroy();
+					enemyspawning(pHero, sEnemies);
+				}
+				//Respawn enemy when spawned in a block
+				if (0 != GetCellValue((int)sEnemies[i].posCurr.x, (int)sEnemies[i].posCurr.y))
 				{
 					sEnemies[i].gameObjInstDestroy();
 					enemyspawning(pHero, sEnemies);

@@ -28,8 +28,8 @@ bool upVol;
 unsigned int chooseSettings;
 extern float volume;
 
-AEGfxTexture* setTex;
-AEGfxVertexList* setMesh;
+AEGfxTexture* setTex = 0;
+AEGfxVertexList* setMesh = 0;
 
 void OptionsLoad()
 {
@@ -43,7 +43,6 @@ void OptionsLoad()
 		450.0f, -90.0f, 0xFFFFFFFF, 1.0f, 1.0f,
 		-90.0f, 90.0f, 0xFFFFFFFF, 0.0f, 0.0f
 	);
-
 	AEGfxTriAdd(
 		450.0f, -90.0f, 0xFFFFFFFF, 1.0f, 1.0f,
 		450.0f, 90.0f, 0xFFFFFFFF, 1.0f, 0.0f,
@@ -70,10 +69,10 @@ void OptionsUpdate()
 {
 	switch (chooseSettings)
 	{
-		case 0:
-			fullscreen = false;
-			AEToogleFullScreen(fullscreen);
-			break;
+		//case 0:
+		//	fullscreen = false;
+		//	AEToogleFullScreen(fullscreen);
+		//	break;
 		case 1:
 			downVol = true;
 			break;
@@ -160,13 +159,15 @@ void OptionsDraw()
 {
 	char strBuffer[100];
 
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetPosition(-175.0f, 235.0f);
-	AEGfxTextureSet(setTex, 0.f, 0.f);
+	AEGfxTextureSet(setTex, 0.0f, 0.0f);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxSetTransparency(1.0f);
 	AEGfxMeshDraw(setMesh, AE_GFX_MDM_TRIANGLES);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+
 
 	sprintf_s(strBuffer, "To decrease volume: F11");
 	AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);

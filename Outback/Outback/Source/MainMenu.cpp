@@ -46,9 +46,7 @@ void GameStateMainMenuLoad()
 {
 	AEGfxSetBackgroundColor(0.96f, 0.64f, 0.12f);
 
-	float camX = 0;
-	float camY = 0;
-	AEGfxSetCamPosition(camX, camY);
+	AEGfxSetCamPosition(0, 0);
 	
 	//BG Image Mesh
 	AEGfxMeshStart();
