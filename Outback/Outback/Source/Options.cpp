@@ -137,17 +137,13 @@ void OptionsDraw()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxMeshDraw(setMesh, AE_GFX_MDM_TRIANGLES);
 
-<<<<<<< HEAD
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
 
-
 	sprintf_s(strBuffer, "To decrease volume: F11");
 	AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-=======
 	sprintf_s(strBuffer, "To decrease volume: 9");
 	AEGfxPrint(fontID, strBuffer, -0.35f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
->>>>>>> 96c92c5cc5c8f4e17ed5404220e6eea649325b38
 
 	sprintf_s(strBuffer, "To increase volume: 0");
 	AEGfxPrint(fontID, strBuffer, -0.35f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);

@@ -195,7 +195,7 @@ public:
 };
 
 void enemyspawning(Player player, Enemy* enemies);
-void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state);
+void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state, int level);
 
 extern GameObj*				sGameObjList;
 extern unsigned long		sGameObjNum;

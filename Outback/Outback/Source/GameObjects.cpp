@@ -770,7 +770,7 @@ void enemyspawning(Player player, Enemy* enemies)
 	}
 }
 
-void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state)
+void objectiveDisplay(float camX, float camY, float time, float start, unsigned int state, int level)
 {
 	//Position of health base based off the camera position
 	float X = camX + 325.0f;
@@ -778,10 +778,17 @@ void objectiveDisplay(float camX, float camY, float time, float start, unsigned 
 	float boxWidth = 120.0f;
 	float boxHeight = 100.0f;
 
+	float X_l = camX - 325.0f;
+	float Y_l = camY + 275.0f;
+	float boxWidth_l = 100.0f;
+	float boxHeight_l = 25.0f;
+
 	char line_1[50];
 	char line_2[50];
+	char level_num[50];
 	memset(line_1, 0, 50 * sizeof(char));
 	memset(line_2, 0, 50 * sizeof(char));
+	memset(level_num, 0, 50 * sizeof(char));
 
 	int tmp_time = (int)roundf(time);
 
@@ -801,22 +808,34 @@ void objectiveDisplay(float camX, float camY, float time, float start, unsigned 
 		sprintf_s(line_2, "to the car");
 	}
 
+	sprintf_s(level_num, "Level %d", level);
+
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 	AEGfxSetTransparency(1.0f);
 
-	AEMtx33 scale1, trans, result;
+	AEMtx33 scale, trans, result;
+	AEMtx33 scale_l, trans_l, result_l;
 
 	for (int i = 0; i < GAME_OBJ_NUM_MAX; i++)
 	{
 		if (sGameObjList[i].type == TYPE_OBJECT_MAXHP)
 		{
-			AEMtx33Scale(&scale1, boxWidth, boxHeight);
+			//objecyive
+			AEMtx33Scale(&scale, boxWidth, boxHeight);
 			AEMtx33Trans(&trans, X, Y);
-			AEMtx33Concat(&result, &trans, &scale1);
+			AEMtx33Concat(&result, &trans, &scale);
 			AEGfxSetTransform(result.m);
+			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
+			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
+
+			//level
+			AEMtx33Scale(&scale_l, boxWidth_l, boxHeight_l);
+			AEMtx33Trans(&trans_l, X_l, Y_l);
+			AEMtx33Concat(&result_l, &trans_l, &scale_l);
+			AEGfxSetTransform(result_l.m);
 			AEGfxTextureSet(sGameObjList[i].pTex, 0, 0);
 			AEGfxMeshDraw(sGameObjList[i].pMesh, AE_GFX_MDM_TRIANGLES);
 		}
@@ -824,4 +843,5 @@ void objectiveDisplay(float camX, float camY, float time, float start, unsigned 
 	AEGfxPrint(fontID, "OBJECTIVE:", 0.675f, 0.9f, 0.8f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, line_1, 0.675f, 0.8f, 0.8f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, line_2, 0.675f, 0.7f, 0.8f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, level_num, -0.90f, 0.90f, 0.8f, 1.0f, 1.0f, 1.0f);
 }

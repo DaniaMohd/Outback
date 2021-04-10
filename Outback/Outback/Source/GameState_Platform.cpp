@@ -1463,7 +1463,7 @@ void GameStatePlatformDraw(void)
 	//Player health bar
 	pHero.healthDisplay(camX, camY);
 
-	objectiveDisplay(camX, camY, goalTimer, startingTime, gGameStateCurr);
+	objectiveDisplay(camX, camY, goalTimer, startingTime, gGameStateCurr, level);
 
 	//Pause screen
 	if (gameIsPaused == true)
