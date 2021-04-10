@@ -31,6 +31,10 @@ float			timer = 0.0f;
 bool			setMute = false;
 bool			setUnmute = false;
 bool			mute = false;
+
+extern bool downVol;
+extern bool upVol;
+extern bool gameIsPaused;
 //bool			boomerangCollision = false;
 //bool			playerJump = false;
 //bool			changeLevel = false;
@@ -64,6 +68,25 @@ void AudioEngineUpdate()
 	{
 		channel1->setMute(false);
 	}
+
+	if (downVol)
+	{
+		if (AEInputCheckTriggered(AEVK_9))
+		{
+			DecreaseVol();
+		}
+	}
+
+	if (upVol)
+	{
+		if (AEInputCheckTriggered(AEVK_0))
+		{
+			IncreaseVol();
+		}
+	}
+
+	result = Syst->update();
+	if (result != FMOD_RESULT::FMOD_OK) return;
 }
 
 void AudioEngineDraw()
@@ -179,3 +202,61 @@ void GameOverBGMUnload()
 	if (result != FMOD_RESULT::FMOD_OK) return;
 }
 
+void ToggleAudioMute()
+{
+	if (mute == false) {
+		channel1->setMute(false);
+		mute = true;
+	}
+	else if (mute == true) {
+		channel1->setMute(true);
+		mute = false;
+	}
+}
+
+void ToggleAudioPause()
+{
+	if (gameIsPaused == false) {
+		channel1->setPaused(false);
+		mute = true;
+	}
+	else if (gameIsPaused == true) {
+		channel1->setPaused(true);
+		mute = false;
+	}
+}
+
+void DecreaseVol()
+{
+	//Press 9 to decrease background music volume
+	if (downVol)												
+	{
+		channel1->getVolume(&volume);
+
+		volume -= 0.01f;
+
+		if (volume < 0)
+		{
+			volume = 0;
+		}
+
+		channel1->setVolume(volume);
+	}
+}
+
+void IncreaseVol()
+{
+	//Press 0 to increase background music volume
+	if (upVol)
+	{
+		channel1->getVolume(&volume);
+		volume += 0.01f;
+
+		if (volume > 1)
+		{
+			volume = 1;
+		}
+
+		channel1->setVolume(volume);
+	}
+}

@@ -173,6 +173,8 @@ void LvlSelectDraw()
 	case 2:
 		AEGfxPrint(fontID, strBuffer, -0.45f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 		break;
+	default:
+		AE_FATAL_ERROR("Cannot select level!!");
 	}
 
 

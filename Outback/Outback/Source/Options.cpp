@@ -54,6 +54,9 @@ void OptionsLoad()
 	setTex = AEGfxTextureLoad("..\\Resources\\Logo\\Settings0.png");
 	AE_ASSERT_MESG(setTex, "Failed to create settings texture!");
 
+
+
+	MainMenuBGMLoad();
 }
 
 void OptionsInit()
@@ -63,16 +66,20 @@ void OptionsInit()
 	endless = false;
 	newGame = true;
 	fullscreen = true;
+	downVol = false;
+	upVol = false;
+	settingsBool = false;
+	volume = 0.5f;
+
 }
 
 void OptionsUpdate()
 {
 	switch (chooseSettings)
 	{
-		//case 0:
-		//	fullscreen = false;
-		//	AEToogleFullScreen(fullscreen);
-		//	break;
+		case 0:
+			fullscreen = false;
+			break;
 		case 1:
 			downVol = true;
 			break;
@@ -80,72 +87,37 @@ void OptionsUpdate()
 			upVol = true;
 			break;
 		case 3:
-			if (setMute)
-			{
-				setMute = false;
-				setUnmute = true;
-
-				MainMenuBGMUnload();
-				MainMenuBGMLoad();
-			}
-			else
-			{
-				setMute = true;
-				setUnmute = false;
-			}
+			ToggleAudioMute();
 			break;
+		default:
+			AE_FATAL_ERROR("Cannot choose options!!");
 	}
 
-	if (AEInputCheckTriggered(AEVK_N))
+	
+
+	if (AEInputCheckTriggered(AEVK_M))
 	{
-		if (fullscreen == true)
-		{
-			fullscreen = false;
-		}
-		else
-		{
-			fullscreen = true;
-		}
+		ToggleAudioMute();
 	}
 
-	if (AEInputCheckTriggered(AEVK_F10))
+	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
-		if (setUnmute == true)
-		{
-			setMute = true;
-			setUnmute = false;
-		}
-
-		else
-		{
-			setMute = false;
-			setUnmute = true;
-		}
+		ToggleAudioPause();
 	}
 
-	if (AEInputCheckTriggered(AEVK_F11))
+	if (downVol)
 	{
-		if (downVol == true)
+		if (AEInputCheckTriggered(AEVK_9))
 		{
-			volume -= 0.1f;
-		}
-
-		else
-		{
-			volume = 0.5f;
+			DecreaseVol();
 		}
 	}
-
-	if (AEInputCheckTriggered(AEVK_F12))
+	
+	if (upVol)
 	{
-		if (upVol == true)
+		if (AEInputCheckTriggered(AEVK_0))
 		{
-			volume += 0.1f;
-		}
-
-		else
-		{
-			volume = 0.5f;
+			IncreaseVol();
 		}
 	}
 
@@ -165,21 +137,26 @@ void OptionsDraw()
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxMeshDraw(setMesh, AE_GFX_MDM_TRIANGLES);
 
+<<<<<<< HEAD
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
 
 
 	sprintf_s(strBuffer, "To decrease volume: F11");
 	AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+=======
+	sprintf_s(strBuffer, "To decrease volume: 9");
+	AEGfxPrint(fontID, strBuffer, -0.35f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+>>>>>>> 96c92c5cc5c8f4e17ed5404220e6eea649325b38
 
-	sprintf_s(strBuffer, "To increase volume: F12");
-	AEGfxPrint(fontID, strBuffer, -0.15f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
+	sprintf_s(strBuffer, "To increase volume: 0");
+	AEGfxPrint(fontID, strBuffer, -0.35f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 
-	sprintf_s(strBuffer, "To mute / unmute: F10");
-	AEGfxPrint(fontID, strBuffer, -0.15f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	sprintf_s(strBuffer, "To mute / unmute: M");
+	AEGfxPrint(fontID, strBuffer, -0.35f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	sprintf_s(strBuffer, "To toggle fullscreen: N");
-	AEGfxPrint(fontID, strBuffer, -0.15f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, strBuffer, -0.35f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	AEGfxPrint(fontID, "Press BACKSPACE", -0.9f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "for Main Menu", -0.9f, -0.95f, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -195,5 +172,5 @@ void OptionsFree()
 
 void OptionsUnload()
 {
-
+	MainMenuBGMUnload();
 }
