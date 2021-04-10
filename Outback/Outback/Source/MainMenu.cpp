@@ -178,7 +178,7 @@ void GameStateMainMenuUpdate()
 
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 1)
 		{
-			gGameStateNext = GS_LEVEL2;
+			gGameStateNext = GS_OPTIONS;
 		}
 
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 2)
@@ -283,7 +283,7 @@ void GameStateMainMenuDraw()
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL SELECTION", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "LEVEL 2", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "SETTINGS", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "CREDITS", -0.7f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
 

@@ -23,6 +23,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\Options.cpp" />
     <ClCompile Include="Source\Win.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +48,7 @@
     <ClInclude Include="Include\main.h" />
     <ClInclude Include="Include\MainMenu.h" />
     <ClInclude Include="Include\Map.h" />
+    <ClInclude Include="Include\Options.h" />
     <ClInclude Include="Include\Win.h" />
   </ItemGroup>
   <ItemGroup>
