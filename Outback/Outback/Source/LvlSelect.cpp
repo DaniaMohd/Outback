@@ -111,7 +111,7 @@ void LvlSelectUpdate()
 
 	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 1)
 	{
-		gGameStateNext = GS_LEVEL2;
+		gGameStateNext = GS_LEVEL1;
 	}
 
 	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 2)

@@ -638,7 +638,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level1.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -646,7 +646,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported1.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -668,11 +668,6 @@ void GameStatePlatformLoad(void)
 
 	// Whole level fits in the screen
 	if (gGameStateCurr == GS_TUTORIAL)
-	{
-		AEMtx33Scale(&scale, (float)(AEGetWindowWidth() / BINARY_MAP_WIDTH), (float)(AEGetWindowHeight() / BINARY_MAP_HEIGHT));
-	}
-	//### take out after all 3 levels are done
-	if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
 	{
 		AEMtx33Scale(&scale, (float)(AEGetWindowWidth() / BINARY_MAP_WIDTH), (float)(AEGetWindowHeight() / BINARY_MAP_HEIGHT));
 	}
@@ -1333,13 +1328,6 @@ void GameStatePlatformUpdate(void)
 
 		//Camera settings
 		if (gGameStateCurr == GS_TUTORIAL)
-		{
-			// Camera fixed
-			camX = BINARY_MAP_WIDTH / 2 - 10.0f;
-			camY = BINARY_MAP_HEIGHT / 2 - 10.0f;
-		}
-		//### take out after all 3 levels are done
-		if (gGameStateCurr == GS_LEVEL1 || gGameStateCurr == GS_LEVEL2)
 		{
 			// Camera fixed
 			camX = BINARY_MAP_WIDTH / 2 - 10.0f;
