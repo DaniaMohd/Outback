@@ -19,10 +19,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 extern bool			setMute;
 extern bool			setUnmute;
 extern bool			mute;
-extern bool			boomerangCollision;
-extern bool			playerJump;
-extern bool			changeLevel;
-extern bool			gameOver;
+//extern bool			boomerangCollision;
+//extern bool			playerJump;
+//extern bool			changeLevel;
+//extern bool			gameOver;
 extern bool			carEngineRev;
 
 void AudioEngineLoad();
@@ -49,6 +49,9 @@ void ToggleAudioPause();
 
 void DecreaseVol();
 void IncreaseVol();
+
+void carEngineLoad();
+void carEngineUnload();
 
 #endif // !AUDIO_H_
 

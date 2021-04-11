@@ -84,6 +84,7 @@ int optionMenu;
 AEGfxTexture* optionTex;
 bool isfullscreen;
 
+extern bool carEngineRev;
 
 /******************************************************************************/
 /*!
@@ -918,6 +919,7 @@ void GameStatePlatformInit(void)
 void GameStatePlatformUpdate(void)
 {
 	int i, j;
+	AudioEngineUpdate();
 
 	if (AEInputCheckTriggered(AEVK_P))
 	{
@@ -1373,6 +1375,8 @@ void GameStatePlatformUpdate(void)
 			//Check if player touches goal
 			if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sGoal.boundingBox, sGoal.velCurr)) == true && goalTimer == startingTime)
 			{
+				carEngineRev = true;
+				carEngineLoad();
 				timerStart = true;
 				if (gGameStateCurr == GS_TUTORIAL)
 				{
@@ -1755,4 +1759,5 @@ void GameStatePlatformUnload(void)
 	Level1BGMUnload();
 	Level2BGMUnload();
 	Level3BGMUnload();
+	carEngineUnload();
 }

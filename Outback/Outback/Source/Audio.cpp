@@ -19,13 +19,14 @@ FMOD::System	* Syst;
 FMOD::Sound		* mainMenuBGM, * Level1BGM, * Level2BGM, * Level3BGM,
 				* GameOverBGM, * Jump, * highScore, * beeSFX, * emuSFX,
 				* spiderSFX, * lootSFX, * boomerangSFX, * keySelect,
-				* playerSFX;
-FMOD::Channel	* channel1/*, * channel2, * channel3*/;
+				* playerSFX, * car;
+FMOD::Channel	* channel1, * channel2/*, * channel3*/;
 FMOD_RESULT		result;
 unsigned int	version;
 void			* extradriverdata;
 
 float			volume = 0.5f;
+float			vol = 0.1f;
 float			timer = 0.0f;
 
 bool			setMute = false;
@@ -39,7 +40,7 @@ extern bool gameIsPaused;
 //bool			playerJump = false;
 //bool			changeLevel = false;
 //bool			gameOver = false;
-//bool			carEngineRev = false;
+bool			carEngineRev = false;
 
 void AudioEngineLoad()
 {
@@ -48,12 +49,13 @@ void AudioEngineLoad()
 
 	result = Syst->init(32, FMOD_INIT_NORMAL, extradriverdata);
 	if (result != FMOD_RESULT::FMOD_OK) return;
+
 }
 
 void AudioEngineInit()
 {
 	mute = false;
-
+	carEngineRev = false;
 	setUnmute = false;
 }
 
@@ -62,11 +64,13 @@ void AudioEngineUpdate()
 	if (setMute)
 	{
 		channel1->setMute(true);
+		channel2->setMute(true);
 	}
 
 	if (setUnmute)
 	{
 		channel1->setMute(false);
+		channel2->setMute(false);
 	}
 
 	if (downVol)
@@ -264,4 +268,25 @@ void IncreaseVol()
 
 		channel1->setVolume(volume);
 	}
+}
+
+void carEngineLoad()
+{
+
+	result = Syst->createSound("..\\Resources\\SFX\\Car\\AUTO-INFINITI_GEN-HDF-02199.wav", FMOD_LOOP_OFF, 0, &car);
+	if (result != FMOD_RESULT::FMOD_OK) return;
+
+	if (carEngineRev && !setMute)
+	{
+		result = channel2->setVolume(vol);
+		result = Syst->playSound(car, 0, false, &channel2);
+		if (result != FMOD_RESULT::FMOD_OK) return;
+		carEngineRev = false;
+	}
+}
+
+void carEngineUnload()
+{
+	result = car->release();
+	if (result != FMOD_RESULT::FMOD_OK) return;
 }

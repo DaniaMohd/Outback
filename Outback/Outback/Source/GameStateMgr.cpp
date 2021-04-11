@@ -48,6 +48,7 @@ void GameStateMgrInit(unsigned int gameStateInit)
 
 	// call the update to set the function pointers
 	GameStateMgrUpdate();
+
 }
 
 /******************************************************************************/
@@ -57,6 +58,8 @@ void GameStateMgrInit(unsigned int gameStateInit)
 /******************************************************************************/
 void GameStateMgrUpdate()
 {
+	AudioEngineUpdate();
+
 	if ((gGameStateCurr == GS_RESTART) || (gGameStateCurr == GS_QUIT))
 		return;
 
@@ -170,6 +173,6 @@ void GameStateMgrUpdate()
 		AE_FATAL_ERROR("invalid state!!");
 	}
 
-	AudioEngineUpdate();
+
 
 }
