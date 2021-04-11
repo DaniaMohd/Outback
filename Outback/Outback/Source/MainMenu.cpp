@@ -309,7 +309,13 @@ void GameStateMainMenuDraw()
 		// Set texture
 		AEGfxTextureSet(MainExitTex, 1, 1);
 		AEGfxMeshDraw(MainExitMesh, AE_GFX_MDM_TRIANGLES);
-
+		if (selectMainX == 17)
+		{
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxMeshDraw(selectionMainMesh, AE_GFX_MDM_TRIANGLES);
+			// Set position for the highlight
+			AEGfxSetPosition(selectMainX, -52);
+		}
 		if (b == 1)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
