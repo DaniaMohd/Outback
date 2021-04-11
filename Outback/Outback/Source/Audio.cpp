@@ -204,13 +204,16 @@ void GameOverBGMUnload()
 
 void ToggleAudioMute()
 {
-	if (mute == false) {
-		channel1->setMute(false);
-		mute = true;
-	}
-	else if (mute == true) {
-		channel1->setMute(true);
-		mute = false;
+	if (AEInputCheckTriggered(AEVK_M))
+	{
+		if (mute == false) {
+			channel1->setMute(false);
+			mute = true;
+		}
+		else if (mute == true) {
+			channel1->setMute(true);
+			mute = false;
+		}
 	}
 }
 

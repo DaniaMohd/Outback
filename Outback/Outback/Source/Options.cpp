@@ -1,11 +1,11 @@
 /******************************************************************************/
 /*!
-\file		Options.h
+\file		Options.cpp
 \author 	Lim Sim Chee, Shannon
 \par    	email: lim.s@digipen.edu
 \date   	8th April 2021
 \brief      This file contains the declearations of the functions needed for
-			the level selection screen
+			the options screen
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
@@ -36,7 +36,7 @@ void OptionsLoad()
 	AEGfxSetCamPosition(0, 0);
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-	// Create credits header
+	// Create options header
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		-90.0f, -90.0f, 0xFFFFFFFF, 0.0f, 1.0f,
@@ -140,8 +140,6 @@ void OptionsDraw()
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
 
-	sprintf_s(strBuffer, "To decrease volume: F11");
-	AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	sprintf_s(strBuffer, "To decrease volume: 9");
 	AEGfxPrint(fontID, strBuffer, -0.35f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 
