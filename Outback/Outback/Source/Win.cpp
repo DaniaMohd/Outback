@@ -47,10 +47,6 @@ void GameStateWinUpdate()
 	{
 		gGameStateNext = GS_MAINMENU;
 	}
-	if (AEInputCheckTriggered(AEVK_ESCAPE))
-	{
-		gGameStateNext = GS_QUIT;
-	}
 }
 
 /******************************************************************************/
@@ -70,7 +66,6 @@ void GameStateWinDraw()
 	AEGfxSetTransparency(1.0f);
 	AEGfxPrint(fontID, strBuffer, -0.55f, 0.40f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "Press 'BACKSPACE' to return to main menu", -0.65f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Press 'ESCAPE' to exit", -0.35f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /******************************************************************************/

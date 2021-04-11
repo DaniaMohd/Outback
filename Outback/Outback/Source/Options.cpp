@@ -187,7 +187,6 @@ void OptionsDraw()
 
 	AEGfxPrint(fontID, "Press BACKSPACE", -0.9f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "for Main Menu", -0.9f, -0.95f, 1.0f, 1.0f, 1.0f, 1.0f);
-
 }
 
 void OptionsFree()

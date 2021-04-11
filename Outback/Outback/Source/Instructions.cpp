@@ -77,17 +77,19 @@ void InstructUpdate()
 		gGameStateNext = GS_MAINMENU;
 	}
 
-	if (AEInputCheckTriggered(AEVK_RIGHT))
+	if (AEInputCheckReleased(AEVK_RIGHT) || AEInputCheckReleased(AEVK_LEFT))
 	{
-		gGameStateNext = GS_INSTRUCTIONS2;
+		if (gGameStateCurr == GS_INSTRUCTIONS)
+		{
+			gGameStateNext = GS_INSTRUCTIONS2;
+		}
+		if (gGameStateCurr == GS_INSTRUCTIONS2)
+		{
+			gGameStateNext = GS_INSTRUCTIONS;
+		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_LEFT))
-	{
-		gGameStateNext = GS_INSTRUCTIONS;
-	}
-
-	if (AEInputCheckTriggered(AEVK_SPACE))
+	if (AEInputCheckTriggered(AEVK_RETURN))
 	{
 		gGameStateNext = GS_TUTORIAL;
 	}
@@ -111,7 +113,7 @@ void InstructDraw()
 		AEGfxPrint(fontID, "W : to climb the ladders", -0.35f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxPrint(fontID, "J : to shoot the boomerang", -0.35f, -0.15f, 1.0f, 0.0f, 0.0f, 0.0f);
 
-		AEGfxPrint(fontID, "Press RIGHT for", 0.55f, -0.75f, 1.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxPrint(fontID, "Press < / > for", 0.55f, -0.75f, 1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxPrint(fontID, "next page", 0.55f, -0.95f, 1.0f, 0.0f, 0.0f, 0.0f);
 	}
 
@@ -125,11 +127,11 @@ void InstructDraw()
 		AEGfxSetTransparency(1.0f);
 		AEGfxMeshDraw(powerUpMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxPrint(fontID, "Press LEFT for", 0.55f, -0.75f, 1.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxPrint(fontID, "Press < / > for", 0.55f, -0.75f, 1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxPrint(fontID, "previous page", 0.55f, -0.95f, 1.0f, 0.0f, 0.0f, 0.0f);
 	}
 
-	AEGfxPrint(fontID, "Press SPACEBAR to start game", -0.35f, -0.45f, 1.0f, 0.0f, 0.0f, 0.0f);
+	AEGfxPrint(fontID, "Press ENTER to start tutorial", -0.35f, -0.45f, 1.0f, 0.0f, 0.0f, 0.0f);
 
 	AEGfxPrint(fontID, "Press BACKSPACE", -0.9f, -0.75f, 1.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxPrint(fontID, "for Main Menu", -0.9f, -0.95f, 1.0f, 0.0f, 0.0f, 0.0f);

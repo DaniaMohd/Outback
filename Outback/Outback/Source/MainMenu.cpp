@@ -68,13 +68,13 @@ void GameStateMainMenuLoad()
 	//Highlight
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		-50.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
-		 50.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		-50.0f,  10.5f, 0xFFFF0000, 0.0f, 0.0f);
+		-90.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+		 90.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		-90.0f,  10.5f, 0xFFFF0000, 0.0f, 0.0f);
 	AEGfxTriAdd(
-		 50.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
-		 50.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
-		-50.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+		 90.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+		 90.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+		-90.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 
 	vertex = AEGfxMeshEnd();
 	AE_ASSERT_MESG(vertex, "Failed to create Enemy Mesh!");
@@ -99,7 +99,7 @@ void GameStateMainMenuLoad()
 	memset(MainConfirm, 0, 100 * sizeof(char));
 	sprintf_s(MainConfirm, "YES / NO");
 	memset(exitComment, 0, 100 * sizeof(char));
-	sprintf_s(exitComment, "Left/Right to control, SPACE to choose");
+	sprintf_s(exitComment, "Left/Right to control, ENTER to choose");
 
 	//selection mesh
 	AEGfxMeshStart();
@@ -151,18 +151,6 @@ void GameStateMainMenuUpdate()
 	*/
 	if (exitDia == 0)
 	{
-		if (curr > 5)
-			curr = 0;
-
-		if (curr < 0)
-			curr = 5;
-
-		if (curMainMenu > 0.15f * 360)
-			curMainMenu = -0.45f * 270;
-
-		if (curMainMenu < -0.45f * 360)
-			curMainMenu = 0.15f * 360;
-
 		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 		{
 			curMainMenu += 0.15f * 300;
@@ -199,6 +187,18 @@ void GameStateMainMenuUpdate()
 		{
 			exitDia = 1;
 		}
+
+		if (curr > 4)
+		{
+			curr = 0;
+			curMainMenu = 0.15f * 360;
+		}
+
+		if (curr < 0)
+		{
+			curr = 4;
+			curMainMenu = -0.45f * 280;
+		}
 	}
 	if (exitDia == 1)
 	{
@@ -218,7 +218,7 @@ void GameStateMainMenuUpdate()
 			selectMainX = 45;
 		if (selectMainX > 45)
 			selectMainX = -17;
-		if (AEInputCheckTriggered(AEVK_SPACE) && b == 1)
+		if (AEInputCheckReleased(AEVK_RETURN) && b == 1)
 		{
 			if (selectMainX == -17)
 			{
@@ -227,6 +227,7 @@ void GameStateMainMenuUpdate()
 			else
 			{
 				exitDia = 0;
+				b = 0;
 			}
 		}
 	}
@@ -261,16 +262,16 @@ void GameStateMainMenuDraw()
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxMeshDraw(vertex, AE_GFX_MDM_TRIANGLES);
 		// Set position for the highlight
-		AEGfxSetPosition(-230, curMainMenu);
+		AEGfxSetPosition(-200, curMainMenu);
 	}
 	//The title's position
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "LEVEL SELECTION", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "INSTRUCTIONS", -0.7f, 0.00, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "SETTINGS", -0.7f, -0.15F, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "START GAME", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "HOW TO PLAY", -0.7f, 0.00, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "OPTIONS", -0.7f, -0.15F, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "CREDITS", -0.7f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "QUIT GAME",	  -0.7f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
 	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);

@@ -1024,7 +1024,7 @@ void GameStatePlatformUpdate(void)
 			gameIsPaused = true;
 			optionMenu = 0;
 			pauseQuit = 0;
-			printf("game paused\n, %d", gameIsPaused);		
+			//printf("game paused\n, %d", gameIsPaused);		
 			ToggleAudioPause();
 			
 		}
@@ -1033,7 +1033,7 @@ void GameStatePlatformUpdate(void)
 			if (pauseQuit == 0 && optionMenu == 0)
 			{
 				gameIsPaused = false;
-				printf("game play\n");
+				//printf("game play\n");
 				ToggleAudioPause();
 			}
 		}
