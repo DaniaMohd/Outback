@@ -97,7 +97,12 @@ void logoUpdate()
 {
 	logoTimer += g_dt;
 
-	if ((AEInputCheckCurr(AEVK_RETURN)) || (AEInputCheckCurr(AEVK_SPACE)) && logoTimer > 3.0f)
+	if ((AEInputCheckCurr(AEVK_RETURN) 
+		|| AEInputCheckCurr(AEVK_SPACE) 
+		|| AEInputCheckCurr(AEVK_LBUTTON) 
+		|| AEInputCheckCurr(AEVK_RBUTTON) 
+		|| AEInputCheckCurr(AEVK_ESCAPE)) 
+		&& logoTimer > 3.0f)
 	{
 		gGameStateNext = GS_MAINMENU;
 	}
