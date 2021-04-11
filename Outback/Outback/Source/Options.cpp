@@ -140,8 +140,8 @@ void OptionsDraw()
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
 
-	//sprintf_s(strBuffer, "To decrease volume: F11");
-	//AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+	sprintf_s(strBuffer, "To decrease volume: F11");
+	AEGfxPrint(fontID, strBuffer, -0.15f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	sprintf_s(strBuffer, "To decrease volume: 9");
 	AEGfxPrint(fontID, strBuffer, -0.35f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 
