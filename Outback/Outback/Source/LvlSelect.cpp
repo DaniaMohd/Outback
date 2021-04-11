@@ -80,17 +80,6 @@ void LvlSelectInit()
 
 void LvlSelectUpdate()
 {
-	if (lvlSelect > 2)
-		lvlSelect = 0;
-
-	if (lvlSelect < 0)
-		lvlSelect = 2;
-
-	if (currLevel > 0.30f * 360)
-		currLevel = -0.45f * 270;
-
-	if (currLevel < -0.30f * 360)
-		currLevel = 0.45 * 360;
 
 	if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 	{
@@ -116,7 +105,8 @@ void LvlSelectUpdate()
 
 	if (AEInputCheckTriggered(AEVK_RETURN) && lvlSelect == 2)
 	{
-		gGameStateNext = GS_LEVEL3;
+		gGameStateNext = GS_LEVEL1;
+		endless = true;
 	}
 
 	if (AEInputCheckTriggered(AEVK_BACK))
@@ -124,27 +114,17 @@ void LvlSelectUpdate()
 		gGameStateNext = GS_MAINMENU;
 	}
 
-	//if (AEInputCheckTriggered(AEVK_N))
-	//{
-	//	if (fullscreen == true)
-	//	{
-	//		fullscreen = false;
-	//	}
-	//	else
-	//	{
-	//		fullscreen = true;
-	//	}
+	if (lvlSelect > 2)
+		lvlSelect = 0;
 
-	//	AEToogleFullScreen(fullscreen);
-	//	if (endless == true)
-	//	{
-	//		endless = false;
-	//	}
-	//	else if (endless == false)
-	//	{
-	//		endless = true;
-	//	}
-	//}
+	if (lvlSelect < 0)
+		lvlSelect = 2;
+
+	if (currLevel > 0.30f * 360)
+		currLevel = -0.45f * 270;
+
+	if (currLevel < -0.30f * 360)
+		currLevel = 0.45 * 360;
 }
 
 void LvlSelectDraw()

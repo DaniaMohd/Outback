@@ -199,28 +199,6 @@ void GameStateMainMenuUpdate()
 		{
 			exitDia = 1;
 		}
-
-		//if (AEInputCheckTriggered(AEVK_N))
-		//{
-		//	if (fullscreen == true)
-		//	{
-		//		fullscreen = false;
-		//	}
-		//	else
-		//	{
-		//		fullscreen = true;
-		//	}
-
-		//	AEToogleFullScreen(fullscreen);
-		//	if (endless == true)
-		//	{
-		//		endless = false;
-		//	}
-		//	else if (endless == false)
-		//	{
-		//		endless = true;
-		//	}
-		//}
 	}
 	if (exitDia == 1)
 	{
