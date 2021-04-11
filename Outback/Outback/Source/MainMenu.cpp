@@ -216,9 +216,9 @@ void GameStateMainMenuUpdate()
 			}
 		}
 		if (curMainMenu > 0.15f * 360)
-			curMainMenu = -0.3f * 270;
+			curMainMenu = -0.45f * 270;
 
-		if (curMainMenu < -0.3f * 360)
+		if (curMainMenu < -0.45f * 360)
 			curMainMenu = 0.15f * 360;
 	}
 	if (exitDia == 1)

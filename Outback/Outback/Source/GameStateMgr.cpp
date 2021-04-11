@@ -170,6 +170,6 @@ void GameStateMgrUpdate()
 		AE_FATAL_ERROR("invalid state!!");
 	}
 
-	ToggleAudioMute();
+	AudioEngineUpdate();
 
 }

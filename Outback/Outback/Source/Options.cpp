@@ -78,7 +78,27 @@ void OptionsUpdate()
 	switch (chooseSettings)
 	{
 		case 0:
-			fullscreen = false;
+			if (AEInputCheckTriggered(AEVK_N))
+			{
+				if (fullscreen == true)
+				{
+					fullscreen = false;
+				}
+				else
+				{
+					fullscreen = true;
+				}
+
+				AEToogleFullScreen(fullscreen);
+				if (endless == true)
+				{
+					endless = false;
+				}
+				else if (endless == false)
+				{
+					endless = true;
+				}
+			}
 			break;
 		case 1:
 			downVol = true;
@@ -104,6 +124,7 @@ void OptionsUpdate()
 		default:
 			AE_FATAL_ERROR("Cannot choose options!!");
 	}
+
 
 	
 
