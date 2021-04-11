@@ -217,6 +217,9 @@ void OBGameOverDraw()
 
 void OBGameOverFree()
 {
+	free(ggExitTex);
+	free(selectionMesh);
+	free(ggExitMesh);
 	/*free(cont);
 	free(restart);
 	free(setting);
