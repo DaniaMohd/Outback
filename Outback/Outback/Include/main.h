@@ -42,6 +42,7 @@ extern double	g_appTime;
 #include "Credits.h"
 #include "LvlSelect.h"
 #include "Options.h"
+#include "Instructions.h"
 
 #endif // OUTBACK_MAIN_H_
 

@@ -18,6 +18,7 @@
     <ClCompile Include="Source\GameOverScreen.cpp" />
     <ClCompile Include="Source\GameStateMgr.cpp" />
     <ClCompile Include="Source\GameState_Platform.cpp" />
+    <ClCompile Include="Source\Instructions.cpp" />
     <ClCompile Include="Source\Logo.cpp" />
     <ClCompile Include="Source\LvlSelect.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Include\GameStateList.h" />
     <ClInclude Include="Include\GameStateMgr.h" />
     <ClInclude Include="Include\GameState_Platform.h" />
+    <ClInclude Include="Include\Instructions.h" />
     <ClInclude Include="Include\Logo.h" />
     <ClInclude Include="Include\LvlSelect.h" />
     <ClInclude Include="Include\main.h" />

@@ -72,7 +72,15 @@ float goalTimer;
 float startingTime;
 bool timerStart;
 int maxEnemies = 100;
-float initalX, initialY;
+char pauseinfo[100], pauseConfirm[100], dcomment[100];
+AEGfxVertexList* pauseExitMesh;
+AEGfxTexture* pauseExitTex;
+AEGfxVertexList* pauseSelectionMesh;
+int pauseselectX;
+int c = 0;		//int to prevent falling thru issue
+int pauseQuit;
+
+
 
 /******************************************************************************/
 /*!
@@ -647,7 +655,44 @@ void GameStatePlatformLoad(void)
 			memset(pause, 0, 100 * sizeof(char));
 			sprintf_s(pause, "PAUSED");
 			memset(conti, 0, 100 * sizeof(char));
-			sprintf_s(conti, "Press ESC to continue, Press BACKSPACE to go Menu");
+			sprintf_s(conti, "Press Q to QUIT, Press BACKSPACE to go Menu");
+		}
+		{
+			//QUIT MESH
+			AEGfxMeshStart();
+			AEGfxTriAdd(
+				-100.0f * 2, -100.0f, 0x00FF00FF, 0.0f, 0.0f,
+				100.0f * 2, -100.0f, 0x00FFFF00, 0.0f, 0.0f,
+				-100.0f * 2, 100.0f, 0x0000FFFF, 0.0f, 0.0f);
+			AEGfxTriAdd(
+				100.0f * 2, -100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+				-100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f,
+				100.0f * 2, 100.0f, 0x00FFFFFF, 0.0f, 0.0f);
+
+			pauseExitMesh = AEGfxMeshEnd();
+			AE_ASSERT_MESG(pauseExitMesh, "Failed to create range Mesh!");
+			pauseExitTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+			AE_ASSERT_MESG(pauseExitTex, "Failed to create pause text!!");
+			memset(pauseinfo, 0, 100 * sizeof(char));
+			sprintf_s(pauseinfo, "Please confirm to quit the program");
+			memset(pauseConfirm, 0, 100 * sizeof(char));
+			sprintf_s(pauseConfirm, "YES / NO");
+			memset(dcomment, 0, 100 * sizeof(char));
+			sprintf_s(dcomment, "Left/Right to control, SPACE to choose");
+			pauseQuit = 0;
+
+			AEGfxMeshStart();
+			AEGfxTriAdd(
+				-25.0f, -10.5f, 0xFFFF0000, 0.0f, 1.0f,
+				25.0f, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+				-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+			AEGfxTriAdd(
+				25.0, -10.5f, 0xFFFF0000, 1.0f, 1.0f,
+				25.0f, 10.5f, 0xFFFF0000, 1.0f, 0.0f,
+				-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
+			pauseSelectionMesh = AEGfxMeshEnd();
+			AE_ASSERT_MESG(pauseSelectionMesh, "Failed to create Enemy Mesh!");
+			pauseselectX = -17;
 		}
 	}
 
@@ -705,6 +750,7 @@ void GameStatePlatformLoad(void)
 	}
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
+
 }
 
 /******************************************************************************/
@@ -866,6 +912,48 @@ void GameStatePlatformUpdate(void)
 {
 	int i, j;
 
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		pHero.RangeUp();
+		pHero.SpeedUp();
+		pHero.DamageUp();
+		pHero.HpUp();
+		pHero.RegenUp();
+		pHero.VampUp();
+	}
+
+	if (pauseQuit == 1)
+	{
+		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
+		{
+			if (c != 1)
+				c = 1;
+			pauseselectX -= 62;
+		}
+		if (AEInputCheckTriggered(AEVK_D) || AEInputCheckTriggered(AEVK_RIGHT))
+		{
+			if (c != 1)
+				c = 1;
+			pauseselectX += 62;
+		}
+		if (pauseselectX < -17)
+			pauseselectX = 45;
+		if (pauseselectX > 45)
+			pauseselectX = -17;
+		if (AEInputCheckTriggered(AEVK_SPACE) && c == 1)
+		{
+			if (pauseselectX == -17)
+			{
+				gGameStateNext = GS_QUIT;
+			}
+			else
+			{
+				pauseQuit = 0;
+			}
+		}
+	}
+
+
 	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true)
 	{
 		gGameStateNext = GS_MAINMENU;
@@ -877,6 +965,10 @@ void GameStatePlatformUpdate(void)
 		gameIsPaused = true;
 		ToggleAudioPause();
 	}
+	if (AEInputCheckTriggered(AEVK_Q) && gameIsPaused == true)
+	{
+		pauseQuit = 1;
+	}
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
@@ -886,12 +978,16 @@ void GameStatePlatformUpdate(void)
 			gameIsPaused = true;
 			printf("game paused\n, %d", gameIsPaused);		
 			ToggleAudioPause();
+			
 		}
 		else
 		{
-			gameIsPaused = false;
-			printf("game play\n");
-			ToggleAudioPause();
+			if (pauseQuit == 0)
+			{
+				gameIsPaused = false;
+				printf("game play\n");
+				ToggleAudioPause();
+			}
 		}
 	}
 	if (gameIsPaused == false)
@@ -1515,10 +1611,34 @@ void GameStatePlatformDraw(void)
 		AEGfxPrint(fontID, txt, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 		sprintf_s(txt, "X %d", pHero.hpInc);
 		AEGfxPrint(fontID, txt, -0.4f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.vampirism);
+		sprintf_s(txt, "X %d", pHero.vampirism / 5);
 		AEGfxPrint(fontID, txt, 0.1f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 		sprintf_s(txt, "X %d", pHero.regeneration);
 		AEGfxPrint(fontID, txt, 0.6f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	if (pauseQuit == 1 && gameIsPaused==true)
+	{
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Set position for object 2
+		AEGfxSetPosition(0.0f, -0.1f);	//rtriangle
+		// No tint
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// Set texture
+		AEGfxTextureSet(pauseExitTex, 1, 1);
+		AEGfxMeshDraw(pauseExitMesh, AE_GFX_MDM_TRIANGLES);
+
+		if (c == 1)
+		{
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxMeshDraw(pauseSelectionMesh, AE_GFX_MDM_TRIANGLES);
+			AEGfxSetPosition(pauseselectX, -54);
+		}
+		AEGfxPrint(fontID, pauseinfo, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, dcomment, -0.45f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, pauseConfirm, -0.1f, -0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
+
+
 	}
 }
 
@@ -1565,6 +1685,9 @@ void GameStatePlatformUnload(void)
 	free(sProjectiles);
 	free(pauseMesh);
 	free(pauseTex);
+	free(pauseExitTex);
+	free(pauseSelectionMesh);
+	free(pauseExitMesh);
 
 	/*********
 	Free the map data

@@ -151,11 +151,11 @@ void GameStateMainMenuUpdate()
 	*/
 	if (exitDia == 0)
 	{
-		if (curr > 3)
+		if (curr > 4)
 			curr = 0;
 
 		if (curr < 0)
-			curr = 3;
+			curr = 4;
 
 		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 		{
@@ -176,15 +176,20 @@ void GameStateMainMenuUpdate()
 
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 1)
 		{
-			gGameStateNext = GS_OPTIONS;
+			gGameStateNext = GS_INSTRUCTIONS;
 		}
 
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 2)
 		{
-			gGameStateNext = GS_CREDITS;
+			gGameStateNext = GS_OPTIONS;
 		}
 
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 3)
+		{
+			gGameStateNext = GS_CREDITS;
+		}
+
+		if (AEInputCheckReleased(AEVK_RETURN) && curr == 4)
 		{
 			exitDia = 1;
 		}
@@ -281,9 +286,10 @@ void GameStateMainMenuDraw()
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
 	//AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "LEVEL SELECTION", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "SETTINGS", -0.7f, 0.00f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "CREDITS", -0.7f, -0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "INSTRUCTIONS", -0.7f, 0.00, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "SETTINGS", -0.7f, -0.15F, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "CREDITS", -0.7f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "EXIT",	  -0.7f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	//The arrow to select
 	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
