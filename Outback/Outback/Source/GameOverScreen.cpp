@@ -32,7 +32,7 @@ int a = 0;		//int to prevent falling thru issue
 
 void OBGameOverLoad()
 {
-	AEGfxSetBackgroundColor(0.10f, 0.00f, 0.08f);
+	AEGfxSetBackgroundColor(0.78f, 0.56f, 0.34f);
 	
 	GameOverBGMLoad();
 }
