@@ -719,7 +719,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level1.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level2.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
