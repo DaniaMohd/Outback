@@ -82,6 +82,7 @@ int pauseQuit;
 
 int optionMenu;
 AEGfxTexture* optionTex;
+bool isfullscreen;
 
 
 /******************************************************************************/
@@ -673,7 +674,7 @@ void GameStatePlatformLoad(void)
 
 			pauseExitMesh = AEGfxMeshEnd();
 			AE_ASSERT_MESG(pauseExitMesh, "Failed to create range Mesh!");
-			pauseExitTex = AEGfxTextureLoad("..\\Resources\\Textures\\pausepop.png");
+			pauseExitTex = AEGfxTextureLoad("..\\Resources\\Textures\\Background.png");
 			AE_ASSERT_MESG(pauseExitTex, "Failed to create pause text!!");
 			memset(pauseinfo, 0, 100 * sizeof(char));
 			sprintf_s(pauseinfo, "Please confirm to quit the program");
@@ -931,6 +932,18 @@ void GameStatePlatformUpdate(void)
 
 	if (optionMenu == 1)
 	{
+		if (AEInputCheckTriggered(AEVK_N))
+		{
+			if (isfullscreen == false)
+			{
+				isfullscreen = true;
+			}
+			else
+			{
+				isfullscreen = false;
+			}
+			AEToogleFullScreen(isfullscreen);
+		}
 		if (AEInputCheckTriggered(AEVK_M))
 		{
 			ToggleAudioMute();

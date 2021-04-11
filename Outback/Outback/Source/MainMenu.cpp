@@ -113,7 +113,7 @@ void GameStateMainMenuLoad()
 		-25.0f, 10.5f, 0xFFFF0000, 0.0f, 0.0f);
 	selectionMainMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(selectionMainMesh, "Failed to create Enemy Mesh!");
-	selectMainX = -17;
+	selectMainX = 45;
 
 	MainMenuBGMLoad();
 }
