@@ -912,6 +912,16 @@ void GameStatePlatformUpdate(void)
 {
 	int i, j;
 
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		pHero.RangeUp();
+		pHero.SpeedUp();
+		pHero.DamageUp();
+		pHero.HpUp();
+		pHero.RegenUp();
+		pHero.VampUp();
+	}
+
 	if (pauseQuit == 1)
 	{
 		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
@@ -1596,7 +1606,7 @@ void GameStatePlatformDraw(void)
 		AEGfxPrint(fontID, txt, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 		sprintf_s(txt, "X %d", pHero.hpInc);
 		AEGfxPrint(fontID, txt, -0.4f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.vampirism);
+		sprintf_s(txt, "X %d", pHero.vampirism / 5);
 		AEGfxPrint(fontID, txt, 0.1f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 		sprintf_s(txt, "X %d", pHero.regeneration);
 		AEGfxPrint(fontID, txt, 0.6f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
