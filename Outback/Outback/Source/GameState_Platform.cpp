@@ -725,7 +725,7 @@ void GameStatePlatformInit(void)
 		{
 			if (MapData[y][x] == TYPE_OBJECT_HERO)
 				++totalSpawn;
-			else if (MapData[y][x] == TYPE_OBJECT_GOAL)
+			if (MapData[y][x] == TYPE_OBJECT_GOAL)
 				++totalGoals;
 		}
 	}
@@ -735,9 +735,9 @@ void GameStatePlatformInit(void)
 	
 	sBoomNum = 0;
 	
-	spawnGoal = rand() % totalGoals;
-	
-	ranSpawn = rand() % totalSpawn;
+	//spawnGoal = rand() % totalGoals;
+	//
+	//ranSpawn = rand() % totalSpawn;
 
 	//Empty and Collidable blocks
 	{
@@ -963,7 +963,7 @@ void GameStatePlatformUpdate(void)
 			//	printf("endless\n");
 			//}
 			gGameStateNext = GS_LEVEL3;
-			//PrintRetrievedInformation();
+			PrintRetrievedInformation();
 		}
 
 		//BOUNDING BOXES & UPDATES
