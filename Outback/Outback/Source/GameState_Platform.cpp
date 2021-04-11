@@ -80,6 +80,8 @@ int pauseselectX;
 int c = 0;		//int to prevent falling thru issue
 int pauseQuit;
 
+int optionMenu;
+AEGfxTexture* optionTex;
 
 
 /******************************************************************************/
@@ -655,7 +657,7 @@ void GameStatePlatformLoad(void)
 			memset(pause, 0, 100 * sizeof(char));
 			sprintf_s(pause, "PAUSED");
 			memset(conti, 0, 100 * sizeof(char));
-			sprintf_s(conti, "Press Q to QUIT, Press BACKSPACE to go Menu");
+			sprintf_s(conti, "Q to QUIT,BACKSPACE to Menu, O for Option, ESC to Play");
 		}
 		{
 			//QUIT MESH
@@ -748,6 +750,10 @@ void GameStatePlatformLoad(void)
 		pixelHeight = AEGetWindowHeight() / 15;
 		AEMtx33Scale(&scale, pixelWidth, pixelHeight);
 	}
+
+
+	optionTex = AEGfxTextureLoad("..\\Resources\\Textures\\option.png");
+	AE_ASSERT_MESG(optionTex, "Failed to create pause text!!");
 
 	AEMtx33Concat(&MapTransform, &scale, &trans);
 
@@ -922,6 +928,33 @@ void GameStatePlatformUpdate(void)
 		pHero.VampUp();
 	}
 
+
+	if (optionMenu == 1)
+	{
+		if (AEInputCheckTriggered(AEVK_M))
+		{
+			ToggleAudioMute();
+		}
+
+		if (AEInputCheckTriggered(AEVK_9))
+		{
+			DecreaseVol();
+		}
+
+		if (AEInputCheckTriggered(AEVK_0))
+		{
+			IncreaseVol();
+		}
+	}
+
+	if (AEInputCheckTriggered(AEVK_O) && gameIsPaused==true && pauseQuit==0)
+	{
+		if (optionMenu == 0)
+			optionMenu = 1;
+		else
+			optionMenu = 0;
+	}
+
 	if (pauseQuit == 1)
 	{
 		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
@@ -954,7 +987,7 @@ void GameStatePlatformUpdate(void)
 	}
 
 
-	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true)
+	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true && optionMenu == 0)
 	{
 		gGameStateNext = GS_MAINMENU;
 	}
@@ -976,13 +1009,15 @@ void GameStatePlatformUpdate(void)
 		if (gameIsPaused == false)
 		{
 			gameIsPaused = true;
+			optionMenu = 0;
+			pauseQuit = 0;
 			printf("game paused\n, %d", gameIsPaused);		
 			ToggleAudioPause();
 			
 		}
 		else
 		{
-			if (pauseQuit == 0)
+			if (pauseQuit == 0 && optionMenu == 0)
 			{
 				gameIsPaused = false;
 				printf("game play\n");
@@ -1593,28 +1628,38 @@ void GameStatePlatformDraw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetTextureMode(AE_GFX_TM_PRECISE);
 		AEGfxSetPosition(camX, camY);
-		AEGfxTextureSet(pauseTex, 0, 0);
+		if (optionMenu == 0)
+		{
+			AEGfxTextureSet(pauseTex, 0, 0);
+		}
+		else
+		{
+			AEGfxTextureSet(optionTex, 0, 0);
+		}
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxMeshDraw(pauseMesh, AE_GFX_MDM_TRIANGLES);
 
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetTransparency(1.0f);
-		AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, conti, -0.65f, 0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
-		char txt[100];
-		sprintf_s(txt, "X %d", pHero.powerDamage / 10 - 1);
-		AEGfxPrint(fontID, txt, -0.4f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.powerRange - 1);
-		AEGfxPrint(fontID, txt, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.powerSpeed - 1);
-		AEGfxPrint(fontID, txt, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.hpInc);
-		AEGfxPrint(fontID, txt, -0.4f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.vampirism / 5);
-		AEGfxPrint(fontID, txt, 0.1f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-		sprintf_s(txt, "X %d", pHero.regeneration);
-		AEGfxPrint(fontID, txt, 0.6f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		if (optionMenu == 0)
+		{
+			AEGfxPrint(fontID, pause, -0.1f, 0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+			AEGfxPrint(fontID, conti, -0.75f, 0.3f, 1.0f, 1.0f, 1.0f, 1.0f);
+			char txt[100];
+			sprintf_s(txt, "X %d", pHero.powerDamage / 10 - 1);
+			AEGfxPrint(fontID, txt, -0.4f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+			sprintf_s(txt, "X %d", pHero.powerRange - 1);
+			AEGfxPrint(fontID, txt, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+			sprintf_s(txt, "X %d", pHero.powerSpeed - 1);
+			AEGfxPrint(fontID, txt, 0.6f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+			sprintf_s(txt, "X %d", pHero.hpInc);
+			AEGfxPrint(fontID, txt, -0.4f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+			sprintf_s(txt, "X %d", pHero.vampirism / 5);
+			AEGfxPrint(fontID, txt, 0.1f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+			sprintf_s(txt, "X %d", pHero.regeneration);
+			AEGfxPrint(fontID, txt, 0.6f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 
 	if (pauseQuit == 1 && gameIsPaused==true)
