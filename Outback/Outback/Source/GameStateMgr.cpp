@@ -150,8 +150,26 @@ void GameStateMgrUpdate()
 		GameStateFree = OptionsFree;
 		GameStateUnload = OptionsUnload;
 		break;
+	case GS_INSTRUCTIONS:
+		GameStateLoad = InstructLoad;
+		GameStateInit = InstructInit;
+		GameStateUpdate = InstructUpdate;
+		GameStateDraw = InstructDraw;
+		GameStateFree = InstructFree;
+		GameStateUnload = InstructUnload;
+		break;
+	case GS_INSTRUCTIONS2:
+		GameStateLoad = InstructLoad;
+		GameStateInit = InstructInit;
+		GameStateUpdate = InstructUpdate;
+		GameStateDraw = InstructDraw;
+		GameStateFree = InstructFree;
+		GameStateUnload = InstructUnload;
+		break;
 	default:
 		AE_FATAL_ERROR("invalid state!!");
 	}
+
+	ToggleAudioMute();
 
 }
