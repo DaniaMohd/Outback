@@ -72,6 +72,7 @@ float goalTimer;
 float startingTime;
 bool timerStart;
 int maxEnemies = 100;
+float initalX, initialY;
 
 /******************************************************************************/
 /*!
@@ -662,7 +663,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level1.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level1.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -670,7 +671,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level1.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -678,7 +679,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level3.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level1.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -735,9 +736,9 @@ void GameStatePlatformInit(void)
 	
 	sBoomNum = 0;
 	
-	//spawnGoal = rand() % totalGoals;
-	//
-	//ranSpawn = rand() % totalSpawn;
+	spawnGoal = rand() % totalGoals;
+	
+	ranSpawn = rand() % totalSpawn;
 
 	//Empty and Collidable blocks
 	{
@@ -962,9 +963,14 @@ void GameStatePlatformUpdate(void)
 			//	endless = true;
 			//	printf("endless\n");
 			//}
-			gGameStateNext = GS_LEVEL3;
+			gGameStateNext = GS_LEVEL2;
 			PrintRetrievedInformation();
 		}
+		if (AEInputCheckReleased(AEVK_M))
+		{
+			gGameStateNext = GS_LEVEL3;
+		}
+
 
 		//BOUNDING BOXES & UPDATES
 		{
