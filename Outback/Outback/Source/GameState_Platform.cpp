@@ -122,7 +122,7 @@ void GameStatePlatformLoad(void)
 		}
 
 		//1
-		//Creating the white object
+		//Creating the TILE object
 		{
 			pObj = sGameObjList + sGameObjNum++;
 			pObj->type = TYPE_OBJECT_COLLISION;
@@ -603,6 +603,30 @@ void GameStatePlatformLoad(void)
 			AE_ASSERT_MESG(pObj->pTex, "Failed to create particles!");
 		}
 
+		//22
+		//Creating the WATER object
+		{
+			pObj = sGameObjList + sGameObjNum++;
+			pObj->type = TYPE_OBJECT_WATER;
+
+
+			AEGfxMeshStart();
+			AEGfxTriAdd(
+				-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+				0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+			AEGfxTriAdd(
+				0.5, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+				0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+
+			pObj->pMesh = AEGfxMeshEnd();
+			AE_ASSERT_MESG(pObj->pMesh, "Failed to create Block Mesh!");
+			pObj->pTex = AEGfxTextureLoad("..\\Resources\\Textures\\Water.png");
+			AE_ASSERT_MESG(pObj->pTex, "Failed to create Block Texture!");
+		}
+
 		//PAUSE MESH
 		{
 			AEGfxMeshStart();
@@ -638,7 +662,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported.txt")) //testing
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -646,7 +670,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Exported1.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -654,7 +678,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level3.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -812,6 +836,14 @@ void GameStatePlatformInit(void)
 					SnapToCell(&sGoal.posCurr.y);
 				}
 				++sGoalNum;
+			}
+			else if (MapData[y][x] == TYPE_OBJECT_WATER)
+			{
+				sBlocks[blkCount].gameObjInstCreate(TYPE_OBJECT_WATER, 1.0f, &Pos, nullptr, 0.0f);
+
+				SnapToCell(&sBlocks[blkCount].posCurr.x);
+				SnapToCell(&sBlocks[blkCount].posCurr.y);
+				blkCount++;
 			}
 		}
 	}
