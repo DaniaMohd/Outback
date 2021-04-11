@@ -87,7 +87,19 @@ void OptionsUpdate()
 			upVol = true;
 			break;
 		case 3:
-			ToggleAudioMute();
+			if (setMute)
+			{
+				setMute = false;
+				setUnmute = true;
+
+				MainMenuBGMUnload();
+				MainMenuBGMLoad();
+			}
+			else
+			{
+				setMute = true;
+				setUnmute = false;
+			}
 			break;
 		default:
 			AE_FATAL_ERROR("Cannot choose options!!");

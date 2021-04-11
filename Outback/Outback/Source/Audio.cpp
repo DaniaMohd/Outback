@@ -85,6 +85,8 @@ void AudioEngineUpdate()
 		}
 	}
 
+	ToggleAudioMute();
+
 	result = Syst->update();
 	if (result != FMOD_RESULT::FMOD_OK) return;
 }

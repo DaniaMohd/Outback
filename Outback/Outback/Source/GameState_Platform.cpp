@@ -700,6 +700,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_TUTORIAL)
 	{
 		Level1BGMLoad();
+		AudioEngineUpdate();
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Tutorial.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 30.0f;
@@ -708,6 +709,7 @@ void GameStatePlatformLoad(void)
 	if (gGameStateCurr == GS_LEVEL1)
 	{
 		Level1BGMLoad();
+		AudioEngineUpdate();
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level1.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
@@ -716,6 +718,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL2)
 	{
 		Level2BGMLoad();
+		AudioEngineUpdate();
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level2.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
@@ -724,6 +727,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
+		AudioEngineUpdate();
 		if (!ImportMapDataFromFile("..\\Resources\\Levels\\Level3.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
