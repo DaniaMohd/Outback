@@ -40,7 +40,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	//AEToogleFullScreen(true);
 
-	GameStateMgrInit(GS_MAINMENU);
+	GameStateMgrInit(GS_LOGO);
 	AudioEngineLoad();
 
 	while(gGameStateCurr != GS_QUIT)

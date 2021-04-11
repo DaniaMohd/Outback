@@ -151,11 +151,17 @@ void GameStateMainMenuUpdate()
 	*/
 	if (exitDia == 0)
 	{
-		if (curr > 4)
+		if (curr > 5)
 			curr = 0;
 
 		if (curr < 0)
-			curr = 4;
+			curr = 5;
+
+		if (curMainMenu > 0.15f * 360)
+			curMainMenu = -0.45f * 270;
+
+		if (curMainMenu < -0.45f * 360)
+			curMainMenu = 0.15f * 360;
 
 		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
 		{
@@ -194,32 +200,27 @@ void GameStateMainMenuUpdate()
 			exitDia = 1;
 		}
 
-		if (AEInputCheckTriggered(AEVK_N))
-		{
-			if (fullscreen == true)
-			{
-				fullscreen = false;
-			}
-			else
-			{
-				fullscreen = true;
-			}
+		//if (AEInputCheckTriggered(AEVK_N))
+		//{
+		//	if (fullscreen == true)
+		//	{
+		//		fullscreen = false;
+		//	}
+		//	else
+		//	{
+		//		fullscreen = true;
+		//	}
 
-			AEToogleFullScreen(fullscreen);
-			if (endless == true)
-			{
-				endless = false;
-			}
-			else if (endless == false)
-			{
-				endless = true;
-			}
-		}
-		if (curMainMenu > 0.15f * 360)
-			curMainMenu = -0.3f * 270;
-
-		if (curMainMenu < -0.3f * 360)
-			curMainMenu = 0.15f * 360;
+		//	AEToogleFullScreen(fullscreen);
+		//	if (endless == true)
+		//	{
+		//		endless = false;
+		//	}
+		//	else if (endless == false)
+		//	{
+		//		endless = true;
+		//	}
+		//}
 	}
 	if (exitDia == 1)
 	{
