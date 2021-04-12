@@ -1,16 +1,18 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		GameState_Platform.cpp
-\author
-\par    	email:
-\date   	??/??/2021
-\brief      This file contains the definition for the Game State Platform function.
+\file			GameState_Platform.cpp
+\project name	Outback
+\author(s)	 	Primary:	Javin Ong J-Min
+				Secondary:	Yu Xi Lim
+				Secondary:	Binte Mohd Rizal, Nurul Dania
+				Secondary:	Sim Xuan Yee
+				Secondary:	Lim Sim Chee, Shannon
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #include "main.h"
 
@@ -969,38 +971,6 @@ void GameStatePlatformUpdate(void)
 			optionMenu = 0;
 	}
 
-	/*if (pauseQuit == 1)
-	{
-		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
-		{
-			if (c != 1)
-				c = 1;
-			pauseselectX -= 62;
-		}
-		if (AEInputCheckTriggered(AEVK_D) || AEInputCheckTriggered(AEVK_RIGHT))
-		{
-			if (c != 1)
-				c = 1;
-			pauseselectX += 62;
-		}
-		if (pauseselectX < -17)
-			pauseselectX = 45;
-		if (pauseselectX > 45)
-			pauseselectX = -17;
-		if (AEInputCheckTriggered(AEVK_RETURN) && c == 1)
-		{
-			if (pauseselectX == -17)
-			{
-				gGameStateNext = GS_QUIT;
-			}
-			else
-			{
-				pauseQuit = 0;
-				c = 0;
-			}
-		}
-	}*/
-
 	if (toMainMenu == 1)
 	{
 		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
@@ -1044,10 +1014,6 @@ void GameStatePlatformUpdate(void)
 		gameIsPaused = true;
 		ToggleAudioPause();
 	}
-	/*if (AEInputCheckTriggered(AEVK_Q) && gameIsPaused == true)
-	{
-		pauseQuit = 1;
-	}*/
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{

@@ -1,16 +1,14 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		main.cpp
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
-\brief      This file contains the definition for the main function.
+\file			main.cpp
+\project name	Outback
+\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #include "main.h"
 

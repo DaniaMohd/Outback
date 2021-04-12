@@ -1,11 +1,7 @@
 ﻿/****************************************************************************** /
 /*!
-\file		MainMenu.cpp
-\author 	Sim Xuan Yee
-\par    	email: xuanyee.s@digipen.edu
-\date		14th March 2021
-\brief		This file contains the definitions of the functions needed to run
-			the pasuescreen of the game
+\file			GameOverScreen.cpp
+\author(s)	 	Primary:	Sim Xuan Yee
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
@@ -108,21 +104,6 @@ void OBGameOverUpdate()
 			selection -= 1;
 		}
 
-		/*if (AEInputCheckTriggered(AEVK_SPACE) && selection == 2)
-		{
-			gGameStateNext = GS_LEVEL1;
-			level = 0;
-		}*/
-
-		//if (AEInputCheckTriggered(AEVK_RETURN) && currPause == 0.15f)
-			//gGameStateNext = OB_INSTRUCTIONS;
-
-		//if (AEInputCheckTriggered(AEVK_RETURN) && currGG == 0.00f)
-			//gGameStateNext = OB_SETTINGS;
-
-		//if (AEInputCheckTriggered(AEVK_RETURN) && currGG == -0.15f)
-			//gGameStateNext = OB_CREDITS;
-
 		if (AEInputCheckReleased(AEVK_RETURN) && selection == 1)
 			gGameStateNext = GS_MAINMENU;
 
@@ -161,7 +142,7 @@ void OBGameOverUpdate()
 			selectX = 45;
 		if (selectX > 45)
 			selectX = -17;
-		if (AEInputCheckTriggered(AEVK_SPACE) && a == 1)
+		if (AEInputCheckReleased(AEVK_RETURN) && a == 1)
 		{
 			if (selectX == -17)
 			{

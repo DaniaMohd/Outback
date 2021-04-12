@@ -1,16 +1,16 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		MainMenu.cpp
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
-\brief      This file contains the definition for the main menu function.
+\file			main.cpp
+\project name	Outback
+\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania
+				Secondary:	Sim Xuan Yee
+				Secondary:	Lim Sim Chee, Shannon
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #include "main.h"
 
@@ -139,16 +139,6 @@ void GameStateMainMenuInit()
 /******************************************************************************/
 void GameStateMainMenuUpdate()
 {
-	/*
-	1. check if the cursor > 0.15
-		set the cursor -0.15
-	2. check if the cursor < -0.15
-		set the cursor 0.15
-	3. if up key
-		cursor += 0.15f
-	4. if down key
-		cursor -= 0.15f
-	*/
 	if (exitDia == 0)
 	{
 		if (AEInputCheckTriggered(AEVK_UP) || AEInputCheckTriggered(AEVK_W))
@@ -265,18 +255,12 @@ void GameStateMainMenuDraw()
 	}
 	//The title's position
 	AEGfxPrint(fontTitle, strBuffer, -0.8f, 0.60f, 1.0f, 1.0f, 1.0f, 1.0f);
-	//AEGfxPrint(fontID, "Please press 'ENTER' to confirm selection", -0.65f, 0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "START GAME", -0.7f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "HOW TO PLAY", -0.7f, 0.00, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "OPTIONS", -0.7f, -0.15F, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "CREDITS", -0.7f, -0.30f, 1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, "QUIT GAME",	  -0.7f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
 
-	//The arrow to select
-	//AEGfxPrint(fontID, "<--", -0.45f, curMainMenu, 1.0f, 1.0f, 1.0f, 1.0f);
-	//AEGfxPrint(fontID, "Press 'BACKSPACE' to return to Main Menu", -0.65f, -0.45f, 1.0f, 1.0f, 1.0f, 1.0f);
-	//AEGfxPrint(fontID, "Collect all the coins to win!", -0.45f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f);
-	//AEGfxPrint(fontID, "WASD and arrow keys compatable!", -0.55f, -0.90f, 1.0f, 1.0f, 1.0f, 1.0f);
 	if (exitDia == 1)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

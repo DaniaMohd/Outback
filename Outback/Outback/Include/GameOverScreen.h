@@ -1,10 +1,7 @@
 /****************************************************************************** /
 /*!
-\file		GameOverScreen.h
-\author 	DigiPen
-\par    	email: digipen\@digipen.edu
-\date
-\brief
+\file			GameOverScreen.h
+\author(s)	 	Primary:	Sim Xuan Yee
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

@@ -1,16 +1,14 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		Map.h
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
-\brief      This file contains the definition for the map function.
+\file			Map.h
+\project name	Outback
+\author(s)	 	Primary:	Javin Ong J-Min
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #ifndef MAP_H_
 #define MAP_H_

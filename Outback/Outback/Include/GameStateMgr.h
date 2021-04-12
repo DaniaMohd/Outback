@@ -1,16 +1,14 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		GameStateMgr.h
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
-\brief      This file contains the definition for the Game State Manager function.
+\file			GameState_Platform.cpp
+\project name	Outback
+\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #ifndef CS230_GAME_STATE_MGR_H_
 #define CS230_GAME_STATE_MGR_H_

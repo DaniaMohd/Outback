@@ -1,17 +1,15 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		Instructions.cpp
-\author 	Lim Sim Chee, Shannon
-\par    	email: lim.s@digipen.edu
-\date   	8th April 2021
-\brief      This file contains the declearations of the functions needed for
-			the instructions screen
+\file			Instructions.cpp
+\project name	Outback
+\author(s)	 	Primary:	Lim Sim Chee, Shannon
+				Secondary:	Binte Mohd Rizal, Nurul Dania
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
 prior written consent of DigiPen Institute of Technology is prohibited.
- */
- /******************************************************************************/
+*/
+/******************************************************************************/
 
 #include "main.h"
 
