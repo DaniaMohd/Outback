@@ -1,11 +1,8 @@
 /****************************************************************************** /
 /*!
-\file		Audio.cpp
-\author 	Lim Sim Chee, Shannon
-\par    	email: lim.s@digipen.edu
-\date		15th March 2021
-\brief		This file contains the definitions of the functions to play the
-			music and the sound effects of the game.
+\file			Audio.cpp
+\project name	Outback
+\author(s)	 	Primary:	Lim Sim Chee, Shannon
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
@@ -20,7 +17,7 @@ FMOD::Sound		* mainMenuBGM, * Level1BGM, * Level2BGM, * Level3BGM,
 				* GameOverBGM, * Jump, * highScore, * beeSFX, * emuSFX,
 				* spiderSFX, * lootSFX, * boomerangSFX, * keySelect,
 				* playerSFX, * car;
-FMOD::Channel	* channel1, * channel2/*, * channel3*/;
+FMOD::Channel	* channel1, * channel2;
 FMOD_RESULT		result;
 unsigned int	version;
 void			* extradriverdata;
@@ -36,10 +33,6 @@ bool			mute = false;
 extern bool downVol;
 extern bool upVol;
 extern bool gameIsPaused;
-//bool			boomerangCollision = false;
-//bool			playerJump = false;
-//bool			changeLevel = false;
-//bool			gameOver = false;
 bool			carEngineRev = false;
 
 void AudioEngineLoad()

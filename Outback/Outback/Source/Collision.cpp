@@ -1,10 +1,8 @@
-/******************************************************************************/
+/****************************************************************************** /
 /*!
-\file		Collision.cpp
-\author 	Javin Ong J-min
-\par    	email: ong.j@digipen.edu
-\date   	15/03/2021
-\brief      This file contains the definition for the Collision function.
+\file			Collision.cpp
+\project name	Outback
+\author(s)	 	Primary:	Javin Ong J-min
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

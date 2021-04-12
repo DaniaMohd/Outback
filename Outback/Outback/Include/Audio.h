@@ -1,11 +1,8 @@
 /****************************************************************************** /
 /*!
-\file		Audio.h
-\author 	Lim Sim Chee, Shannon
-\par    	email: lim.s@digipen.edu
-\date		15th March 2021
-\brief		This file contains the declarations of the functions to play the
-			music and the sound effects of the game.
+\file			Audio.h
+\project name	Outback
+\author(s)	 	Primary:	Lim Sim Chee, Shannon
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
@@ -19,10 +16,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 extern bool			setMute;
 extern bool			setUnmute;
 extern bool			mute;
-//extern bool			boomerangCollision;
-//extern bool			playerJump;
-//extern bool			changeLevel;
-//extern bool			gameOver;
 extern bool			carEngineRev;
 
 void AudioEngineLoad();

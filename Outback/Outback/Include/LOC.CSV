@@ -1,0 +1,24 @@
+language,filename,blank,comment,code,"http://cloc.sourceforge.net v 1.60  T=0.06 s (387.8 files/s, 99996.5 lines/s)"
+C/C++ Header,fmod_common.h,258,821,668
+C/C++ Header,fmod_dsp_effects.h,183,708,441
+C/C++ Header,fmod.h,133,194,392
+C/C++ Header,fmod_dsp.h,141,442,340
+C/C++ Header,GameObjects.h,34,7,161
+C/C++ Header,fmod_errors.h,6,11,96
+C/C++ Header,fmod_output.h,28,79,86
+C/C++ Header,fmod_codec.h,26,94,58
+C/C++ Header,Audio.h,11,17,29
+C/C++ Header,main.h,18,16,23
+C/C++ Header,GameStateList.h,6,17,22
+C/C++ Header,Map.h,6,12,17
+C/C++ Header,GameStateMgr.h,15,23,17
+C/C++ Header,GameOverScreen.h,5,12,10
+C/C++ Header,Collision.h,7,16,10
+C/C++ Header,GameState_Platform.h,7,14,9
+C/C++ Header,Instructions.h,4,13,9
+C/C++ Header,Win.h,6,12,9
+C/C++ Header,LvlSelect.h,4,13,9
+C/C++ Header,Credits.h,4,13,9
+C/C++ Header,MainMenu.h,6,12,9
+C/C++ Header,Logo.h,5,13,9
+C/C++ Header,Options.h,4,13,9

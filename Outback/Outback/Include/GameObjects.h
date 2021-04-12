@@ -1,3 +1,17 @@
+/****************************************************************************** /
+/*!
+\file			Audio.h
+\project name	Outback
+\author(s)	 	Primary:	Javin Ong J-Min
+				Secondary:	Yu Xi Lim
+				Secondary:	Binte Mohd Rizal, Nurul Dania
+
+Copyright (C) 2021 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the
+prior written consent of DigiPen Institute of Technology is prohibited.
+*/
+/******************************************************************************/
+
 const unsigned int	GAME_OBJ_NUM_MAX = 32;	//The total number of different objects (Shapes)
 const unsigned int	GAME_OBJ_INST_NUM_MAX = 1024;	//The total number of different game object instances
 

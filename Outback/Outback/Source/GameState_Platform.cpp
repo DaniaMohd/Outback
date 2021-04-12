@@ -87,6 +87,8 @@ int toMainMenu;
 
 extern bool carEngineRev;
 
+float initialX, initialY;
+
 /******************************************************************************/
 /*!
 	"Load" Platform
@@ -827,6 +829,8 @@ void GameStatePlatformInit(void)
 			{
 				if (currSpawn == ranSpawn)
 				{
+					initialX = Pos.x;
+					initialY = Pos.y;
 					pHero.playerCreate(&Pos);
 					if (newGame == true)
 					{
@@ -926,17 +930,6 @@ void GameStatePlatformUpdate(void)
 {
 	int i, j;
 	AudioEngineUpdate();
-
-	if (AEInputCheckTriggered(AEVK_P))
-	{
-		pHero.RangeUp();
-		pHero.SpeedUp();
-		pHero.DamageUp();
-		pHero.HpUp();
-		pHero.RegenUp();
-		pHero.VampUp();
-	}
-
 
 	if (optionMenu == 1)
 	{
@@ -1063,8 +1056,7 @@ void GameStatePlatformUpdate(void)
 		{
 			gameIsPaused = true;
 			optionMenu = 0;
-			pauseQuit = 0;
-			//printf("game paused\n, %d", gameIsPaused);		
+			pauseQuit = 0;	
 			ToggleAudioPause();
 			
 		}
@@ -1073,7 +1065,6 @@ void GameStatePlatformUpdate(void)
 			if (pauseQuit == 0 && optionMenu == 0)
 			{
 				gameIsPaused = false;
-				//printf("game play\n");
 				ToggleAudioPause();
 			}
 		}
@@ -1113,43 +1104,6 @@ void GameStatePlatformUpdate(void)
 			}
 		}
 
-		//### Next stage DEBUG
-		if (AEInputCheckReleased(AEVK_N))
-		{
-			//win = true;
-			//if (win == true)
-			//{
-			//	switch (gGameStateCurr)
-			//	{
-			//	case GS_LEVEL1:
-			//		gGameStateNext = GS_LEVEL2;
-			//		win = false;
-			//		break;
-			//	case GS_LEVEL2:
-			//		gGameStateNext = GS_LEVEL3;
-			//		win = false;
-			//		break;
-			//	case GS_LEVEL3:
-			//		gGameStateNext = GS_WIN;
-			//		win = false;
-			//		break;
-			//	default:
-			//		break;
-			//	}
-			//}
-			//if (endless == true)
-			//{
-			//	endless = false;
-			//	printf("not endless\n");
-			//}
-			//else if (endless == false)
-			//{
-			//	endless = true;
-			//	printf("endless\n");
-			//}
-			gGameStateNext = GS_LEVEL2;
-			PrintRetrievedInformation();
-		}
 		if (AEInputCheckReleased(AEVK_M))
 		{
 			gGameStateNext = GS_LEVEL3;
@@ -1377,6 +1331,14 @@ void GameStatePlatformUpdate(void)
 							sBlocks[i].PowerUpCreate(sBlocks[i].posCurr);
 						}
 					}
+				}
+
+				//If player hit the water
+				if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
+					&& sBlocks[i].pObject->type == TYPE_OBJECT_WATER)
+				{
+					pHero.posCurr.x = initialX;
+					pHero.posCurr.y = initialY;
 				}
 			}
 
