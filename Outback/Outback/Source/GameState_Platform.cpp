@@ -660,7 +660,7 @@ void GameStatePlatformLoad(void)
 			memset(pause, 0, 100 * sizeof(char));
 			sprintf_s(pause, "PAUSED");
 			memset(conti, 0, 100 * sizeof(char));
-			sprintf_s(conti, "Q to QUIT,BACKSPACE to Menu, O for Option, ESC to Play");
+			sprintf_s(conti, "BACKSPACE to Menu, O for Option, ESC to Resume Game");
 			
 
 		}
@@ -681,14 +681,14 @@ void GameStatePlatformLoad(void)
 			pauseExitTex = AEGfxTextureLoad("..\\Resources\\Textures\\Background.png");
 			AE_ASSERT_MESG(pauseExitTex, "Failed to create pause text!!");
 			memset(pauseinfo, 0, 100 * sizeof(char));
-			sprintf_s(pauseinfo, "Please confirm to quit the program");
+			//sprintf_s(pauseinfo, "Please confirm to quit the program");
 			memset(pauseConfirm, 0, 100 * sizeof(char));
 			sprintf_s(pauseConfirm, "YES / NO");
 			memset(dcomment, 0, 100 * sizeof(char));
 			sprintf_s(dcomment, "Left/Right to control, ENTER to choose");
 			memset(toMainMenuText, 0, 100 * sizeof(char));
 			sprintf_s(toMainMenuText, "Please confirm to return to Main Menu");
-			pauseQuit = 0;
+			//pauseQuit = 0;
 			toMainMenu = 0;
 
 			AEGfxMeshStart();
@@ -968,7 +968,7 @@ void GameStatePlatformUpdate(void)
 		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_O) && gameIsPaused==true && pauseQuit==0)
+	if (AEInputCheckTriggered(AEVK_O) && gameIsPaused==true)
 	{
 		if (optionMenu == 0)
 			optionMenu = 1;
@@ -976,7 +976,7 @@ void GameStatePlatformUpdate(void)
 			optionMenu = 0;
 	}
 
-	if (pauseQuit == 1)
+	/*if (pauseQuit == 1)
 	{
 		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
 		{
@@ -1006,7 +1006,7 @@ void GameStatePlatformUpdate(void)
 				c = 0;
 			}
 		}
-	}
+	}*/
 
 	if (toMainMenu == 1)
 	{
@@ -1026,7 +1026,7 @@ void GameStatePlatformUpdate(void)
 			pauseselectX = 45;
 		if (pauseselectX > 45)
 			pauseselectX = -17;
-		if (AEInputCheckTriggered(AEVK_RETURN) && c == 1)
+		if (AEInputCheckReleased(AEVK_RETURN) && c == 1)
 		{
 			if (pauseselectX == -17)
 			{
@@ -1040,7 +1040,7 @@ void GameStatePlatformUpdate(void)
 		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true && optionMenu == 0)
+	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true)
 	{
 		toMainMenu = 1;
 	}
@@ -1051,10 +1051,10 @@ void GameStatePlatformUpdate(void)
 		gameIsPaused = true;
 		ToggleAudioPause();
 	}
-	if (AEInputCheckTriggered(AEVK_Q) && gameIsPaused == true)
+	/*if (AEInputCheckTriggered(AEVK_Q) && gameIsPaused == true)
 	{
 		pauseQuit = 1;
-	}
+	}*/
 
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
@@ -1717,7 +1717,7 @@ void GameStatePlatformDraw(void)
 		}
 	}
 
-	if ((pauseQuit == 1 || toMainMenu == 1) && gameIsPaused == true)
+	if (toMainMenu == 1 && gameIsPaused == true)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 2
@@ -1792,9 +1792,9 @@ void GameStatePlatformUnload(void)
 	free(sProjectiles);
 	free(pauseMesh);
 	free(pauseTex);
-	free(pauseExitTex);
+	//free(pauseExitTex);
 	free(pauseSelectionMesh);
-	free(pauseExitMesh);
+	//free(pauseExitMesh);
 
 	/*********
 	Free the map data

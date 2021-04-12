@@ -162,7 +162,6 @@ void GameStateMainMenuUpdate()
 			curMainMenu -= 0.15f * 300;
 			curr++;
 		}
-
 		if (AEInputCheckReleased(AEVK_RETURN) && curr == 0)
 		{
 			gGameStateNext = GS_LVLSELECT;

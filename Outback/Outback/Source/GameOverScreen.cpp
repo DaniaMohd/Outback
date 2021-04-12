@@ -55,7 +55,7 @@ void OBGameOverInit()
 	sprintf_s(barrow, "^^^");
 
 	memset(bcomment, 0, 100 * sizeof(char));
-	sprintf_s(bcomment, "Left/Right to control, SPACE to choose");
+	sprintf_s(bcomment, "Left/Right to control, ENTER to choose");
 
 	AEGfxMeshStart();
 	AEGfxTriAdd(
@@ -123,10 +123,10 @@ void OBGameOverUpdate()
 		//if (AEInputCheckTriggered(AEVK_RETURN) && currGG == -0.15f)
 			//gGameStateNext = OB_CREDITS;
 
-		if (AEInputCheckTriggered(AEVK_SPACE) && selection == 1)
+		if (AEInputCheckReleased(AEVK_RETURN) && selection == 1)
 			gGameStateNext = GS_MAINMENU;
 
-		if (AEInputCheckTriggered(AEVK_SPACE) && selection == 0)
+		if (AEInputCheckReleased(AEVK_RETURN) && selection == 0)
 			selectedA = 1;
 
 		if (AEInputCheckTriggered(AEVK_ESCAPE))
@@ -170,6 +170,7 @@ void OBGameOverUpdate()
 			else
 			{
 				selectedA = 0;
+				a = 0;
 			}
 		}
 	}
@@ -205,7 +206,7 @@ void OBGameOverDraw()
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(selectionMesh, AE_GFX_MDM_TRIANGLES);
-			AEGfxSetPosition(selectX, -52);
+			AEGfxSetPosition(selectX, -60);
 		}
 		AEGfxPrint(fontID, ggQuit, -0.41f, 0.22f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, bcomment, -0.45f, -0.02f, 1.0f, 1.0f, 1.0f, 1.0f);

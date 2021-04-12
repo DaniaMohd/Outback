@@ -89,7 +89,7 @@ void InstructUpdate()
 		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN))
+	if (AEInputCheckReleased(AEVK_RETURN))
 	{
 		gGameStateNext = GS_TUTORIAL;
 	}
