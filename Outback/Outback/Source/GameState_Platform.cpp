@@ -756,8 +756,8 @@ void GameStatePlatformLoad(void)
 	else
 	{
 		// Each block is set
-		pixelWidth = AEGetWindowWidth() / 20;
-		pixelHeight = AEGetWindowHeight() / 15;
+		pixelWidth = AEGetWindowWidth() / 20.0f;
+		pixelHeight = AEGetWindowHeight() / 15.0f;
 		AEMtx33Scale(&scale, pixelWidth, pixelHeight);
 	}
 
@@ -1061,7 +1061,7 @@ void GameStatePlatformUpdate(void)
 			}
 
 			//firing
-			if (AEInputCheckCurr(AEVK_J) && sBoomNum < pHero.projectileMax)
+			if (AEInputCheckCurr(AEVK_J) && sBoomNum < (unsigned)pHero.projectileMax)
 			{
 				pHero.playerFire(sProjectiles);
 				++sBoomNum;
@@ -1119,8 +1119,8 @@ void GameStatePlatformUpdate(void)
 					//bees
 					if (sEnemies[i].pObject->type == TYPE_OBJECT_ENEMY2)
 					{
-						sEnemies[i].velCurr.x = cos(sEnemies[i].counter1);
-						sEnemies[i].velCurr.y = sin(sEnemies[i].counter1);
+						sEnemies[i].velCurr.x = cosf(sEnemies[i].counter1);
+						sEnemies[i].velCurr.y = sinf(sEnemies[i].counter1);
 						sEnemies[i].facePlayer(pHero);
 						sEnemies[i].counter += g_dt;
 						sEnemies[i].counter1 += g_dt;
@@ -1658,7 +1658,7 @@ void GameStatePlatformDraw(void)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(pauseSelectionMesh, AE_GFX_MDM_TRIANGLES);
-			AEGfxSetPosition(pauseselectX, -54);
+			AEGfxSetPosition((float)pauseselectX, -54);
 		}
 		if (pauseQuit == 1)
 		{
