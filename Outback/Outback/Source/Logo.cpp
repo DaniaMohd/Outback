@@ -97,12 +97,11 @@ void logoUpdate()
 {
 	logoTimer += g_dt;
 
-	if ((AEInputCheckReleased(AEVK_RETURN) 
+	if (   AEInputCheckReleased(AEVK_RETURN) 
 		|| AEInputCheckCurr(AEVK_SPACE) 
 		|| AEInputCheckCurr(AEVK_LBUTTON) 
 		|| AEInputCheckCurr(AEVK_RBUTTON) 
 		|| AEInputCheckCurr(AEVK_ESCAPE))
-		&& logoTimer >= 3.0f)
 	{
 		logoTimer=10.0f;
 	}

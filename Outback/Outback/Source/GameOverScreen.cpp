@@ -108,11 +108,11 @@ void OBGameOverUpdate()
 			selection -= 1;
 		}
 
-		if (AEInputCheckTriggered(AEVK_SPACE) && selection == 2)
+		/*if (AEInputCheckTriggered(AEVK_SPACE) && selection == 2)
 		{
 			gGameStateNext = GS_LEVEL1;
 			level = 0;
-		}
+		}*/
 
 		//if (AEInputCheckTriggered(AEVK_RETURN) && currPause == 0.15f)
 			//gGameStateNext = OB_INSTRUCTIONS;
@@ -132,15 +132,15 @@ void OBGameOverUpdate()
 		if (AEInputCheckTriggered(AEVK_ESCAPE))
 			gGameStateNext = GS_MAINMENU;
 
-		if (selection > 2)
+		if (selection > 1)
 		{
 			currGG = -0.39f;
 			selection = 0;
 		}
 		if (selection < 0)
 		{
-			currGG = 0.21f;
-			selection = 2;
+			currGG = -0.09f;
+			selection = 1;
 		}
 	}
 	if (selectedA == 1)
@@ -184,7 +184,7 @@ void OBGameOverDraw()
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetTransparency(1.0f);
 		AEGfxPrint(fontID, gameOverMsg, -0.5, 0.50f, 1.1f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, brestart, 0.2, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
+		//AEGfxPrint(fontID, brestart, 0.2, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, mainMenu, -0.16f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, quit, -0.4f, 0.15f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, barrow, currGG, 0.07f, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -207,9 +207,9 @@ void OBGameOverDraw()
 			AEGfxMeshDraw(selectionMesh, AE_GFX_MDM_TRIANGLES);
 			AEGfxSetPosition(selectX, -52);
 		}
-		AEGfxPrint(fontID, ggQuit, -0.41f, 0.16f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, bcomment, -0.45f, -0.06f, 1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxPrint(fontID, ggConfirm, -0.1f, -0.26f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, ggQuit, -0.41f, 0.22f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, bcomment, -0.45f, -0.02f, 1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxPrint(fontID, ggConfirm, -0.1f, -0.22f, 1.0f, 1.0f, 1.0f, 1.0f);
 
 
 	}

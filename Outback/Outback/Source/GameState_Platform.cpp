@@ -72,7 +72,7 @@ float goalTimer;
 float startingTime;
 bool timerStart;
 int maxEnemies = 100;
-char pauseinfo[100], pauseConfirm[100], dcomment[100];
+char pauseinfo[100], pauseConfirm[100], dcomment[100], toMainMenuText[100];
 AEGfxVertexList* pauseExitMesh;
 AEGfxTexture* pauseExitTex;
 AEGfxVertexList* pauseSelectionMesh;
@@ -83,6 +83,7 @@ int pauseQuit;
 int optionMenu;
 AEGfxTexture* optionTex;
 bool isfullscreen;
+int toMainMenu;
 
 extern bool carEngineRev;
 
@@ -660,6 +661,8 @@ void GameStatePlatformLoad(void)
 			sprintf_s(pause, "PAUSED");
 			memset(conti, 0, 100 * sizeof(char));
 			sprintf_s(conti, "Q to QUIT,BACKSPACE to Menu, O for Option, ESC to Play");
+			
+
 		}
 		{
 			//QUIT MESH
@@ -682,8 +685,11 @@ void GameStatePlatformLoad(void)
 			memset(pauseConfirm, 0, 100 * sizeof(char));
 			sprintf_s(pauseConfirm, "YES / NO");
 			memset(dcomment, 0, 100 * sizeof(char));
-			sprintf_s(dcomment, "Left/Right to control, SPACE to choose");
+			sprintf_s(dcomment, "Left/Right to control, ENTER to choose");
+			memset(toMainMenuText, 0, 100 * sizeof(char));
+			sprintf_s(toMainMenuText, "Please confirm to return to Main Menu");
 			pauseQuit = 0;
+			toMainMenu = 0;
 
 			AEGfxMeshStart();
 			AEGfxTriAdd(
@@ -988,7 +994,7 @@ void GameStatePlatformUpdate(void)
 			pauseselectX = 45;
 		if (pauseselectX > 45)
 			pauseselectX = -17;
-		if (AEInputCheckTriggered(AEVK_SPACE) && c == 1)
+		if (AEInputCheckTriggered(AEVK_RETURN) && c == 1)
 		{
 			if (pauseselectX == -17)
 			{
@@ -997,14 +1003,46 @@ void GameStatePlatformUpdate(void)
 			else
 			{
 				pauseQuit = 0;
+				c = 0;
 			}
 		}
 	}
 
+	if (toMainMenu == 1)
+	{
+		if (AEInputCheckTriggered(AEVK_A) || AEInputCheckTriggered(AEVK_LEFT))
+		{
+			if (c != 1)
+				c = 1;
+			pauseselectX -= 62;
+		}
+		if (AEInputCheckTriggered(AEVK_D) || AEInputCheckTriggered(AEVK_RIGHT))
+		{
+			if (c != 1)
+				c = 1;
+			pauseselectX += 62;
+		}
+		if (pauseselectX < -17)
+			pauseselectX = 45;
+		if (pauseselectX > 45)
+			pauseselectX = -17;
+		if (AEInputCheckTriggered(AEVK_RETURN) && c == 1)
+		{
+			if (pauseselectX == -17)
+			{
+				gGameStateNext = GS_MAINMENU;
+			}
+			else
+			{
+				toMainMenu = 0;
+				c = 0;
+			}
+		}
+	}
 
 	if (AEInputCheckTriggered(AEVK_BACK) && gameIsPaused == true && optionMenu == 0)
 	{
-		gGameStateNext = GS_MAINMENU;
+		toMainMenu = 1;
 	}
 
 	//Pause game when window is minimized
@@ -1679,7 +1717,7 @@ void GameStatePlatformDraw(void)
 		}
 	}
 
-	if (pauseQuit == 1 && gameIsPaused==true)
+	if ((pauseQuit == 1 || toMainMenu == 1) && gameIsPaused == true)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 2
@@ -1696,7 +1734,14 @@ void GameStatePlatformDraw(void)
 			AEGfxMeshDraw(pauseSelectionMesh, AE_GFX_MDM_TRIANGLES);
 			AEGfxSetPosition(pauseselectX, -54);
 		}
-		AEGfxPrint(fontID, pauseinfo, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		if (pauseQuit == 1)
+		{
+			AEGfxPrint(fontID, pauseinfo, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
+		if (toMainMenu == 1)
+		{
+			AEGfxPrint(fontID, toMainMenuText, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
 		AEGfxPrint(fontID, dcomment, -0.45f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, pauseConfirm, -0.1f, -0.2f, 1.0f, 1.0f, 1.0f, 1.0f);
 
