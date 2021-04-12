@@ -2,8 +2,8 @@
 /*!
 \file			Logo.cpp
 \project name	Outback
-\author(s)	 	Primary:	Lim Sim Chee, Shannon
-				Secondary:	Binte Mohd Rizal, Nurul Dania
+\author(s)	 	Primary:	Lim Sim Chee, Shannon			(60%)
+				Secondary:	Binte Mohd Rizal, Nurul Dania	(40%)
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

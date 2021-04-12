@@ -2,7 +2,7 @@
 /*!
 \file			GameState_Platform.h
 \project name	Outback
-\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania
+\author(s)	 	Primary:	Javin Ong J-Min
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
