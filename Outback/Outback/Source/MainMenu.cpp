@@ -1,6 +1,6 @@
 /****************************************************************************** /
 /*!
-\file			main.cpp
+\file			MainMenu.cpp
 \project name	Outback
 \author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania	(50%)
 				Secondary:	Sim Xuan Yee					(30%)
