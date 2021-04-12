@@ -736,7 +736,7 @@ void GameStatePlatformLoad(void)
 	else if (gGameStateCurr == GS_LEVEL3)
 	{
 		Level3BGMLoad();
-		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level1.txt"))
+		if (!ImportMapDataFromFile("..\\Resources\\Levels\\level3.txt"))
 			gGameStateNext = GS_QUIT;
 		goalTimer = 60.0f;
 		startingTime = 60.0f;
@@ -1240,7 +1240,8 @@ void GameStatePlatformUpdate(void)
 				//checks if player touches power up
 				if ((CollisionIntersection_RectRect(pHero.boundingBox, pHero.velCurr, sBlocks[i].boundingBox, sBlocks[i].velCurr)) == true
 					&& sBlocks[i].pObject->type != TYPE_OBJECT_COIN
-					&& sBlocks[i].pObject->type != TYPE_OBJECT_LADDER)
+					&& sBlocks[i].pObject->type != TYPE_OBJECT_LADDER
+					&& sBlocks[i].pObject->type != TYPE_OBJECT_WATER)
 				{
 					if (sBlocks[i].pObject->type == TYPE_OBJECT_DAMAGE)
 					{
