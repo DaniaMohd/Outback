@@ -202,14 +202,7 @@ void OBGameOverFree()
 	free(ggExitTex);
 	free(selectionMesh);
 	free(ggExitMesh);
-	/*free(cont);
-	free(restart);
-	free(setting);
-	free(sound);
-	free(help);
-	free(aexit);
-	free(arrow);
-	free(comment);*/
+
 }
 
 void OBGameOverUnload()
