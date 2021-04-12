@@ -416,7 +416,7 @@ void Enemy::enemyGridFlag()
 /******************************************************************************/
 void Enemy::enemyFire(Player character, Projectile* bullet)
 {
-	float mag = sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f));
+	float mag = (float)sqrt(pow((double)character.posCurr.x - posCurr.x, 2.0f) + pow((double)character.posCurr.y - posCurr.y, 2.0f));
 	//detect player and can shoot
 	if (mag <= detectionRadius && counter >= 2.0f)
 	{

@@ -276,14 +276,14 @@ void GameStateMainMenuDraw()
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(selectionMainMesh, AE_GFX_MDM_TRIANGLES);
 			// Set position for the highlight
-			AEGfxSetPosition(selectMainX, -52);
+			AEGfxSetPosition((float)selectMainX, -52);
 		}
 		if (b == 1)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(selectionMainMesh, AE_GFX_MDM_TRIANGLES);
 			// Set position for the highlight
-			AEGfxSetPosition(selectMainX, -52);
+			AEGfxSetPosition((float)selectMainX, -52);
 		}
 		AEGfxPrint(fontID, MainQuit, -0.41f, 0.20f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, exitComment, -0.45f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);

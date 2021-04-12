@@ -187,7 +187,7 @@ void OBGameOverDraw()
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(selectionMesh, AE_GFX_MDM_TRIANGLES);
-			AEGfxSetPosition(selectX, -60);
+			AEGfxSetPosition((float)selectX, -60);
 		}
 		AEGfxPrint(fontID, ggQuit, -0.41f, 0.22f, 1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxPrint(fontID, bcomment, -0.45f, -0.02f, 1.0f, 1.0f, 1.0f, 1.0f);
