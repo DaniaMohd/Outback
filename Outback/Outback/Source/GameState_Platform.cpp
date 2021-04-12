@@ -2,11 +2,9 @@
 /*!
 \file			GameState_Platform.cpp
 \project name	Outback
-\author(s)	 	Primary:	Javin Ong J-Min
-				Secondary:	Yu Xi Lim
-				Secondary:	Binte Mohd Rizal, Nurul Dania
-				Secondary:	Sim Xuan Yee
-				Secondary:	Lim Sim Chee, Shannon
+\author(s)	 	Primary:	Yu Xi Lim		(40%)
+				Secondary:	Sim Xuan Yee	(40%)
+				Secondary:	Javin Ong J-Min	(20%)
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

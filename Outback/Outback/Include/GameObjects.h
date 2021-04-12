@@ -1,10 +1,10 @@
 /****************************************************************************** /
 /*!
-\file			Audio.h
+\file			GameObjects.h
 \project name	Outback
-\author(s)	 	Primary:	Javin Ong J-Min
-				Secondary:	Yu Xi Lim
-				Secondary:	Binte Mohd Rizal, Nurul Dania
+\author(s)	 	Primary:	Yu Xi Lim						(40%)
+				Secondary:	Javin Ong J-Min					(30%)
+				Secondary:	Binte Mohd Rizal, Nurul Dania	(30%)
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the
@@ -21,7 +21,6 @@ const float			JUMP_VELOCITY = 12.5f;
 const float			MOVE_VELOCITY_HERO = 7.0f;
 const float			MOVE_VELOCITY_ENEMY = 7.5f;
 const double		ENEMY_IDLE_TIME = 2.0;
-const int			HERO_LIVES = 3;	//dont need
 
 //Flags
 const unsigned int	FLAG_ACTIVE = 0x00000001;

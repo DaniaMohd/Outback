@@ -1,10 +1,10 @@
 /****************************************************************************** /
 /*!
-\file			Audio.h
+\file			GameObjects.h
 \project name	Outback
-\author(s)	 	Primary:	Javin Ong J-Min
-				Secondary:	Yu Xi Lim
-				Secondary:	Binte Mohd Rizal, Nurul Dania
+\author(s)	 	Primary:	Yu Xi Lim						(40%)
+				Secondary:	Javin Ong J-Min					(30%)
+				Secondary:	Binte Mohd Rizal, Nurul Dania	(30%)
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

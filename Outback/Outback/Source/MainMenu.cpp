@@ -2,9 +2,9 @@
 /*!
 \file			main.cpp
 \project name	Outback
-\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania
-				Secondary:	Sim Xuan Yee
-				Secondary:	Lim Sim Chee, Shannon
+\author(s)	 	Primary:	Binte Mohd Rizal, Nurul Dania	(50%)
+				Secondary:	Sim Xuan Yee					(30%)
+				Secondary:	Lim Sim Chee, Shannon			(20%)
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the

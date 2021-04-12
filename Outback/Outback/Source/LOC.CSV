@@ -1,16 +1,16 @@
-language,filename,blank,comment,code,"http://cloc.sourceforge.net v 1.60  T=0.05 s (285.4 files/s, 100030.2 lines/s)"
-C++,GameState_Platform.cpp,233,217,1358
-C++,GameObjects.cpp,90,135,622
-C++,MainMenu.cpp,42,71,223
-C++,Audio.cpp,51,19,222
-C++,Credits.cpp,47,66,219
-C++,GameOverScreen.cpp,34,35,168
-C++,Options.cpp,35,14,153
-C++,GameStateMgr.cpp,17,27,134
-C++,LvlSelect.cpp,34,16,133
-C++,Collision.cpp,27,22,124
-C++,Logo.cpp,36,21,120
-C++,Instructions.cpp,28,15,107
-C++,Map.cpp,22,29,105
-C++,main.cpp,21,26,51
-C++,Win.cpp,13,42,34
+language,filename,blank,comment,code,"http://cloc.sourceforge.net v 1.60  T=0.05 s (288.3 files/s, 98712.1 lines/s)"
+C++,GameState_Platform.cpp,232,190,1314
+C++,GameObjects.cpp,92,147,622
+C++,MainMenu.cpp,41,55,223
+C++,Audio.cpp,51,12,222
+C++,Credits.cpp,47,63,219
+C++,GameOverScreen.cpp,30,20,169
+C++,Options.cpp,35,11,153
+C++,GameStateMgr.cpp,17,25,134
+C++,LvlSelect.cpp,34,14,133
+C++,Collision.cpp,27,20,124
+C++,Logo.cpp,36,19,120
+C++,Instructions.cpp,28,13,107
+C++,Map.cpp,22,27,105
+C++,main.cpp,21,24,51
+C++,Win.cpp,13,40,34
