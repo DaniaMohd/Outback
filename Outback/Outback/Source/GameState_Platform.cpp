@@ -1648,7 +1648,7 @@ void GameStatePlatformDraw(void)
 	{
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set position for object 2
-		AEGfxSetPosition(0.0f, -0.1f);	//rtriangle
+		AEGfxSetPosition(camX, camY);	//rtriangle
 		// No tint
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		// Set texture
@@ -1659,7 +1659,7 @@ void GameStatePlatformDraw(void)
 		{
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 			AEGfxMeshDraw(pauseSelectionMesh, AE_GFX_MDM_TRIANGLES);
-			AEGfxSetPosition((float)pauseselectX, -54);
+			AEGfxSetPosition(camX + pauseselectX, camY -54);
 		}
 		if (pauseQuit == 1)
 		{
